@@ -1,0 +1,482 @@
+[
+  {
+    "question": "What is the difference between repartition and coalesce in Apache Spark?",
+    "reference_answer": "repartition(n) creates exactly n partitions through a full shuffle, so it can increase or decrease parallelism but costs network and disk I/O. coalesce(n) usually merges existing partitions with minimal shuffle and is mainly used to reduce partitions before output. Use repartition to rebalance skew or raise parallelism; use coalesce to reduce small files cheaply.",
+    "category": "spark_partitioning",
+    "difficulty": "medium"
+  },
+  {
+    "question": "What is the difference between SparkSession and SparkContext in Spark?",
+    "reference_answer": "SparkContext is the lower-level entry point for cluster connection and RDD APIs. SparkSession is the newer unified entry point for DataFrame, Dataset, SQL, Hive, streaming, and access to the underlying SparkContext. In modern Spark applications, create a SparkSession and only reach into SparkContext when low-level RDD or cluster configuration work is required.",
+    "category": "spark_optimization",
+    "difficulty": "hard"
+  },
+  {
+    "question": "What is the difference between cache() and persist() in Spark? When would you use each?",
+    "reference_answer": "cache() is a shorthand for persist() with Spark's default storage level. persist() lets you choose the storage level, such as memory only, memory and disk, serialized, or replicated. Cache small reused datasets that fit memory; persist with disk fallback or serialized storage when data is large or recomputation is expensive.",
+    "category": "spark_partitioning",
+    "difficulty": "medium"
+  },
+  {
+    "question": "What is the difference between groupByKey and reduceByKey in Spark?",
+    "reference_answer": "groupByKey moves all values for each key across the network before aggregation, which can be memory-heavy and slow. reduceByKey combines values locally on each partition before shuffling partial results, reducing network traffic. Prefer reduceByKey or aggregateByKey for associative aggregations; use groupByKey only when you truly need all raw values per key.",
+    "category": "spark_partitioning",
+    "difficulty": "medium"
+  },
+  {
+    "question": "What is the difference between narrow and wide transformations in Apache Spark? Explain with examples.",
+    "reference_answer": "A narrow transformation lets each output partition depend on one input partition, such as map, filter, and union; it can be pipelined without shuffle. A wide transformation depends on multiple input partitions, such as groupBy, distinct, reduceByKey, join, and repartition; it creates shuffle boundaries, stages, and higher failure/retry cost. Wide operations are often the main performance bottleneck.",
+    "category": "spark_join_optimization",
+    "difficulty": "medium"
+  },
+  {
+    "question": "What strategies can you use to handle skewed data in Spark?",
+    "reference_answer": "First identify skew from task duration, partition sizes, and key frequency. Mitigate it with salting hot keys, splitting heavy keys, broadcast joins for small tables, AQE skew join handling, better partitioning, pre-aggregation, and filtering unnecessary data early. Validate the fix by checking shuffle size, spill, and task time distribution.",
+    "category": "spark_join_optimization",
+    "difficulty": "medium"
+  },
+  {
+    "question": "Can you explain the architecture of Apache Spark and its components?",
+    "reference_answer": "Spark uses a driver program to build the logical plan, request executors from a cluster manager, and schedule work. Executors run tasks, cache data, and report status. Jobs are split into stages at shuffle boundaries; stages contain tasks that run over partitions. Core components include Spark SQL, Structured Streaming, MLlib, GraphX, storage, and the scheduler.",
+    "category": "spark_join_optimization",
+    "difficulty": "hard"
+  },
+  {
+    "question": "Describe the difference between Spark RDDs, DataFrames, and Datasets.",
+    "reference_answer": "RDDs are low-level distributed collections with strong control but little query optimization. DataFrames are structured, schema-aware datasets optimized by Catalyst and Tungsten, usually the best default for Spark SQL workloads. Datasets add typed object APIs in Scala/Java while retaining optimization; in PySpark, DataFrames are the primary high-level API.",
+    "category": "spark_partitioning",
+    "difficulty": "hard"
+  },
+  {
+    "question": "Explain the concept of Broadcast Join in Spark. When should it be used?",
+    "reference_answer": "A broadcast join sends a small table to every executor so the large table can be joined locally without shuffling both sides. Use it when one side fits comfortably in executor memory and is reused across tasks. Avoid it for large or underestimated tables because it can cause executor memory pressure or failed tasks.",
+    "category": "spark_join_optimization",
+    "difficulty": "medium"
+  },
+  {
+    "question": "Explain the difference between Spark's map() and flatMap() transformations.",
+    "reference_answer": "map applies a function to each input record and returns exactly one output element per input element. flatMap applies a function that returns zero, one, or many elements and then flattens the results. Use map for one-to-one transformations and flatMap for tokenization, exploding arrays, filtering while expanding, or parsing one record into many rows.",
+    "category": "spark_partitioning",
+    "difficulty": "medium"
+  },
+  {
+    "question": "How do you handle late-arriving data in Spark Structured Streaming?",
+    "reference_answer": "Use event time, watermarks, and windowed aggregations so Spark can keep state long enough for delayed records. Choose a watermark delay that matches business tolerance for lateness and memory cost. Write idempotently to the sink, keep checkpoints, and define how to handle records arriving after the watermark, such as dropping, side-outputting, or replaying corrections.",
+    "category": "spark_streaming",
+    "difficulty": "hard"
+  },
+  {
+    "question": "How do you optimize Spark jobs for better performance? Mention at least 5 techniques.",
+    "reference_answer": "Start by reducing input size with projection, filters, and predicate pushdown. Use appropriate partition counts, avoid unnecessary shuffles, broadcast small join inputs, cache only reused data, and choose efficient file formats such as Parquet. Also handle skew, enable AQE, inspect the Spark UI, avoid Python UDFs when built-ins work, and tune executor memory/cores based on spill and task time.",
+    "category": "spark_join_optimization",
+    "difficulty": "hard"
+  },
+  {
+    "question": "How does Spark's Catalyst Optimizer work? Explain its stages.",
+    "reference_answer": "Catalyst turns SQL or DataFrame code into an unresolved logical plan, resolves names and types during analysis, applies rule-based logical optimizations, creates candidate physical plans, estimates costs where possible, and selects an executable plan. Physical execution then uses whole-stage code generation and Tungsten-style memory optimizations to run the chosen plan efficiently.",
+    "category": "spark_join_optimization",
+    "difficulty": "hard"
+  },
+  {
+    "question": "What is the difference between Managed and External tables in Hive/Spark?",
+    "reference_answer": "For managed tables, the metastore owns both metadata and data location; dropping the table usually deletes the data. External tables store metadata in the catalog while data remains at an external path, so dropping the table normally removes only metadata. Use external tables when data is shared, lifecycle-managed outside Spark, or must survive table recreation.",
+    "category": "spark_tables",
+    "difficulty": "easy"
+  },
+  {
+    "question": "What is the small-file problem in Spark, and how do you solve it?",
+    "reference_answer": "The small-file problem occurs when a table contains many tiny files, making metadata listing, task scheduling, and reads inefficient. Solve it with compaction, optimized writes, sensible partitioning, coalesce or repartition before writing, table maintenance commands, and avoiding high-cardinality partition columns. Monitor file counts and average file size over time.",
+    "category": "spark_partitioning",
+    "difficulty": "hard"
+  },
+  {
+    "question": "Architect incremental load in ADF + Databricks with idempotency, late-arrival handling, and cost/scalability implications of watermark vs. change data capture.",
+    "reference_answer": "Use ADF for orchestration and Databricks for transformation, storing raw input in bronze and merge-ready records in silver. Watermark loads are simple and cheap but can miss updates or deletes unless paired with lookback windows. CDC is more accurate for changes and idempotent merges but costs more operationally. Use deterministic keys, MERGE, checkpoints, audit tables, and replayable raw data.",
+    "category": "spark_partitioning",
+    "difficulty": "medium"
+  },
+  {
+    "question": "Architecturally, how do Job-Stage-Task boundaries in Spark's execution model impact cluster sizing, shuffle cost, and when would you deliberately collapse or split stages?",
+    "reference_answer": "Jobs are actions, stages are separated by shuffle boundaries, and tasks execute per partition. More partitions can improve parallelism but increase scheduling overhead; wide stages require shuffle storage, network bandwidth, and memory for aggregation or joins. Collapse stages by removing unnecessary shuffles or combining narrow operations; split work when isolation, checkpointing, skew mitigation, or resource control improves reliability.",
+    "category": "spark_partitioning",
+    "difficulty": "hard"
+  },
+  {
+    "question": "Architecturally, how would you justify or challenge Hadoop vs. a cloud-native data lake (S3 + EMR/Databricks) for a greenfield enterprise data platform? Discuss scalability ceilings, cost model trade-offs, and operational complexity.",
+    "reference_answer": "For greenfield systems, a cloud-native lake usually wins on elastic compute, managed services, separation of storage and compute, easier scaling, and lower operational burden. Hadoop can be justified for existing investments, strict locality, or specialized on-prem constraints. Compare storage cost, autoscaling, security, metadata, governance, failure recovery, data gravity, migration cost, and team skills.",
+    "category": "data_platform_architecture",
+    "difficulty": "hard"
+  },
+  {
+    "question": "Convert complex SQL (CTEs, window functions, subqueries) to production-grade PySpark. Discuss when to use spark.sql() vs. DataFrame API, and the implications for testability, partitioning, and execution predictability.",
+    "reference_answer": "Use spark.sql when existing SQL is clear, validated, and maintained by analysts; use the DataFrame API when composing reusable transformations, unit tests, and programmatic logic. Preserve semantics for CTEs, joins, and windows, then inspect the physical plan. Make partitioning explicit around expensive joins/writes, avoid hidden cross joins, and test intermediate outputs with small fixtures.",
+    "category": "spark_sql",
+    "difficulty": "medium"
+  },
+  {
+    "question": "Design a cost-aware resource strategy for a Databricks workload with spiky and batch jobs. Explain Dynamic Resource Allocation, when to disable it, and how min/max executors and spot instances affect cost and SLAs.",
+    "reference_answer": "Use job clusters, autoscaling, and Dynamic Resource Allocation for bursty workloads so idle executors can be removed. Set min executors high enough for SLA startup and max executors to cap cost. Disable or constrain DRA for latency-sensitive streaming, workloads with unstable scaling, or when executor churn hurts cache reuse. Use spot instances for fault-tolerant tasks, with on-demand drivers and critical executors.",
+    "category": "spark_join_optimization",
+    "difficulty": "hard"
+  },
+  {
+    "question": "Design a Delta table layout for mixed workload: point lookups by user_id, range scans by date, and full partition scans. Compare partitioning vs. Z-ordering-when to use each, and the rewrite cost trade-off.",
+    "reference_answer": "Partition by low-to-medium cardinality columns that align with large scan pruning, commonly date. Do not partition by high-cardinality user_id because it creates many small files. Use Z-ordering or clustering on user_id to improve point lookups inside files. Balance optimize frequency against rewrite cost; compact and recluster only when query savings justify the extra compute.",
+    "category": "spark_join_optimization",
+    "difficulty": "hard"
+  },
+  {
+    "question": "Design a fault-tolerant Spark Streaming checkpoint strategy: what to persist, recovery semantics, and cost/scalability trade-offs with checkpoint frequency.",
+    "reference_answer": "Store checkpoints in durable distributed storage, not local disks. Persist offsets, query progress, state store data, and metadata needed to restart consistently. Frequent checkpoints improve recovery point objectives but add I/O overhead; infrequent checkpoints are cheaper but increase replay time. Pair checkpoints with idempotent sinks or transactional writes to achieve practical exactly-once behavior.",
+    "category": "spark_streaming",
+    "difficulty": "hard"
+  },
+  {
+    "question": "Design an anti-skew strategy for a join on a high-cardinality key with a long-tail distribution (e.g., a few keys hold 80% of rows). Cover salting, split-skew, AQE, and cost/operational trade-offs.",
+    "reference_answer": "Measure the hot keys first. Salt only skewed keys by adding a random bucket on the large side and duplicating matching small-side rows across buckets. Use AQE skew join handling when available, and split extreme keys into separate paths if needed. The trade-off is extra data expansion, more complex logic, and operational monitoring versus shorter tail tasks.",
+    "category": "spark_join_optimization",
+    "difficulty": "hard"
+  },
+  {
+    "question": "Explain how Adaptive Query Execution changes the economics of Spark tuning. What problems does it solve at runtime, and when might you still need manual intervention (e.g., salting, broadcast hints)?",
+    "reference_answer": "AQE uses runtime statistics after shuffle boundaries to coalesce small partitions, change join strategies, and split skewed partitions. It reduces the need for perfect static tuning and can lower shuffle overhead. Manual intervention is still needed when stats are wrong, skew is extreme, broadcast safety requires business knowledge, or data layout and file sizes are the true bottleneck.",
+    "category": "spark_join_optimization",
+    "difficulty": "medium"
+  },
+  {
+    "question": "Explain strategies for managing schema changes in PySpark over time.",
+    "reference_answer": "Use explicit schemas, schema versioning, nullable additions for backward compatibility, and controlled evolution in Delta or Parquet. Validate incoming data before writes, quarantine unexpected fields, and keep contract tests for producers. For breaking changes, use migration jobs, compatibility views, and a deprecation window so downstream consumers can update safely.",
+    "category": "pyspark",
+    "difficulty": "medium"
+  },
+  {
+    "question": "Explain the benefits of using DataFrames over RDDs.",
+    "reference_answer": "DataFrames carry schema information, enabling Catalyst optimization, predicate pushdown, column pruning, efficient joins, and better serialization/code generation. They integrate naturally with SQL, structured file formats, and BI-style workflows. RDDs are useful for low-level custom logic, but DataFrames are usually faster, more maintainable, and easier to optimize for production data engineering.",
+    "category": "spark_join_optimization",
+    "difficulty": "hard"
+  },
+  {
+    "question": "Explain the concept of checkpointing in Spark and why it is important.",
+    "reference_answer": "Checkpointing saves intermediate state or lineage to durable storage so Spark can recover without recomputing a long dependency chain. In batch, it can truncate complex lineage and improve fault tolerance. In streaming, it stores offsets, state, and progress so a query can restart consistently after failure. It trades storage and I/O cost for reliability.",
+    "category": "spark_fault_tolerance",
+    "difficulty": "hard"
+  },
+  {
+    "question": "Explain the difference between batch and streaming data processing in Data Fusion.",
+    "reference_answer": "Batch processing handles bounded data on a schedule, often optimizing for throughput and cost. Streaming handles unbounded events continuously, optimizing for latency, state management, and recovery. In Data Fusion, the design choice affects source connectors, windows, triggers, checkpoints, error handling, scaling, and sink idempotency.",
+    "category": "spark_streaming",
+    "difficulty": "hard"
+  },
+  {
+    "question": "Explain the Medallion Architecture (Bronze, Silver, Gold layers).",
+    "reference_answer": "Bronze stores raw, replayable data with minimal transformation. Silver cleans, validates, deduplicates, and conforms data into reliable entities. Gold contains business-ready aggregates, marts, and serving tables. The pattern improves traceability, quality gates, incremental processing, and separation between ingestion, refinement, and consumption.",
+    "category": "spark_join_optimization",
+    "difficulty": "hard"
+  },
+  {
+    "question": "Explain wide vs. narrow transformations and how they drive shuffle cost, failure domains, and pipeline design. When would you intentionally add a wide transformation, and how do you minimize its impact?",
+    "reference_answer": "Narrow transformations stay within partition boundaries and are cheap to pipeline. Wide transformations require shuffle, creating new stages, network I/O, spill risk, and larger failure domains. Add a wide transformation intentionally for global aggregation, deduplication, repartitioning, or joins. Minimize impact with filtering, pre-aggregation, broadcast joins, sensible partition counts, and skew handling.",
+    "category": "spark_join_optimization",
+    "difficulty": "hard"
+  },
+  {
+    "question": "Given a streaming dataset from Kafka, how would you ingest the data in real-time using Spark?",
+    "reference_answer": "Use Structured Streaming with the Kafka source, define subscribed topics, starting offsets, and schema parsing for key/value payloads. Apply event-time processing, watermarks, validation, and transformations. Write to a durable sink such as Delta with checkpointLocation configured. Tune trigger intervals, max offsets per trigger, and consumer parallelism based on latency and throughput goals.",
+    "category": "spark_streaming",
+    "difficulty": "hard"
+  },
+  {
+    "question": "How do you drop columns with null values in PySpark?",
+    "reference_answer": "If the goal is to drop columns where every value is null, compute non-null counts per column and select only columns with count greater than zero. If using a threshold, calculate null ratios and keep columns below the threshold. Avoid row-wise dropna when the requirement is column removal, and be careful with nested fields.",
+    "category": "pyspark",
+    "difficulty": "medium"
+  },
+  {
+    "question": "How do you handle data skewness in Spark?",
+    "reference_answer": "Detect skew by inspecting partition sizes, task duration, shuffle read, and hot keys. Use salting, skew-aware joins, broadcast joins, pre-aggregation, custom partitioning, and AQE. For extreme hot keys, process them separately. The right fix depends on whether skew comes from joins, aggregations, file layout, or source partitioning.",
+    "category": "spark_join_optimization",
+    "difficulty": "medium"
+  },
+  {
+    "question": "How do you optimize Spark jobs for performance?",
+    "reference_answer": "Profile first with the Spark UI and query plans. Reduce data scanned, use columnar formats, push filters early, avoid unnecessary shuffles, broadcast small tables, tune partitions, cache reused data, handle skew, and enable AQE. Also avoid Python UDFs when SQL functions exist, compact small files, and right-size executors for CPU, memory, and spill behavior.",
+    "category": "spark_join_optimization",
+    "difficulty": "hard"
+  },
+  {
+    "question": "How would you implement a sliding window aggregation in Spark Structured Streaming?",
+    "reference_answer": "Read the stream, parse event time, apply watermarking, and group by window(event_time, windowDuration, slideDuration) plus any business keys. Aggregate metrics and write to a sink with checkpointing. Choose watermark and trigger intervals based on lateness tolerance, output mode, state size, and downstream latency requirements.",
+    "category": "spark_streaming",
+    "difficulty": "hard"
+  },
+  {
+    "question": "How would you read data from a web API using PySpark?",
+    "reference_answer": "For small API pulls, call the API outside Spark or in controlled driver-side batches, then parallelize normalized records. For large pulls, create partitioned request ranges and use mapPartitions with rate limiting, retries, timeouts, and backoff. Store raw responses first, avoid one HTTP call per row, and protect secrets with a managed secret store.",
+    "category": "pyspark",
+    "difficulty": "medium"
+  },
+  {
+    "question": "Implement a Spark job to find the top 10 most frequent words in a large text file.",
+    "reference_answer": "Read the text file, split lines into words, normalize case and punctuation, filter empty tokens, aggregate counts by word, then order by count descending and take 10. For large data, use DataFrame functions or reduceByKey-style aggregation, avoid collecting full results, and only collect the final top 10.",
+    "category": "spark_sql",
+    "difficulty": "hard"
+  },
+  {
+    "question": "Prioritize Spark optimizations by impact and effort. Discuss partitioning strategy, caching policy, join selection, shuffle reduction, and when each becomes a scalability or cost bottleneck.",
+    "reference_answer": "Highest-impact first: reduce data scanned, fix bad joins, remove avoidable shuffles, and handle skew. Next tune partition counts and file layout. Cache only reused expensive intermediates that fit memory. Broadcast small dimensions and use sort-merge for large joins. Each optimization becomes a bottleneck when it increases spill, executor memory pressure, small files, or long-tail tasks.",
+    "category": "spark_join_optimization",
+    "difficulty": "hard"
+  },
+  {
+    "question": "Walk through the three AQE features in Spark 3.x (coalesce, join switch, skew join)-how they operate at shuffle boundaries, which configs enable them, and what happens when AQE cannot help.",
+    "reference_answer": "AQE works after shuffle stages expose runtime statistics. It can coalesce many small shuffle partitions, switch join strategy such as sort-merge to broadcast when a side is small, and split skewed partitions. Enable adaptive execution and related coalesce/skew configs. AQE cannot fix poor input layout, extreme business-key skew, bad logic, or missing resources.",
+    "category": "spark_join_optimization",
+    "difficulty": "hard"
+  },
+  {
+    "question": "What are the key components of the Spark execution model (Job, Stage, Task)?",
+    "reference_answer": "A job is created by an action. Spark splits the job into stages separated by shuffle dependencies. Each stage runs tasks over partitions, usually one task per partition. Understanding these boundaries helps tune partition counts, locate shuffle bottlenecks, interpret Spark UI timelines, and reason about retries, locality, and executor sizing.",
+    "category": "spark_join_optimization",
+    "difficulty": "hard"
+  },
+  {
+    "question": "What is Adaptive Query Execution (AQE) in Spark 3.x, and how does it improve performance?",
+    "reference_answer": "AQE optimizes a query while it runs by using runtime statistics. It can reduce too many shuffle partitions, switch join strategies, and handle skewed partitions. This improves performance when static estimates are inaccurate. It is most useful for SQL/DataFrame workloads with shuffles and should be validated through query plans and Spark UI metrics.",
+    "category": "spark_join_optimization",
+    "difficulty": "medium"
+  },
+  {
+    "question": "What is broadcasting in Spark, and why is it used? Can you give an example of its use?",
+    "reference_answer": "Broadcasting sends a read-only copy of small data to each executor so tasks can use it locally. It is used for broadcast joins and lookup/reference data to avoid repeated network transfer or large shuffles. Example: broadcast a small country-code dimension table when joining it to a very large events table.",
+    "category": "spark_join_optimization",
+    "difficulty": "medium"
+  },
+  {
+    "question": "What is Spark's Catalyst Optimizer? Explain its stages.",
+    "reference_answer": "Catalyst is Spark SQL's optimization framework. It parses expressions into an unresolved logical plan, analyzes it using catalog and type information, optimizes the logical plan with rules, builds physical plan candidates, and selects an executable plan. It enables predicate pushdown, column pruning, constant folding, join reordering, and other DataFrame/SQL optimizations.",
+    "category": "spark_join_optimization",
+    "difficulty": "hard"
+  },
+  {
+    "question": "What is the difference between Managed and External Tables in Databricks?",
+    "reference_answer": "Managed tables are controlled by Databricks or the metastore, including their storage location and lifecycle. Dropping them can remove the underlying data. External tables point to data in an external path, so the catalog manages metadata while storage is governed separately. External tables are preferred for shared data lakes or independent retention policies.",
+    "category": "spark_tables",
+    "difficulty": "easy"
+  },
+  {
+    "question": "What is the difference between map and flatMap in Spark, and when would you use each?",
+    "reference_answer": "map returns one output record for each input record. flatMap returns an iterable for each input and flattens all elements, so one input can become zero, one, or many outputs. Use map for direct row transformations and flatMap for splitting lines into words, expanding arrays, or discarding records while emitting multiple results.",
+    "category": "spark_partitioning",
+    "difficulty": "medium"
+  },
+  {
+    "question": "What is the difference between repartition and coalesce in Spark?",
+    "reference_answer": "repartition performs a shuffle to create a requested number of partitions and can increase parallelism or rebalance data. coalesce usually avoids a full shuffle and is best for reducing partition count before writing. repartition costs more but distributes data better; coalesce is cheaper but can create uneven partitions if overused.",
+    "category": "spark_partitioning",
+    "difficulty": "medium"
+  },
+  {
+    "question": "What is the difference between Spark RDDs, DataFrames, and Datasets?",
+    "reference_answer": "RDDs provide low-level distributed object operations with explicit control and limited optimization. DataFrames provide schema-aware relational operations optimized by Catalyst and are the normal PySpark choice. Datasets combine typed JVM objects with Catalyst optimization in Scala/Java. Use DataFrames for most production ETL, RDDs for special low-level transformations.",
+    "category": "spark_partitioning",
+    "difficulty": "hard"
+  },
+  {
+    "question": "What is the purpose of the Bronze, Silver, and Gold layers in a data pipeline?",
+    "reference_answer": "Bronze keeps raw ingested data for audit and replay. Silver applies cleaning, deduplication, schema enforcement, and joins to create trusted reusable data. Gold serves business metrics, dashboards, ML features, or downstream products. The layers separate concerns and make quality, lineage, and incremental processing easier to manage.",
+    "category": "lakehouse_design",
+    "difficulty": "medium"
+  },
+  {
+    "question": "What is the small-file problem in Spark, and how do you solve it?",
+    "reference_answer": "The small-file problem occurs when a table contains many tiny files, making metadata listing, task scheduling, and reads inefficient. Solve it with compaction, optimized writes, sensible partitioning, coalesce or repartition before writing, table maintenance commands, and avoiding high-cardinality partition columns. Monitor file counts and average file size over time.",
+    "category": "spark_partitioning",
+    "difficulty": "hard"
+  },
+  {
+    "question": "What work is done by the executor memory in Spark?",
+    "reference_answer": "Executor memory holds cached data, shuffle buffers, aggregation and join state, task execution data, broadcast variables, and overhead for JVM/Python processes. Poor memory sizing causes spill, garbage collection, or executor failures. Tune storage versus execution pressure by checking cache usage, shuffle spill, GC time, task failures, and executor logs.",
+    "category": "spark_join_optimization",
+    "difficulty": "medium"
+  },
+  {
+    "question": "A job repartitions to 200 partitions, groups by user_id, and writes Parquet, but only a few tasks run during the write on a 20-executor cluster. How would you explain the driver, stage, and task creation, and why might parallelism be low?",
+    "reference_answer": "The driver builds a DAG only when the write action starts, then splits the work into stages at shuffle boundaries such as repartition and groupBy. A stage may have many tasks, but concurrent execution is capped by available executor cores and by the number of partitions in that specific stage. Low parallelism can come from AQE coalescing partitions, earlier coalesce/repartition choices, output committer bottlenecks, small output partitions, or too few executor cores actually available.",
+    "category": "spark_architecture",
+    "difficulty": "medium"
+  },
+  {
+    "question": "An executor is lost and the driver reports a job failure while the cluster manager starts a replacement. When can Spark recompute the lost work, and when will it abort the job?",
+    "reference_answer": "Spark can recompute lost tasks when lineage is available, shuffle dependencies can still be read, and retry limits have not been exceeded. The driver tracks task attempts and can reschedule work on replacement executors. The job may fail when failures repeat beyond configured limits, shuffle files disappear without a shuffle service or tracking support, fetch failures cascade, cached state cannot be rebuilt, or the root cause is a driver-side or deterministic application error.",
+    "category": "spark_fault_tolerance",
+    "difficulty": "hard"
+  },
+  {
+    "question": "A pipeline performs a heavy join and then has two actions: one writes Parquet and another computes a KPI count. Should you cache after the join or rely on Spark to reuse the work?",
+    "reference_answer": "If both actions reuse the expensive joined result, persist after the join and materialize it with the first action. Without caching, Spark treats the two actions as separate jobs and may recompute the upstream join stages for the second action. Pick a storage level based on memory pressure and recomputation cost, and confirm that cached blocks remain available rather than being evicted.",
+    "category": "spark_caching",
+    "difficulty": "medium"
+  },
+  {
+    "question": "A job explodes an array, groups by key, aggregates counts, then calls collect and the driver runs out of memory. Walk through where computation and data movement happen, and why the driver crashes.",
+    "reference_answer": "The action triggers planning on the driver. Executors run the explode and local work in parallel, while groupBy creates a shuffle so rows with the same key move to the same reducer partitions. After final aggregation, collect sends all result partitions back to the driver. The crash happens because the driver must hold the full collected result locally; write, limit/take, or return only small aggregates instead.",
+    "category": "spark_execution",
+    "difficulty": "hard"
+  },
+  {
+    "question": "A job has a large shuffle map stage with 20,000 tasks followed by a final stage with only 200 tasks. Why can the final stage still dominate end-to-end runtime on a 2,000-core cluster?",
+    "reference_answer": "The final stage can use at most one task per partition, so 200 tasks cannot saturate 2,000 cores. It may also process larger per-task input, perform expensive writes, wait on skewed partitions, or spend time in shuffle fetch and output commit. Stage bottlenecks depend on partition count, skew, per-task work, and dependencies, not just the number of tasks in earlier stages.",
+    "category": "spark_execution",
+    "difficulty": "medium"
+  },
+  {
+    "question": "Shuffle fetch failures appear when dynamic allocation removes executors. How is shuffle data produced and consumed across stages, what goes wrong, and what mitigations would you apply?",
+    "reference_answer": "Shuffle map tasks write partitioned blocks that later reducer tasks fetch over the network. If dynamic allocation removes executors that hold shuffle files, downstream stages can fail to fetch those blocks unless shuffle data is preserved externally. Mitigate with external shuffle service or shuffle tracking, sensible dynamic allocation timeouts, decommissioning support, stable executor settings for shuffle-heavy jobs, and retry/fetch tuning after fixing the storage lifecycle.",
+    "category": "spark_fault_tolerance",
+    "difficulty": "hard"
+  },
+  {
+    "question": "For daily active users from 5 TB of click logs joined with a 50 GB user dimension and written to Parquet, would you use RDDs or DataFrames, and how do Catalyst and Tungsten affect runtime?",
+    "reference_answer": "DataFrames are the better default because the workload is relational: filtering, aggregation, join, and Parquet output. Catalyst can prune columns, push filters, optimize join order/strategy, and simplify expressions. Tungsten and whole-stage code generation reduce object overhead and improve CPU and memory efficiency. RDDs give control, but lose many optimizer and execution benefits unless the logic cannot be expressed with DataFrame operations.",
+    "category": "spark_api",
+    "difficulty": "medium"
+  },
+  {
+    "question": "A parse-filter-groupBy pipeline is slower than expected. Would you keep a typed Dataset, convert to an untyped DataFrame, or use RDDs, considering encoders, code generation, and serialization?",
+    "reference_answer": "Prefer an untyped DataFrame when the logic is expressible with built-in functions, because Spark can keep data in its optimized internal format and apply Catalyst plus whole-stage code generation. Typed Datasets provide compile-time types but can introduce encoder and object materialization overhead. RDDs are appropriate only for custom non-relational logic that cannot be expressed efficiently in SQL/DataFrame APIs.",
+    "category": "spark_api",
+    "difficulty": "hard"
+  },
+  {
+    "question": "A DataFrame join spills heavily and shows long garbage collection pauses. How would you decide whether the bottleneck is Catalyst planning, Tungsten memory behavior, or shuffle mechanics, and what would you try first?",
+    "reference_answer": "Inspect the SQL plan and Spark UI metrics: physical join type, shuffle read/write, spill, task skew, GC time, and whether UDFs or encoders force object materialization. Heavy spill during sort-merge joins usually points to shuffle and memory pressure rather than Catalyst itself. First reduce shuffle volume with filters/projection, broadcast a safe small side, increase parallelism, remove row-wise UDFs, and validate spill and p95 task time.",
+    "category": "spark_optimization",
+    "difficulty": "medium"
+  },
+  {
+    "question": "A Python UDF parses nested JSON and then filters on a field, causing a CPU-bound DataFrame job. How would you redesign it with Spark SQL functions or RDDs, and what changes once the UDF is gone?",
+    "reference_answer": "Replace the Python UDF with from_json, get_json_object, schema-aware parsing, and built-in column expressions so Catalyst can see the parsed fields. This enables predicate pushdown where possible, projection pruning, expression optimization, and code generation. Use RDDs only if parsing requires complex custom logic that built-ins cannot express, and isolate that boundary to avoid breaking the optimized plan unnecessarily.",
+    "category": "pyspark",
+    "difficulty": "hard"
+  },
+  {
+    "question": "A workload has one pure SQL aggregation stage and another custom algorithm needing complex per-key state. Where would you draw the DataFrame/RDD boundary, and how would you minimize serialization and plan breakage?",
+    "reference_answer": "Keep filtering, joins, projections, and aggregations in DataFrames so Catalyst can optimize them. Convert to RDD only at the point where custom per-key state truly cannot be represented with SQL functions, mapGroupsWithState, or grouped operations. Minimize the boundary by projecting only needed columns, using compact schemas, avoiding repeated conversions, and converting results back to DataFrames for downstream optimized writes.",
+    "category": "spark_api",
+    "difficulty": "easy"
+  },
+  {
+    "question": "You join a 5 TB fact table with a 200 MB daily dimension table. How do you choose between broadcast hash join and shuffle sort-merge join, and what checks come first?",
+    "reference_answer": "Broadcast is attractive because it avoids shuffling the 5 TB fact side, but only if the 200 MB dimension is small after filters/projection and fits safely in executor memory. Check broadcast threshold, actual size, executor memory headroom, join cardinality, and AQE behavior. If broadcast is unsafe, use sort-merge and focus on partitioning, filtering, bucketing or clustering, and skew mitigation.",
+    "category": "spark_join_optimization",
+    "difficulty": "medium"
+  },
+  {
+    "question": "You group by user_id, count, and then join the aggregated result back to the original DataFrame on user_id. Where do shuffles occur without bucketing or special settings?",
+    "reference_answer": "The groupBy requires a shuffle so all rows for the same user_id are colocated before counting. The join back to the original data usually requires another shuffle because both sides must be partitioned compatibly on user_id. If the aggregated side is small enough, Spark may broadcast it and avoid the second shuffle, but the aggregation shuffle remains unavoidable.",
+    "category": "spark_join_optimization",
+    "difficulty": "medium"
+  },
+  {
+    "question": "One user_id accounts for 30 percent of clicks, making one join task run far longer than the rest. How do you detect and mitigate this skew without just increasing partitions?",
+    "reference_answer": "Detect skew by checking Spark UI task duration, shuffle read size, records per task, and sampling key frequencies to identify hot keys. Mitigate with salting for the hot key, splitting skewed keys into a separate path, broadcasting the smaller side when safe, or enabling AQE skew join handling. Increasing partitions alone often leaves the hot key concentrated in one reducer.",
+    "category": "spark_skew",
+    "difficulty": "hard"
+  },
+  {
+    "question": "Two large Parquet tables are repeatedly joined on country and day. When would bucketing or repartitioning reduce shuffles, and when would it not help?",
+    "reference_answer": "Bucketing or writing data clustered by the join keys can reduce shuffle when both tables use compatible bucket counts, key definitions, and Spark can preserve and recognize the layout. Repartitioning before a single join may help the immediate job but costs a shuffle itself. It does not help much with severe skew, changing ad hoc join keys, incompatible layouts, or when the maintenance/write cost exceeds repeated read savings.",
+    "category": "spark_join_optimization",
+    "difficulty": "hard"
+  },
+  {
+    "question": "A left join produces 50 times more rows because the right side has many matches per key, then OOMs during shuffle write. What plan changes keep it stable?",
+    "reference_answer": "First decide whether the multiplicative output is required. If not, deduplicate, pre-aggregate, filter, or choose one right-side record per key before joining. If all matches are required, estimate output cardinality, increase shuffle parallelism, consider broadcast only when safe, enable AQE, and add data quality checks. A 50x expansion is often a modeling or quality issue rather than only a resource problem.",
+    "category": "spark_join_optimization",
+    "difficulty": "medium"
+  },
+  {
+    "question": "How can AQE change join strategies at runtime, including broadcast switching and skew handling? Give one case where it helps and one where it cannot.",
+    "reference_answer": "AQE uses runtime statistics at shuffle boundaries to coalesce partitions, switch a planned sort-merge join to broadcast when one side is smaller than expected, and split skewed shuffle partitions. It helps when static estimates are wrong or data distribution is moderately skewed. It cannot fix fundamentally explosive joins, extreme hot keys without enough information, poor file layout, or logic that requires too much output.",
+    "category": "spark_optimization",
+    "difficulty": "hard"
+  },
+  {
+    "question": "Is sort-merge join always slower than broadcast hash join on the same inputs? What factors matter, and how would you verify with Spark metrics?",
+    "reference_answer": "No. Broadcast avoids shuffling the large side, but it can be slower or unstable if the build side is too large, causes memory pressure, or must be repeatedly broadcast. Sort-merge can be better for two large, already partitioned or bucketed inputs. Verify with physical plans, broadcast time, shuffle size, spill, GC, task duration distribution, executor memory, and end-to-end stage metrics.",
+    "category": "spark_join_optimization",
+    "difficulty": "medium"
+  },
+  {
+    "question": "A Spark SQL job becomes three times slower after data growth. Spark UI shows high disk spill and shuffle read, but low executor CPU. What do you change first and how do you validate it?",
+    "reference_answer": "High spill with low CPU suggests tasks are waiting on disk and memory pressure during shuffle. Inspect per-task shuffle size, spill metrics, skew, and current partition count. First reduce per-task data by increasing shuffle partitions or enabling AQE with sensible coalescing, and push filters/projections earlier. Validate by comparing spill bytes, p95 task time, disk I/O, shuffle read per task, and CPU utilization before and after.",
+    "category": "spark_optimization",
+    "difficulty": "hard"
+  },
+  {
+    "question": "Executors show long GC pauses, frequent full GCs, and occasional OOMs in a SQL workload with joins and aggregations. Which configuration and query changes do you consider first?",
+    "reference_answer": "Use the SQL and Executors tabs to determine whether pressure comes from shuffle, cache storage, a large broadcast side, UDF object churn, or too much concurrency per executor. Query fixes include filtering/projection, changing join strategy, avoiding Python or row-wise UDFs, and removing unnecessary cache. Config fixes include moderate executor cores, realistic memory overhead, adjusted shuffle partitions, AQE, and safer broadcast thresholds.",
+    "category": "spark_memory",
+    "difficulty": "medium"
+  },
+  {
+    "question": "A skewed reducer task runs ten times longer than others. How do you confirm skew in Spark UI and what is your go-to mitigation for a skewed join?",
+    "reference_answer": "Confirm skew by comparing task duration, shuffle read bytes, input records, spill, and partition sizes across tasks; one or a few tasks will be outliers. For joins, first see whether the small side can be broadcast. Otherwise use AQE skew join handling or salt hot keys so the large side is spread across buckets and the small side is expanded correspondingly, then validate the tail latency.",
+    "category": "spark_skew",
+    "difficulty": "hard"
+  },
+  {
+    "question": "A daily ETL writes a partitioned Delta or Parquet table. Reads were fast initially but slow after weeks even with the same compute. What file layout and write behavior changes stabilize performance?",
+    "reference_answer": "This is usually small-file and metadata growth. Control output file sizes with coalesce/repartition, optimized writes, max records per file, and periodic compaction such as Delta OPTIMIZE or a Parquet compaction job. Revisit partition columns to avoid high-cardinality over-partitioning, consider clustering or Z-ordering for common filters, and monitor file count, average file size, planning time, and input files per query.",
+    "category": "spark_file_layout",
+    "difficulty": "medium"
+  },
+  {
+    "question": "A full-data run has slow shuffle fetches plus intermittent FetchFailedException and executor loss. Which knobs and architectural changes make shuffle more reliable?",
+    "reference_answer": "Start by fixing executor instability: memory overhead, network timeouts, disk capacity, shuffle service health, and decommissioning behavior. Use external shuffle service or shuffle tracking with dynamic allocation, avoid removing shuffle-producing executors too aggressively, tune retry and fetch settings carefully, and reduce shuffle size through filtering, pre-aggregation, broadcast joins, partition tuning, and skew handling.",
+    "category": "spark_fault_tolerance",
+    "difficulty": "hard"
+  },
+  {
+    "question": "A 50-executor cluster with 8 cores each shows low CPU, many short tasks, and high scheduler delay in a wide stage. How would you choose a better partition count and task sizing strategy?",
+    "reference_answer": "The cluster has about 400 task slots, so partitions should provide enough waves for load balancing without creating tiny tasks. Many short tasks and high scheduler delay indicate too many partitions or too little work per task. Target task durations in the tens of seconds to a few minutes, size partitions by input/shuffle bytes, let AQE coalesce small partitions, and validate CPU utilization, scheduler delay, and p95 task time.",
+    "category": "spark_partitioning",
+    "difficulty": "easy"
+  },
+  {
+    "question": "Kafka click events can arrive two hours late. You need per-campaign counts in five-minute windows without unbounded state. How should watermarks, windows, and output modes be used?",
+    "reference_answer": "Use event-time processing with five-minute windows and a watermark delay that covers the accepted lateness, such as two hours. The watermark lets Spark close old windows and evict state; records later than the watermark are dropped or handled separately. Append mode is valid when Spark can finalize windows, update mode emits changing counts, and complete mode is usually too expensive for large state.",
+    "category": "spark_streaming",
+    "difficulty": "medium"
+  },
+  {
+    "question": "You deduplicate streaming events by event_id, but duplicates can reappear days later. How do you implement deduplication and prevent unbounded state growth?",
+    "reference_answer": "Use event-time watermarking with dropDuplicates on event_id when the duplicate horizon is bounded. The watermark limits how long Spark keeps seen IDs, but duplicates arriving after state eviction can pass through. If duplicates may appear days later, either choose a business TTL that justifies the state cost or make the sink idempotent with an upsert/MERGE keyed by event_id and durable history.",
+    "category": "spark_streaming",
+    "difficulty": "hard"
+  },
+  {
+    "question": "A stateful streaming aggregation writes to an external key-value store, and after a driver crash some keys are double-counted. Why does this happen and how do you get effectively exactly-once results?",
+    "reference_answer": "Spark can recover processing state from checkpoints, but external side effects may be replayed after failure if the sink is not transactional or idempotent. Use a sink with atomic commits, or write deterministic upserts keyed by business key and batch/epoch id. Record processed batch ids, make retries safe, and accept that without sink idempotency or transactions the end-to-end guarantee is at-least-once.",
+    "category": "spark_streaming",
+    "difficulty": "hard"
+  },
+  {
+    "question": "For per-user sessions with a 30-minute inactivity timeout and a final summary when a session closes, would you use mapGroupsWithState, flatMapGroupsWithState, or windowed aggregation?",
+    "reference_answer": "Use flatMapGroupsWithState with event-time timeout when you need dynamic session boundaries and can emit zero, one, or multiple outputs per key, including a final close event. Simple windowed aggregation is too rigid for custom session state, and mapGroupsWithState can be limiting for multiple outputs. Watermarks advance event time and allow Spark to trigger timeouts and clean old state.",
+    "category": "spark_streaming",
+    "difficulty": "medium"
+  },
+  {
+    "question": "Two Kafka streams, impressions and clicks, are joined by ad_id within a ten-minute interval. What state and watermark requirements keep the stream-stream join correct and bounded?",
+    "reference_answer": "Both streams need event-time columns, watermarks, and a bounded join condition such as click time within ten minutes of impression time. Spark keeps state for unmatched rows until the watermark proves they can no longer match. If only one side has a watermark, the other side's state may grow without bound or late matches may be handled incorrectly. Monitor state size and late-drop metrics.",
+    "category": "spark_streaming",
+    "difficulty": "hard"
+  },
+  {
+    "question": "A foreachBatch job writes each micro-batch to Delta and to a low-latency serving store. How do you design batch logic so restarts do not make the sinks diverge?",
+    "reference_answer": "Use the foreachBatch batchId as an idempotency key. Write each sink with deterministic upsert or transactional semantics, and record completion status per sink and batch. If one sink succeeds and the other fails, the retry should safely skip or reapply the successful write without duplicating effects. For strict consistency, use a transactional outbox or make one durable sink the source for replaying the other.",
+    "category": "spark_streaming",
+    "difficulty": "medium"
+  }
+]
