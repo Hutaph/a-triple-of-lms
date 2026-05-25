@@ -22,6 +22,8 @@ OUTPUT_DIR = PROJECT_ROOT / "outputs" / "phi3"
 
 DEFAULT_TEMPERATURE = 0.2
 DEFAULT_MAX_TOKENS = 900
+DEFAULT_SMALL_ONNX_MODEL_ID = "microsoft/Phi-3-small-8k-instruct-onnx-cuda"
+DEFAULT_SMALL_ONNX_VARIANT = "cuda-int4-rtn-block-32"
 
 SYSTEM_PROMPT = (
     "You are a senior Big Data engineer and Spark expert. "
@@ -40,6 +42,8 @@ DEFAULT_MODELS = {
         "name": "Phi-3 Small 8K",
         "env": "PHI3_SMALL_MODEL",
         "id": "microsoft/Phi-3-small-8k-instruct",
+        "onnx_env": "PHI3_SMALL_ONNX_MODEL",
+        "onnx_id": DEFAULT_SMALL_ONNX_MODEL_ID,
         "trust_remote_code": True,
     },
     "medium": {
@@ -93,6 +97,7 @@ def model_registry() -> dict[str, dict[str, Any]]:
         registry[key] = {
             "name": config["name"],
             "id": os.getenv(config["env"], config["id"]),
+            "onnx_id": os.getenv(config.get("onnx_env", ""), config.get("onnx_id", "")),
             "trust_remote_code": config["trust_remote_code"],
         }
     return registry
@@ -215,7 +220,9 @@ def model_load_hints(exc: Exception, model_id_or_path: str) -> str:
         )
     if "flash attention" in message.lower() or "flash_attn" in message.lower():
         hints.append("Phi-3 Small requires flash-attention-capable GPU/runtime for its dense attention layers.")
-    if "phi-3-small" in model_ref or "phi3small" in message.lower():
+    if "onnxruntime_genai" in message.lower():
+        hints.append("Install ONNX Runtime GenAI CUDA with: pip install --pre onnxruntime-genai-cuda.")
+    if ("phi-3-small" in model_ref or "phi3small" in message.lower()) and "onnx" not in model_ref:
         hints.append("Phi-3 Small is the only model in this script that uses custom Triton/block-sparse code.")
 
     return (" Hint: " + " ".join(dict.fromkeys(hints))) if hints else ""
@@ -264,6 +271,62 @@ def load_phi3_model(
     return tokenizer, model
 
 
+def resolve_onnx_model_dir(
+    onnx_model_id: str,
+    onnx_variant: str,
+    onnx_model_dir: str | None,
+    cache_dir: str | None,
+    local_files_only: bool,
+) -> Path:
+    if onnx_model_dir:
+        model_dir = Path(onnx_model_dir).expanduser()
+        if model_dir.name != onnx_variant and (model_dir / onnx_variant).exists():
+            model_dir = model_dir / onnx_variant
+        return model_dir
+
+    from huggingface_hub import snapshot_download
+
+    snapshot_dir = Path(
+        snapshot_download(
+            repo_id=onnx_model_id,
+            allow_patterns=[f"{onnx_variant}/*"],
+            cache_dir=cache_dir,
+            local_files_only=local_files_only,
+        )
+    )
+    return snapshot_dir / onnx_variant
+
+
+def load_phi3_onnx_model(
+    onnx_model_id: str,
+    onnx_variant: str,
+    onnx_model_dir: str | None,
+    cache_dir: str | None,
+    local_files_only: bool,
+):
+    import onnxruntime_genai as og
+
+    model_dir = resolve_onnx_model_dir(
+        onnx_model_id=onnx_model_id,
+        onnx_variant=onnx_variant,
+        onnx_model_dir=onnx_model_dir,
+        cache_dir=cache_dir,
+        local_files_only=local_files_only,
+    )
+    genai_config = model_dir / "genai_config.json"
+    if not genai_config.exists():
+        raise FileNotFoundError(
+            f"ONNX GenAI config not found: {genai_config}. "
+            f"Download with: huggingface-cli download {onnx_model_id} "
+            f"--include {onnx_variant}/* --local-dir <dir>"
+        )
+
+    config = og.Config(str(model_dir))
+    model = og.Model(config)
+    tokenizer = og.Tokenizer(model)
+    return tokenizer, model, str(model_dir)
+
+
 def build_chat_prompt(tokenizer, prompt: str) -> str:
     messages = [
         {"role": "system", "content": SYSTEM_PROMPT},
@@ -277,6 +340,14 @@ def build_chat_prompt(tokenizer, prompt: str) -> str:
         )
     except Exception:
         return f"{SYSTEM_PROMPT}\n\nUser: {prompt}\nAssistant:"
+
+
+def build_onnx_chat_prompt(prompt: str) -> str:
+    return (
+        f"<|system|>\n{SYSTEM_PROMPT}<|end|>\n"
+        f"<|user|>\n{prompt}<|end|>\n"
+        "<|assistant|>\n"
+    )
 
 
 def infer_input_device(model):
@@ -323,6 +394,48 @@ def call_phi3_model(
     generated_ids = output_ids[0][inputs["input_ids"].shape[-1] :]
     output = tokenizer.decode(generated_ids, skip_special_tokens=True).strip()
     return output, latency, len(generated_ids)
+
+
+def call_phi3_onnx_model(
+    tokenizer,
+    model,
+    prompt: str,
+    temperature: float,
+    max_new_tokens: int,
+) -> tuple[str, float, int]:
+    import onnxruntime_genai as og
+
+    text = build_onnx_chat_prompt(prompt)
+    input_tokens = tokenizer.encode(text)
+
+    params = og.GeneratorParams(model)
+    search_options = {
+        "max_length": len(input_tokens) + max_new_tokens,
+        "min_length": len(input_tokens),
+        "do_sample": temperature > 0,
+    }
+    if temperature > 0:
+        search_options["temperature"] = temperature
+    params.set_search_options(**search_options)
+
+    generator = og.Generator(model, params)
+    stream = tokenizer.create_stream()
+    output_chunks = []
+    output_tokens = 0
+
+    start = time.perf_counter()
+    try:
+        generator.append_tokens(input_tokens)
+        while not generator.is_done():
+            generator.generate_next_token()
+            new_token = generator.get_next_tokens()[0]
+            output_chunks.append(stream.decode(new_token))
+            output_tokens += 1
+    finally:
+        del generator
+
+    latency = time.perf_counter() - start
+    return "".join(output_chunks).strip(), latency, output_tokens
 
 
 def expected_points_to_list(text: str | None) -> list[str]:
@@ -393,37 +506,53 @@ def run_model_benchmark(
     samples: list[dict],
     model_name: str,
     model_id: str,
+    onnx_model_id: str,
     cache_dir: str | None,
     local_files_only: bool,
     device: str,
     torch_dtype_name: str,
     load_in_4bit: bool,
     trust_remote_code: bool,
+    backend: str,
+    onnx_variant: str,
+    onnx_model_dir: str | None,
     include_scores: bool,
     sleep_seconds: float,
     show_traceback: bool,
 ) -> list[dict]:
     import torch
 
-    print(f"Loading model: {model_name} ({model_id}); trust_remote_code={trust_remote_code}")
+    active_model_id = onnx_model_id if backend == "onnx" else model_id
+    print(f"Loading model: {model_name} ({active_model_id}); backend={backend}; trust_remote_code={trust_remote_code}")
     gc.collect()
     if torch.cuda.is_available():
         torch.cuda.empty_cache()
 
     try:
-        tokenizer, model = load_phi3_model(
-            model_id_or_path=model_id,
-            cache_dir=cache_dir,
-            local_files_only=local_files_only,
-            device=device,
-            torch_dtype_name=torch_dtype_name,
-            load_in_4bit=load_in_4bit,
-            trust_remote_code=trust_remote_code,
-        )
+        if backend == "onnx":
+            tokenizer, model, resolved_model_dir = load_phi3_onnx_model(
+                onnx_model_id=onnx_model_id,
+                onnx_variant=onnx_variant,
+                onnx_model_dir=onnx_model_dir,
+                cache_dir=cache_dir,
+                local_files_only=local_files_only,
+            )
+            active_model_id = f"{onnx_model_id}/{onnx_variant}"
+            print(f"ONNX model dir: {resolved_model_dir}")
+        else:
+            tokenizer, model = load_phi3_model(
+                model_id_or_path=model_id,
+                cache_dir=cache_dir,
+                local_files_only=local_files_only,
+                device=device,
+                torch_dtype_name=torch_dtype_name,
+                load_in_4bit=load_in_4bit,
+                trust_remote_code=trust_remote_code,
+            )
     except Exception as exc:
         if show_traceback:
             traceback.print_exc()
-        error = f"Model load failed: {exc}{model_load_hints(exc, model_id)}"
+        error = f"Model load failed: {exc}{model_load_hints(exc, active_model_id)}"
         print(error)
         results = []
         for sample in samples:
@@ -435,7 +564,7 @@ def run_model_benchmark(
                 build_result_record(
                     sample=sample,
                     model_name=model_name,
-                    model_id=model_id,
+                    model_id=active_model_id,
                     output=None,
                     error=error,
                     temperature=temperature,
@@ -462,13 +591,22 @@ def run_model_benchmark(
             started_at = datetime.now(timezone.utc).isoformat()
 
             try:
-                output, latency_s, output_tokens = call_phi3_model(
-                    tokenizer=tokenizer,
-                    model=model,
-                    prompt=sample["prompt"],
-                    temperature=temperature,
-                    max_new_tokens=max_tokens,
-                )
+                if backend == "onnx":
+                    output, latency_s, output_tokens = call_phi3_onnx_model(
+                        tokenizer=tokenizer,
+                        model=model,
+                        prompt=sample["prompt"],
+                        temperature=temperature,
+                        max_new_tokens=max_tokens,
+                    )
+                else:
+                    output, latency_s, output_tokens = call_phi3_model(
+                        tokenizer=tokenizer,
+                        model=model,
+                        prompt=sample["prompt"],
+                        temperature=temperature,
+                        max_new_tokens=max_tokens,
+                    )
                 error = None
             except Exception as exc:
                 output = None
@@ -481,7 +619,7 @@ def run_model_benchmark(
                 build_result_record(
                     sample=sample,
                     model_name=model_name,
-                    model_id=model_id,
+                    model_id=active_model_id,
                     output=output,
                     error=error,
                     temperature=temperature,
@@ -620,6 +758,28 @@ def parse_args() -> argparse.Namespace:
         help="Load with bitsandbytes 4-bit quantization. Recommended for Colab T4.",
     )
     parser.add_argument(
+        "--small-backend",
+        choices=["auto", "torch", "onnx"],
+        default="auto",
+        help="Backend for Phi-3 Small. auto uses ONNX CUDA when CUDA is available.",
+    )
+    parser.add_argument(
+        "--small-onnx-model",
+        default=os.getenv("PHI3_SMALL_ONNX_MODEL", DEFAULT_SMALL_ONNX_MODEL_ID),
+        help="Hugging Face repo id for the Phi-3 Small ONNX CUDA model.",
+    )
+    parser.add_argument(
+        "--small-onnx-variant",
+        choices=["cuda-int4-rtn-block-32", "cuda-fp16"],
+        default=os.getenv("PHI3_SMALL_ONNX_VARIANT", DEFAULT_SMALL_ONNX_VARIANT),
+        help="Subfolder variant inside the Phi-3 Small ONNX CUDA repo.",
+    )
+    parser.add_argument(
+        "--small-onnx-dir",
+        default=os.getenv("PHI3_SMALL_ONNX_DIR"),
+        help="Optional local path to the ONNX model subfolder, or to a folder containing the variant subfolder.",
+    )
+    parser.add_argument(
         "--trust-remote-code",
         action="store_true",
         help="Force remote code for every selected model. By default only Phi-3 Small uses it.",
@@ -643,6 +803,17 @@ def parse_args() -> argparse.Namespace:
     return parser.parse_args()
 
 
+def select_backend(model_key: str, small_backend: str, device: str) -> str:
+    if model_key != "small":
+        return "torch"
+    if small_backend != "auto":
+        return small_backend
+
+    import torch
+
+    return "onnx" if device != "cpu" and torch.cuda.is_available() else "torch"
+
+
 def main() -> None:
     args = parse_args()
     cache_dir = normalize_hub_cache_dir(args.cache_dir)
@@ -654,17 +825,23 @@ def main() -> None:
     selected = registry if args.model == "all" else {args.model: registry[args.model]}
 
     all_results = []
-    for model_config in selected.values():
+    for model_key, model_config in selected.items():
+        backend = select_backend(model_key, args.small_backend, args.device)
+        onnx_model_id = args.small_onnx_model if model_key == "small" else model_config["onnx_id"]
         results = run_model_benchmark(
             samples=samples,
             model_name=model_config["name"],
             model_id=model_config["id"],
+            onnx_model_id=onnx_model_id,
             cache_dir=cache_dir,
             local_files_only=args.local_files_only,
             device=args.device,
             torch_dtype_name=args.torch_dtype,
             load_in_4bit=args.load_in_4bit,
             trust_remote_code=args.trust_remote_code or model_config["trust_remote_code"],
+            backend=backend,
+            onnx_variant=args.small_onnx_variant,
+            onnx_model_dir=args.small_onnx_dir,
             include_scores=not args.no_score,
             sleep_seconds=args.sleep,
             show_traceback=args.show_traceback,
