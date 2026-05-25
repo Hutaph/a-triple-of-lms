@@ -349,6 +349,8 @@ def run_model_benchmark(
         )
     except Exception as exc:
         error = f"Model load failed: {exc}"
+        if "trust_remote_code" in str(exc):
+            error += " Hint: Phi-3 Small uses Hugging Face custom code; retry with --trust-remote-code."
         print(error)
         results = []
         for sample in samples:
