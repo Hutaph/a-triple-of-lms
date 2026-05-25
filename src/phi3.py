@@ -7,6 +7,7 @@ import sys
 import time
 from datetime import datetime, timezone
 from pathlib import Path
+from typing import Any
 
 from tqdm import tqdm
 
@@ -28,21 +29,24 @@ SYSTEM_PROMPT = (
 )
 
 DEFAULT_MODELS = {
-    "mini": (
-        "Phi-3 Mini 4K",
-        "PHI3_MINI_MODEL",
-        "microsoft/Phi-3-mini-4k-instruct",
-    ),
-    "small": (
-        "Phi-3 Small 8K",
-        "PHI3_SMALL_MODEL",
-        "microsoft/Phi-3-small-8k-instruct",
-    ),
-    "medium": (
-        "Phi-3 Medium 4K",
-        "PHI3_MEDIUM_MODEL",
-        "microsoft/Phi-3-medium-4k-instruct",
-    ),
+    "mini": {
+        "name": "Phi-3 Mini 4K",
+        "env": "PHI3_MINI_MODEL",
+        "id": "microsoft/Phi-3-mini-4k-instruct",
+        "trust_remote_code": False,
+    },
+    "small": {
+        "name": "Phi-3 Small 8K",
+        "env": "PHI3_SMALL_MODEL",
+        "id": "microsoft/Phi-3-small-8k-instruct",
+        "trust_remote_code": True,
+    },
+    "medium": {
+        "name": "Phi-3 Medium 4K",
+        "env": "PHI3_MEDIUM_MODEL",
+        "id": "microsoft/Phi-3-medium-4k-instruct",
+        "trust_remote_code": False,
+    },
 }
 
 
@@ -82,12 +86,13 @@ def parse_generation_params(param_text: str | None) -> tuple[float, int]:
     return temperature, max_tokens
 
 
-def model_registry() -> dict[str, dict[str, str]]:
+def model_registry() -> dict[str, dict[str, Any]]:
     registry = {}
-    for key, (display_name, env_name, default_model_id) in DEFAULT_MODELS.items():
+    for key, config in DEFAULT_MODELS.items():
         registry[key] = {
-            "name": display_name,
-            "id": os.getenv(env_name, default_model_id),
+            "name": config["name"],
+            "id": os.getenv(config["env"], config["id"]),
+            "trust_remote_code": config["trust_remote_code"],
         }
     return registry
 
@@ -163,6 +168,19 @@ def build_model_kwargs(
     return kwargs
 
 
+def sanitize_phi3_config(config):
+    rope_scaling = getattr(config, "rope_scaling", None)
+    if isinstance(rope_scaling, dict) and not rope_scaling:
+        config.rope_scaling = None
+
+    if getattr(config, "model_type", None) == "phi3small":
+        rope_scaling = getattr(config, "rope_scaling", None)
+        if isinstance(rope_scaling, dict) and "short_factor" not in rope_scaling:
+            config.rope_scaling = None
+
+    return config
+
+
 def load_phi3_model(
     model_id_or_path: str,
     cache_dir: str | None,
@@ -172,7 +190,7 @@ def load_phi3_model(
     load_in_4bit: bool,
     trust_remote_code: bool,
 ):
-    from transformers import AutoModelForCausalLM, AutoTokenizer
+    from transformers import AutoConfig, AutoModelForCausalLM, AutoTokenizer
 
     tokenizer = AutoTokenizer.from_pretrained(
         model_id_or_path,
@@ -180,10 +198,18 @@ def load_phi3_model(
         local_files_only=local_files_only,
         trust_remote_code=trust_remote_code,
     )
+    config = AutoConfig.from_pretrained(
+        model_id_or_path,
+        cache_dir=cache_dir,
+        local_files_only=local_files_only,
+        trust_remote_code=trust_remote_code,
+    )
+    config = sanitize_phi3_config(config)
 
     model = AutoModelForCausalLM.from_pretrained(
         model_id_or_path,
         cache_dir=cache_dir,
+        config=config,
         local_files_only=local_files_only,
         **build_model_kwargs(
             device=device,
@@ -336,7 +362,7 @@ def run_model_benchmark(
 ) -> list[dict]:
     import torch
 
-    print(f"Loading model: {model_name} ({model_id})")
+    print(f"Loading model: {model_name} ({model_id}); trust_remote_code={trust_remote_code}")
     try:
         tokenizer, model = load_phi3_model(
             model_id_or_path=model_id,
@@ -549,7 +575,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--trust-remote-code",
         action="store_true",
-        help="Enable only if your cached Phi-3 variant requires remote code.",
+        help="Force remote code for every selected model. By default only Phi-3 Small uses it.",
     )
     parser.add_argument(
         "--no-score",
@@ -586,7 +612,7 @@ def main() -> None:
             device=args.device,
             torch_dtype_name=args.torch_dtype,
             load_in_4bit=args.load_in_4bit,
-            trust_remote_code=args.trust_remote_code,
+            trust_remote_code=args.trust_remote_code or model_config["trust_remote_code"],
             include_scores=not args.no_score,
             sleep_seconds=args.sleep,
         )
