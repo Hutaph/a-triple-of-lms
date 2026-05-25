@@ -5,6 +5,7 @@ import os
 import re
 import sys
 import time
+import traceback
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
@@ -131,6 +132,24 @@ def torch_dtype_from_name(dtype_name: str, device: str):
     raise ValueError(f"Unsupported torch dtype: {dtype_name}")
 
 
+def quantized_device_map(device: str):
+    import torch
+
+    if device == "cpu":
+        raise ValueError("4-bit loading requires CUDA.")
+    if torch.cuda.device_count() == 1:
+        return {"": 0}
+    return "auto"
+
+
+def bnb_compute_dtype(dtype):
+    import torch
+
+    if dtype == torch.bfloat16 and not torch.cuda.is_bf16_supported():
+        return torch.float16
+    return dtype
+
+
 def build_model_kwargs(
     device: str,
     torch_dtype_name: str,
@@ -141,6 +160,7 @@ def build_model_kwargs(
 
     dtype = torch_dtype_from_name(torch_dtype_name, device)
     kwargs = {
+        "low_cpu_mem_usage": True,
         "torch_dtype": dtype,
         "trust_remote_code": trust_remote_code,
     }
@@ -153,10 +173,10 @@ def build_model_kwargs(
 
         kwargs.update(
             {
-                "device_map": "auto",
+                "device_map": quantized_device_map(device),
                 "quantization_config": BitsAndBytesConfig(
                     load_in_4bit=True,
-                    bnb_4bit_compute_dtype=dtype,
+                    bnb_4bit_compute_dtype=bnb_compute_dtype(dtype),
                     bnb_4bit_quant_type="nf4",
                     bnb_4bit_use_double_quant=True,
                 ),
@@ -179,6 +199,26 @@ def sanitize_phi3_config(config):
             config.rope_scaling = None
 
     return config
+
+
+def model_load_hints(exc: Exception, model_id_or_path: str) -> str:
+    message = str(exc)
+    hints = []
+    model_ref = model_id_or_path.lower()
+
+    if "trust_remote_code" in message:
+        hints.append("Phi-3 Small uses Hugging Face custom code; retry with --trust-remote-code.")
+    if "unsupported scalartype" in message.lower():
+        hints.append(
+            "If this is Phi-3 Small on Colab T4, the model's custom BF16/Triton path is not "
+            "T4-friendly; try an A100/A6000/H100 runtime or the ONNX CUDA variant."
+        )
+    if "flash attention" in message.lower() or "flash_attn" in message.lower():
+        hints.append("Phi-3 Small requires flash-attention-capable GPU/runtime for its dense attention layers.")
+    if "phi-3-small" in model_ref or "phi3small" in message.lower():
+        hints.append("Phi-3 Small is the only model in this script that uses custom Triton/block-sparse code.")
+
+    return (" Hint: " + " ".join(dict.fromkeys(hints))) if hints else ""
 
 
 def load_phi3_model(
@@ -361,10 +401,15 @@ def run_model_benchmark(
     trust_remote_code: bool,
     include_scores: bool,
     sleep_seconds: float,
+    show_traceback: bool,
 ) -> list[dict]:
     import torch
 
     print(f"Loading model: {model_name} ({model_id}); trust_remote_code={trust_remote_code}")
+    gc.collect()
+    if torch.cuda.is_available():
+        torch.cuda.empty_cache()
+
     try:
         tokenizer, model = load_phi3_model(
             model_id_or_path=model_id,
@@ -376,9 +421,9 @@ def run_model_benchmark(
             trust_remote_code=trust_remote_code,
         )
     except Exception as exc:
-        error = f"Model load failed: {exc}"
-        if "trust_remote_code" in str(exc):
-            error += " Hint: Phi-3 Small uses Hugging Face custom code; retry with --trust-remote-code."
+        if show_traceback:
+            traceback.print_exc()
+        error = f"Model load failed: {exc}{model_load_hints(exc, model_id)}"
         print(error)
         results = []
         for sample in samples:
@@ -590,6 +635,11 @@ def parse_args() -> argparse.Namespace:
         default=0.0,
         help="Seconds to sleep between samples.",
     )
+    parser.add_argument(
+        "--show-traceback",
+        action="store_true",
+        help="Print the full model-load traceback before writing failed benchmark rows.",
+    )
     return parser.parse_args()
 
 
@@ -617,6 +667,7 @@ def main() -> None:
             trust_remote_code=args.trust_remote_code or model_config["trust_remote_code"],
             include_scores=not args.no_score,
             sleep_seconds=args.sleep,
+            show_traceback=args.show_traceback,
         )
         all_results.extend(results)
 
