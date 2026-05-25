@@ -337,15 +337,44 @@ def run_model_benchmark(
     import torch
 
     print(f"Loading model: {model_name} ({model_id})")
-    tokenizer, model = load_phi3_model(
-        model_id_or_path=model_id,
-        cache_dir=cache_dir,
-        local_files_only=local_files_only,
-        device=device,
-        torch_dtype_name=torch_dtype_name,
-        load_in_4bit=load_in_4bit,
-        trust_remote_code=trust_remote_code,
-    )
+    try:
+        tokenizer, model = load_phi3_model(
+            model_id_or_path=model_id,
+            cache_dir=cache_dir,
+            local_files_only=local_files_only,
+            device=device,
+            torch_dtype_name=torch_dtype_name,
+            load_in_4bit=load_in_4bit,
+            trust_remote_code=trust_remote_code,
+        )
+    except Exception as exc:
+        error = f"Model load failed: {exc}"
+        print(error)
+        results = []
+        for sample in samples:
+            temperature, max_tokens = parse_generation_params(
+                sample.get("recommended_generation_params")
+            )
+            timestamp = datetime.now(timezone.utc).isoformat()
+            results.append(
+                build_result_record(
+                    sample=sample,
+                    model_name=model_name,
+                    model_id=model_id,
+                    output=None,
+                    error=error,
+                    temperature=temperature,
+                    max_tokens=max_tokens,
+                    latency_s=None,
+                    output_tokens=None,
+                    started_at=timestamp,
+                    ended_at=timestamp,
+                    include_scores=include_scores,
+                )
+            )
+        if torch.cuda.is_available():
+            torch.cuda.empty_cache()
+        return results
 
     results = []
     print(f"Running benchmark for model: {model_name}")
