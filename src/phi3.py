@@ -445,9 +445,11 @@ def summarize(results: list[dict]) -> dict:
     summary = {}
     for model_name in models:
         rows = [result for result in results if result["model_name"] == model_name]
+        errors = [row.get("error") for row in rows if row.get("error")]
         summary[model_name] = {
             "count": len(rows),
-            "errors": sum(1 for row in rows if row.get("error")),
+            "errors": len(errors),
+            "first_error": errors[0] if errors else None,
             "avg_latency_s": average([row.get("latency_s") for row in rows]),
             "avg_output_tokens": average([row.get("output_tokens") for row in rows]),
             "avg_auto_score": average([row.get("auto_score") for row in rows]),
