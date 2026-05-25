@@ -192,6 +192,7 @@ def load_phi3_model(
 ):
     from transformers import AutoConfig, AutoModelForCausalLM, AutoTokenizer
 
+    dtype = torch_dtype_from_name(torch_dtype_name, device)
     tokenizer = AutoTokenizer.from_pretrained(
         model_id_or_path,
         cache_dir=cache_dir,
@@ -205,6 +206,7 @@ def load_phi3_model(
         trust_remote_code=trust_remote_code,
     )
     config = sanitize_phi3_config(config)
+    config.torch_dtype = dtype
 
     model = AutoModelForCausalLM.from_pretrained(
         model_id_or_path,
