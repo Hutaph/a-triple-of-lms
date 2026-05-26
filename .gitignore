@@ -14,10 +14,6 @@ env/
 # Jupyter
 .ipynb_checkpoints/
 
-# Output files
-outputs/
-results/
-*.log
 
 # OS files
 .DS_Store
