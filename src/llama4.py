@@ -226,21 +226,27 @@ def main():
     selected_models = {}
 
     if args.model in ["scout", "all"]:
-        selected_models["Llama 4 Scout"] = models["llama4_scout"]
+        selected_models["llama4_scout"] = {
+            "display_name": "Llama 4 Scout",
+            "model_id": models["llama4_scout"],
+        }
 
     if args.model in ["maverick", "all"]:
-        selected_models["Llama 4 Maverick"] = models["llama4_maverick"]
+        selected_models["llama4_maverick"] = {
+            "display_name": "Llama 4 Maverick",
+            "model_id": models["llama4_maverick"],
+        }
 
-    for model_name, model_id in selected_models.items():
+    for model_key, model_info in selected_models.items():
         results = run_model_benchmark(
             client=client,
             samples=samples,
-            model_name=model_name,
-            model_id=model_id,
+            model_name=model_info["display_name"],
+            model_id=model_info["model_id"],
             sleep_seconds=args.sleep,
         )
 
-        output_path = OUTPUT_DIR / f"{model_name}_outputs.json"
+        output_path = OUTPUT_DIR / f"{model_key}_outputs.json"
         save_results(results, output_path)
 
 if __name__ == "__main__":
