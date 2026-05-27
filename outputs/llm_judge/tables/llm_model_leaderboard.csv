@@ -1,0 +1,5 @@
+model_name,count,avg_score,median_score,min_score,max_score,avg_missing,avg_issues
+Llama 4 Maverick,10,6.508,6.525,4.26,8.38,2.8,2.1
+Llama 4 Scout,10,5.488,5.315,3.02,8.16,3.1,2.5
+Phi-3 Medium 4K,10,5.17,5.065,4.0,7.48,3.0,2.3
+Phi-3 Mini 4K,10,4.095,4.44,1.83,5.2,2.9,2.9

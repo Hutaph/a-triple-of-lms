@@ -11,14 +11,17 @@ from pathlib import Path
 from typing import Any
 
 from dotenv import load_dotenv
-from pydantic import BaseModel
+from pydantic import BaseModel, ValidationError
 from tqdm import tqdm
 
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 DATA_FILE = PROJECT_ROOT / "data" / "bigdata_10_questions.json"
-DEFAULT_OUTPUT_DIR = PROJECT_ROOT / "outputs" / "gpt55_judge"
-DEFAULT_JUDGE_MODEL = "gpt-5.5"
+DEFAULT_OUTPUT_DIR = PROJECT_ROOT / "outputs" / "llm_judge"
+DEFAULT_OPENAI_JUDGE_MODEL = "gpt-5.5"
+DEFAULT_OPENROUTER_JUDGE_MODEL = "deepseek/deepseek-chat-v3.1"
+DEFAULT_OPENROUTER_BASE_URL = "https://openrouter.ai/api/v1"
+DEFAULT_MAX_OUTPUT_TOKENS = 700
 
 METRIC_WEIGHTS = {
     "correctness": 0.25,
@@ -62,7 +65,7 @@ class JudgeReport(BaseModel):
 
 
 def load_json(path: Path) -> Any:
-    with path.open("r", encoding="utf-8") as file:
+    with path.open("r", encoding="utf-8-sig") as file:
         return json.load(file)
 
 
@@ -110,7 +113,7 @@ def discover_prediction_files(root: Path) -> list[Path]:
     for pattern in patterns:
         paths.extend(root.glob(f"**/{pattern}"))
 
-    ignored_parts = {"gpt55_judge", "judged_by_gpt55"}
+    ignored_parts = {"llm_judge", "gpt55_judge", "judged_by_llm", "judged_by_gpt55"}
     unique_paths = []
     seen = set()
     for path in sorted(paths):
@@ -177,16 +180,47 @@ def load_prediction_rows(paths: list[Path], samples: dict[str, dict]) -> list[di
 
 
 def has_existing_result(result: dict) -> bool:
-    return bool(result.get("judge", {}).get("overall_score") is not None)
+    judge = result.get("judge") or {}
+    return bool(judge.get("overall_score") is not None)
 
 
 def load_existing_results(path: Path) -> dict[str, dict]:
+    return {result_key(row): row for row in load_existing_result_rows(path)}
+
+
+def load_existing_result_rows(path: Path) -> list[dict]:
     if not path.exists():
-        return {}
+        return []
     data = load_json(path)
     if not isinstance(data, list):
-        return {}
-    return {result_key(row): row for row in data if isinstance(row, dict)}
+        return []
+    return [row for row in data if isinstance(row, dict)]
+
+
+def merge_result_rows(existing_rows: list[dict], replacements: list[dict]) -> list[dict]:
+    replacement_by_key = {}
+    replacement_order = []
+    for row in replacements:
+        key = result_key(row)
+        if key not in replacement_by_key:
+            replacement_order.append(key)
+        replacement_by_key[key] = row
+
+    merged = []
+    seen = set()
+    for row in existing_rows:
+        key = result_key(row)
+        if key in seen:
+            continue
+        merged.append(replacement_by_key.get(key, row))
+        seen.add(key)
+
+    for key in replacement_order:
+        if key not in seen:
+            merged.append(replacement_by_key[key])
+            seen.add(key)
+
+    return merged
 
 
 def result_key(row: dict) -> str:
@@ -196,6 +230,7 @@ def result_key(row: dict) -> str:
             str(row.get("prediction_index", "")),
             str(row.get("sample_id", "")),
             str(row.get("model_name", "")),
+            str(row.get("judge_model", "")),
         ]
     )
 
@@ -245,15 +280,14 @@ def build_system_prompt() -> str:
         "Penalize hallucinated Spark behavior, unsafe production advice, incorrect code, "
         "missing required sections, and answers that ignore explicit instructions. "
         "For code_sql_quality, mark applicable=false and score=null unless the task asks "
-        "for code, SQL, or code-like implementation. Return concise rationales."
+        "for code, SQL, or code-like implementation. Return compact JSON: each rationale "
+        "must be under 18 words, each list should contain at most 3 short items, and the "
+        "verdict must be one concise sentence."
     )
 
 
-def openai_client(api_key: str | None) -> Any:
+def judge_client(provider: str, api_key: str | None) -> Any:
     load_dotenv(PROJECT_ROOT / ".env")
-    key = api_key or os.getenv("OPENAI_API_KEY")
-    if not key:
-        raise ValueError("Missing OPENAI_API_KEY. Put it in .env or pass --api-key.")
 
     try:
         from openai import OpenAI
@@ -261,6 +295,19 @@ def openai_client(api_key: str | None) -> Any:
         raise ModuleNotFoundError(
             "OpenAI SDK is not installed. Run: pip install -r requirements.txt"
         ) from exc
+
+    if provider == "openrouter":
+        key = api_key or os.getenv("OPENROUTER_API_KEY")
+        if not key:
+            raise ValueError("Missing OPENROUTER_API_KEY. Put it in .env or pass --api-key.")
+        return OpenAI(
+            base_url=os.getenv("OPENROUTER_BASE_URL", DEFAULT_OPENROUTER_BASE_URL),
+            api_key=key,
+        )
+
+    key = api_key or os.getenv("OPENAI_API_KEY")
+    if not key:
+        raise ValueError("Missing OPENAI_API_KEY. Put it in .env or pass --api-key.")
 
     kwargs: dict[str, str] = {"api_key": key}
     organization = os.getenv("OPENAI_ORG_ID") or os.getenv("OPENAI_ORGANIZATION")
@@ -272,7 +319,190 @@ def openai_client(api_key: str | None) -> Any:
     return OpenAI(**kwargs)
 
 
-def call_judge(
+def extract_json_text(content: str) -> str:
+    text = content.strip()
+    if text.startswith("```"):
+        text = re.sub(r"^```(?:json)?\s*", "", text)
+        text = re.sub(r"\s*```$", "", text)
+    if not text.startswith("{"):
+        start = text.find("{")
+        end = text.rfind("}")
+        if start != -1 and end != -1 and end > start:
+            text = text[start : end + 1]
+    return text
+
+
+def listify(value: Any, fallback: str | None = None) -> list[str]:
+    if isinstance(value, list):
+        return [str(item).strip() for item in value if str(item).strip()][:3]
+    if isinstance(value, str) and value.strip():
+        return [value.strip()]
+    return [fallback] if fallback else []
+
+
+def metric_key(value: str) -> str:
+    return re.sub(r"[^a-z0-9]+", "", value.lower())
+
+
+def metric_aliases(metric: str) -> set[str]:
+    aliases = {
+        metric,
+        metric.replace("_", " "),
+        metric.replace("_", "-"),
+    }
+    aliases_by_metric = {
+        "key_point_coverage": ["key points", "coverage", "expected key points"],
+        "instruction_following": ["instructions", "follows instructions"],
+        "reasoning_depth": ["reasoning", "depth"],
+        "production_readiness": ["production", "practicality"],
+        "clarity_structure": ["clarity", "structure", "presentation"],
+        "factual_grounding": ["factuality", "grounding", "accuracy"],
+        "code_sql_quality": ["code quality", "sql quality", "code"],
+    }
+    aliases.update(aliases_by_metric.get(metric, []))
+    return {metric_key(alias) for alias in aliases}
+
+
+def score_to_float(value: Any, default: float | None = None) -> float | None:
+    if value is None:
+        return default
+    try:
+        return bounded_score(value)
+    except (TypeError, ValueError):
+        return default
+
+
+def normalize_metric_score(value: Any, default_score: float) -> dict:
+    applicable = True
+    score: float | None = default_score
+    rationale = "Fallback from overall judge score."
+
+    if isinstance(value, dict):
+        applicable = bool(value.get("applicable", not value.get("not_applicable", False)))
+        score = score_to_float(
+            value.get("score", value.get("value", value.get("rating"))),
+            None if not applicable else default_score,
+        )
+        rationale = str(
+            value.get("rationale")
+            or value.get("reason")
+            or value.get("comment")
+            or value.get("explanation")
+            or rationale
+        )
+    elif isinstance(value, (int, float, str)):
+        parsed_score = score_to_float(value)
+        if parsed_score is None and isinstance(value, str) and value.strip():
+            rationale = value.strip()
+        else:
+            score = parsed_score if parsed_score is not None else default_score
+
+    return {
+        "applicable": applicable,
+        "score": score if applicable else None,
+        "rationale": rationale[:220],
+    }
+
+
+def score_source_lookup(source: Any) -> dict[str, Any]:
+    if isinstance(source, dict):
+        return {metric_key(str(key)): value for key, value in source.items()}
+    if isinstance(source, list):
+        lookup = {}
+        for item in source:
+            if not isinstance(item, dict):
+                continue
+            name = item.get("metric") or item.get("dimension") or item.get("name") or item.get("criterion")
+            if name:
+                lookup[metric_key(str(name))] = item
+        return lookup
+    return {}
+
+
+def normalize_scores(data: dict, overall_score: float) -> dict:
+    source = {}
+    for key in ["scores", "dimension_scores", "metric_scores", "dimensions", "criteria", "rubric_scores"]:
+        if key in data:
+            source = score_source_lookup(data.get(key))
+            if source:
+                break
+
+    scores = {}
+    for metric in METRIC_WEIGHTS:
+        metric_value = None
+        for alias in metric_aliases(metric):
+            if alias in source:
+                metric_value = source[alias]
+                break
+        scores[metric] = normalize_metric_score(metric_value, overall_score)
+    return scores
+
+
+def normalize_judge_report_data(data: dict) -> JudgeReport:
+    raw_overall = (
+        data.get("overall_score")
+        or data.get("score")
+        or data.get("overall")
+        or data.get("overall_rating")
+        or data.get("rating")
+    )
+    overall_score = score_to_float(raw_overall, 0.0) or 0.0
+    scores = normalize_scores(data, overall_score)
+
+    report = {
+        "overall_score": overall_score,
+        "scores": scores,
+        "strengths": listify(data.get("strengths") or data.get("pros") or data.get("positive_points")),
+        "missing_or_weak_points": listify(
+            data.get("missing_or_weak_points")
+            or data.get("weaknesses")
+            or data.get("missing_points")
+            or data.get("areas_for_improvement")
+        ),
+        "factual_or_logic_issues": listify(
+            data.get("factual_or_logic_issues")
+            or data.get("issues")
+            or data.get("errors")
+            or data.get("concerns")
+        ),
+        "improvement_suggestions": listify(
+            data.get("improvement_suggestions")
+            or data.get("suggestions")
+            or data.get("recommendations")
+        ),
+        "verdict": str(
+            data.get("verdict")
+            or data.get("summary")
+            or data.get("rationale")
+            or "Normalized from OpenRouter judge response."
+        )[:300],
+    }
+    return JudgeReport.model_validate(report)
+
+
+def parse_judge_report(content: str) -> JudgeReport:
+    data = json.loads(extract_json_text(content))
+    try:
+        return JudgeReport.model_validate(data)
+    except ValidationError:
+        if not isinstance(data, dict):
+            raise
+        return normalize_judge_report_data(data)
+
+
+def sanitize_error_message(message: str) -> str:
+    message = re.sub(
+        r"https://openrouter\.ai/workspaces/[^'\"\s,]+",
+        "https://openrouter.ai/workspaces/[redacted]",
+        message,
+    )
+    message = re.sub(r"sk-or-v1-[A-Za-z0-9]+", "sk-or-v1-[redacted]", message)
+    message = re.sub(r"('user_id'\s*:\s*)'[^']+'", r"\1'[redacted]'", message)
+    message = re.sub(r'("user_id"\s*:\s*)"[^"]+"', r'\1"[redacted]"', message)
+    return message
+
+
+def call_openai_responses_judge(
     client: Any,
     model: str,
     reasoning_effort: str,
@@ -309,6 +539,108 @@ def call_judge(
         else:
             metadata["judge_usage"] = dict(usage)
     return report, metadata
+
+
+def call_openrouter_chat_judge(
+    client: Any,
+    model: str,
+    max_output_tokens: int,
+    sample: dict,
+    prediction: dict,
+    candidate_output: str,
+) -> tuple[JudgeReport, dict]:
+    started = time.perf_counter()
+    messages = [
+        {
+            "role": "system",
+            "content": (
+                build_system_prompt()
+                + " Return only JSON using exactly these top-level keys: "
+                + "overall_score, scores, strengths, missing_or_weak_points, "
+                + "factual_or_logic_issues, improvement_suggestions, verdict. "
+                + "scores must contain every metric key from the schema. "
+                + "Do not use aliases such as score or dimension_scores. "
+                + "Do not wrap the JSON in Markdown."
+            ),
+        },
+        {"role": "user", "content": build_judge_input(sample, prediction, candidate_output)},
+    ]
+    schema = JudgeReport.model_json_schema()
+    schema_fallback_error = None
+
+    try:
+        response = client.chat.completions.create(
+            model=model,
+            messages=messages,
+            temperature=0,
+            max_tokens=max_output_tokens,
+            response_format={
+                "type": "json_schema",
+                "json_schema": {
+                    "name": "judge_report",
+                    "strict": True,
+                    "schema": schema,
+                },
+            },
+        )
+    except Exception as schema_exc:
+        schema_fallback_error = str(schema_exc)
+        response = client.chat.completions.create(
+            model=model,
+            messages=messages,
+            temperature=0,
+            max_tokens=max_output_tokens,
+            response_format={"type": "json_object"},
+        )
+
+    latency_s = time.perf_counter() - started
+    content = response.choices[0].message.content or ""
+    report = parse_judge_report(content)
+    metadata = {
+        "judge_latency_s": round(latency_s, 3),
+        "judge_response_id": getattr(response, "id", None),
+        "judge_created_at": datetime.now(timezone.utc).isoformat(),
+    }
+    if schema_fallback_error:
+        metadata["structured_output_fallback_error"] = sanitize_error_message(schema_fallback_error)
+    usage = getattr(response, "usage", None)
+    if usage is not None:
+        if hasattr(usage, "model_dump"):
+            metadata["judge_usage"] = usage.model_dump(mode="json")
+        else:
+            metadata["judge_usage"] = dict(usage)
+    return report, metadata
+
+
+def call_judge(
+    client: Any,
+    provider: str,
+    model: str,
+    reasoning_effort: str,
+    max_output_tokens: int,
+    sample: dict,
+    prediction: dict,
+    candidate_output: str,
+) -> tuple[JudgeReport, dict]:
+    if provider == "openrouter":
+        return call_openrouter_chat_judge(
+            client=client,
+            model=model,
+            max_output_tokens=max_output_tokens,
+            sample=sample,
+            prediction=prediction,
+            candidate_output=candidate_output,
+        )
+
+    return call_openai_responses_judge(
+        client=client,
+        model=model,
+        reasoning_effort=reasoning_effort,
+        max_output_tokens=max_output_tokens,
+        sample=sample,
+        prediction=prediction,
+        candidate_output=candidate_output,
+    )
 
 
 def weighted_score(scores: dict) -> float:
@@ -475,7 +807,7 @@ def write_low_score_report(results: list[dict], path: Path, bottom_n: int = 10) 
     scored = [row for row in results if row.get("weighted_score") is not None]
     lowest = sorted(scored, key=lambda row: row["weighted_score"])[:bottom_n]
     lines = [
-        "# GPT-5.5 LLM Judge Low Score Report",
+        "# LLM Judge Low Score Report",
         "",
         "Lowest-scoring answers according to the weighted 0-10 rubric.",
         "",
@@ -515,7 +847,13 @@ def write_low_score_report(results: list[dict], path: Path, bottom_n: int = 10) 
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
-        description="Judge Big Data benchmark outputs with GPT-5.5 on a 0-10 metric rubric."
+        description="Judge Big Data benchmark outputs with an LLM on a 0-10 metric rubric."
+    )
+    parser.add_argument(
+        "--provider",
+        choices=["openai", "openrouter"],
+        default="openai",
+        help="API provider for the judge model.",
     )
     parser.add_argument("--data", default=str(DATA_FILE), help="Benchmark dataset JSON.")
     parser.add_argument(
@@ -529,15 +867,23 @@ def parse_args() -> argparse.Namespace:
         default=str(DEFAULT_OUTPUT_DIR),
         help="Directory for judge JSON/CSV/summary outputs.",
     )
-    parser.add_argument("--api-key", default=None, help="OpenAI API key. Prefer OPENAI_API_KEY in .env.")
-    parser.add_argument("--judge-model", default=DEFAULT_JUDGE_MODEL)
+    parser.add_argument(
+        "--api-key",
+        default=None,
+        help="API key override. Prefer OPENAI_API_KEY or OPENROUTER_API_KEY in .env.",
+    )
+    parser.add_argument(
+        "--judge-model",
+        default=None,
+        help="Judge model id. Defaults to gpt-5.5 for OpenAI or deepseek/deepseek-chat-v3.1 for OpenRouter.",
+    )
     parser.add_argument(
         "--reasoning-effort",
         choices=["none", "low", "medium", "high", "xhigh"],
         default="medium",
-        help="Reasoning effort for GPT-5.5.",
+        help="Reasoning effort for OpenAI Responses models.",
     )
-    parser.add_argument("--max-output-tokens", type=int, default=1800)
+    parser.add_argument("--max-output-tokens", type=int, default=DEFAULT_MAX_OUTPUT_TOKENS)
     parser.add_argument("--limit", type=int, default=0, help="Use 0 to judge all matched rows.")
     parser.add_argument("--sleep", type=float, default=0.5, help="Seconds between API calls.")
     parser.add_argument("--resume", action="store_true", help="Reuse existing result rows when present.")
@@ -547,12 +893,20 @@ def parse_args() -> argparse.Namespace:
 
 def main() -> None:
     args = parse_args()
+    judge_model = args.judge_model or (
+        DEFAULT_OPENROUTER_JUDGE_MODEL
+        if args.provider == "openrouter"
+        else DEFAULT_OPENAI_JUDGE_MODEL
+    )
     data_path = Path(args.data)
     output_dir = Path(args.output_dir)
-    results_path = output_dir / "gpt55_judge_results.json"
-    summary_path = output_dir / "gpt55_judge_summary.json"
-    csv_path = output_dir / "gpt55_judge_results.csv"
-    low_score_path = output_dir / "gpt55_low_score_report.md"
+    results_dir = output_dir / "results"
+    tables_dir = output_dir / "tables"
+    reports_dir = output_dir / "reports"
+    results_path = results_dir / "llm_judge_results.json"
+    summary_path = results_dir / "llm_judge_summary.json"
+    csv_path = tables_dir / "llm_judge_results.csv"
+    low_score_path = reports_dir / "llm_low_score_report.md"
 
     samples = load_samples(data_path)
     prediction_paths = (
@@ -575,27 +929,29 @@ def main() -> None:
     if args.dry_run:
         return
 
-    client = openai_client(args.api_key)
-    existing = load_existing_results(results_path) if args.resume else {}
-    results = []
+    client = judge_client(args.provider, args.api_key)
+    existing_rows = load_existing_result_rows(results_path) if args.resume else []
+    existing = {result_key(row): row for row in existing_rows}
+    replacement_results = []
 
-    for item in tqdm(items, desc=f"Judging with {args.judge_model}"):
+    for item in tqdm(items, desc=f"Judging with {judge_model}"):
         empty_result = build_result(
             item=item,
             report=None,
-            judge_model=args.judge_model,
+            judge_model=judge_model,
             error=None,
             metadata={},
         )
         key = result_key(empty_result)
         if key in existing and has_existing_result(existing[key]):
-            results.append(existing[key])
+            replacement_results.append(existing[key])
             continue
 
         try:
             report, metadata = call_judge(
                 client=client,
-                model=args.judge_model,
+                provider=args.provider,
+                model=judge_model,
                 reasoning_effort=args.reasoning_effort,
                 max_output_tokens=args.max_output_tokens,
                 sample=item["sample"],
@@ -605,24 +961,26 @@ def main() -> None:
             result = build_result(
                 item=item,
                 report=report,
-                judge_model=args.judge_model,
+                judge_model=judge_model,
                 metadata=metadata,
             )
         except Exception as exc:
             result = build_result(
                 item=item,
                 report=None,
-                judge_model=args.judge_model,
-                error=str(exc),
+                judge_model=judge_model,
+                error=sanitize_error_message(str(exc)),
                 metadata={"judge_created_at": datetime.now(timezone.utc).isoformat()},
             )
 
-        results.append(result)
-        dump_json(results, results_path)
+        replacement_results.append(result)
+        merged_results = merge_result_rows(existing_rows, replacement_results)
+        dump_json(merged_results, results_path)
 
         if args.sleep:
             time.sleep(args.sleep)
 
+    results = merge_result_rows(existing_rows, replacement_results)
     summary = summarize(results)
     dump_json(results, results_path)
     dump_json(summary, summary_path)

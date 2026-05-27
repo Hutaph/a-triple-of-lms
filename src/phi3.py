@@ -531,15 +531,7 @@ def score_output(sample: dict, output: str | None) -> dict[str, float]:
     if not output:
         return {}
 
-    try:
-        from benchmarks.spark_qa_benchmark import composite_score
-    except Exception:
-        return {}
-
-    reference = sample.get("ground_truth") or ""
-    must_have_points = expected_points_to_list(sample.get("expected_key_points"))
-    scores = composite_score(output, reference, must_have_points)
-    return {f"auto_{key}": value for key, value in scores.items()}
+    return {}
 
 
 def build_result_record(

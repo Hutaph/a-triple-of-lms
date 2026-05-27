@@ -1,0 +1,361 @@
+sample_id,model_name,category,difficulty,metric,score,applicable,rationale
+BD_THEORY_EASY_01,Llama 4 Maverick,Theory Q&A,easy,correctness,8.0,True,"Accurate on ownership, DROP behavior, use cases"
+BD_THEORY_EASY_01,Llama 4 Maverick,Theory Q&A,easy,completeness,7.0,True,Missing explicit mention of accidental deletion risk
+BD_THEORY_EASY_01,Llama 4 Maverick,Theory Q&A,easy,key_point_coverage,8.0,True,Covers most key points but omits lifecycle risk
+BD_THEORY_EASY_01,Llama 4 Maverick,Theory Q&A,easy,instruction_following,9.0,True,Concisely includes all requested sections
+BD_THEORY_EASY_01,Llama 4 Maverick,Theory Q&A,easy,reasoning_depth,7.0,True,Good but lacks deeper operational insight
+BD_THEORY_EASY_01,Llama 4 Maverick,Theory Q&A,easy,production_readiness,8.0,True,"Advises external for production, safe practice"
+BD_THEORY_EASY_01,Llama 4 Maverick,Theory Q&A,easy,clarity_structure,9.0,True,"Well-structured, clear bullet points"
+BD_THEORY_EASY_01,Llama 4 Maverick,Theory Q&A,easy,factual_grounding,8.0,True,"Factually correct, minor omission"
+BD_THEORY_EASY_01,Llama 4 Maverick,Theory Q&A,easy,code_sql_quality,,False,Not required but provided accurately
+BD_THEORY_EASY_02,Llama 4 Maverick,Theory Q&A,easy,correctness,9.0,True,"Accurate on storage, metadata, DROP behavior."
+BD_THEORY_EASY_02,Llama 4 Maverick,Theory Q&A,easy,completeness,8.0,True,Covers all requested aspects.
+BD_THEORY_EASY_02,Llama 4 Maverick,Theory Q&A,easy,key_point_coverage,8.0,True,Hits most key points.
+BD_THEORY_EASY_02,Llama 4 Maverick,Theory Q&A,easy,instruction_following,8.0,True,Follows prompt structure.
+BD_THEORY_EASY_02,Llama 4 Maverick,Theory Q&A,easy,reasoning_depth,8.0,True,Explains use cases clearly.
+BD_THEORY_EASY_02,Llama 4 Maverick,Theory Q&A,easy,production_readiness,8.0,True,"Safe, practical advice."
+BD_THEORY_EASY_02,Llama 4 Maverick,Theory Q&A,easy,clarity_structure,9.0,True,"Clear sections, well-organized."
+BD_THEORY_EASY_02,Llama 4 Maverick,Theory Q&A,easy,factual_grounding,9.0,True,Matches ground truth details.
+BD_THEORY_EASY_02,Llama 4 Maverick,Theory Q&A,easy,code_sql_quality,,False,Task did not require code.
+BD_THEORY_MEDIUM_01,Llama 4 Maverick,Theory Q&A,medium,correctness,4.0,True,Major error on coalesce
+BD_THEORY_MEDIUM_01,Llama 4 Maverick,Theory Q&A,medium,completeness,5.0,True,Missing key use cases
+BD_THEORY_MEDIUM_01,Llama 4 Maverick,Theory Q&A,medium,key_point_coverage,5.0,True,Missed several expected points
+BD_THEORY_MEDIUM_01,Llama 4 Maverick,Theory Q&A,medium,instruction_following,6.0,True,Partially addressed prompt
+BD_THEORY_MEDIUM_01,Llama 4 Maverick,Theory Q&A,medium,reasoning_depth,6.0,True,Surface-level explanation
+BD_THEORY_MEDIUM_01,Llama 4 Maverick,Theory Q&A,medium,production_readiness,4.0,True,No small-file or skew advice
+BD_THEORY_MEDIUM_01,Llama 4 Maverick,Theory Q&A,medium,clarity_structure,8.0,True,Clear headings and structure
+BD_THEORY_MEDIUM_01,Llama 4 Maverick,Theory Q&A,medium,factual_grounding,4.0,True,Incorrect shuffle claim
+BD_THEORY_MEDIUM_01,Llama 4 Maverick,Theory Q&A,medium,code_sql_quality,,False,No code evaluation needed
+BD_THEORY_MEDIUM_02,Llama 4 Maverick,Theory Q&A,medium,correctness,5.0,True,Partially correct but incomplete
+BD_THEORY_MEDIUM_02,Llama 4 Maverick,Theory Q&A,medium,completeness,4.0,True,Missing memory risk details
+BD_THEORY_MEDIUM_02,Llama 4 Maverick,Theory Q&A,medium,key_point_coverage,5.0,True,Covers some but not all key points
+BD_THEORY_MEDIUM_02,Llama 4 Maverick,Theory Q&A,medium,instruction_following,6.0,True,Follows structure but incomplete
+BD_THEORY_MEDIUM_02,Llama 4 Maverick,Theory Q&A,medium,reasoning_depth,4.0,True,Shallow on memory trade-offs
+BD_THEORY_MEDIUM_02,Llama 4 Maverick,Theory Q&A,medium,production_readiness,5.0,True,Missing OOM warnings
+BD_THEORY_MEDIUM_02,Llama 4 Maverick,Theory Q&A,medium,clarity_structure,7.0,True,Well-structured but cut off
+BD_THEORY_MEDIUM_02,Llama 4 Maverick,Theory Q&A,medium,factual_grounding,6.0,True,Accurate but incomplete
+BD_THEORY_MEDIUM_02,Llama 4 Maverick,Theory Q&A,medium,code_sql_quality,,False,No code requested
+BD_THEORY_HARD_01,Llama 4 Maverick,Theory Q&A,hard,correctness,7.0,True,Mostly accurate but has minor errors
+BD_THEORY_HARD_01,Llama 4 Maverick,Theory Q&A,hard,completeness,6.0,True,Covers main causes and some solutions
+BD_THEORY_HARD_01,Llama 4 Maverick,Theory Q&A,hard,key_point_coverage,6.0,True,Hits many key points but misses some
+BD_THEORY_HARD_01,Llama 4 Maverick,Theory Q&A,hard,instruction_following,7.0,True,Addresses root causes and solutions
+BD_THEORY_HARD_01,Llama 4 Maverick,Theory Q&A,hard,reasoning_depth,7.0,True,Explains why it hurts performance well
+BD_THEORY_HARD_01,Llama 4 Maverick,Theory Q&A,hard,production_readiness,6.0,True,Provides practical advice but lacks trade-offs
+BD_THEORY_HARD_01,Llama 4 Maverick,Theory Q&A,hard,clarity_structure,8.0,True,Well-organized with clear sections
+BD_THEORY_HARD_01,Llama 4 Maverick,Theory Q&A,hard,factual_grounding,6.0,True,Correct on core concepts but misses key details
+BD_THEORY_HARD_01,Llama 4 Maverick,Theory Q&A,hard,code_sql_quality,,False,Task does not require code
+BD_THEORY_HARD_02,Llama 4 Maverick,Theory Q&A,hard,correctness,5.0,True,Partially correct techniques but lacks depth and bottleneck reasoning.
+BD_THEORY_HARD_02,Llama 4 Maverick,Theory Q&A,hard,completeness,4.0,True,"Misses profiling, skew handling, predicate pushdown, and UDF avoidance."
+BD_THEORY_HARD_02,Llama 4 Maverick,Theory Q&A,hard,key_point_coverage,3.0,True,"Covers only cache, shuffle, formats, config; misses many expected points."
+BD_THEORY_HARD_02,Llama 4 Maverick,Theory Q&A,hard,instruction_following,4.0,True,Prioritized by bottleneck but reasoning is shallow and incomplete.
+BD_THEORY_HARD_02,Llama 4 Maverick,Theory Q&A,hard,reasoning_depth,3.0,True,Superficial bottleneck explanations; lacks practical production insights.
+BD_THEORY_HARD_02,Llama 4 Maverick,Theory Q&A,hard,production_readiness,4.0,True,Code examples are basic but safe; misses advanced tuning and monitoring.
+BD_THEORY_HARD_02,Llama 4 Maverick,Theory Q&A,hard,clarity_structure,7.0,True,"Well-structured with sections and examples, but content is incomplete."
+BD_THEORY_HARD_02,Llama 4 Maverick,Theory Q&A,hard,factual_grounding,5.0,True,Techniques are correct but lack depth and context-specific details.
+BD_THEORY_HARD_02,Llama 4 Maverick,Theory Q&A,hard,code_sql_quality,,False,Not applicable for this theory question.
+BD_CODE_EASY_01,Llama 4 Maverick,Code Generation,easy,correctness,7.0,True,Aggregations correct but separate joins inefficient.
+BD_CODE_EASY_01,Llama 4 Maverick,Code Generation,easy,completeness,6.0,True,Missing revenue null handling and write mode.
+BD_CODE_EASY_01,Llama 4 Maverick,Code Generation,easy,key_point_coverage,7.0,True,Covers most key points but misses revenue cleaning.
+BD_CODE_EASY_01,Llama 4 Maverick,Code Generation,easy,instruction_following,6.0,True,Provided code plus comments but missing some requirements.
+BD_CODE_EASY_01,Llama 4 Maverick,Code Generation,easy,reasoning_depth,5.0,True,Separate groupBys inefficient; lacks data quality reasoning.
+BD_CODE_EASY_01,Llama 4 Maverick,Code Generation,easy,production_readiness,5.0,True,No write mode; inefficient joins; no revenue null handling.
+BD_CODE_EASY_01,Llama 4 Maverick,Code Generation,easy,clarity_structure,8.0,True,Code is clear and well-structured.
+BD_CODE_EASY_01,Llama 4 Maverick,Code Generation,easy,factual_grounding,7.0,True,Mostly correct PySpark but minor inefficiencies.
+BD_CODE_EASY_01,Llama 4 Maverick,Code Generation,easy,code_sql_quality,7.0,True,Functional but not optimal; separate aggregations wasteful.
+BD_CODE_MEDIUM_01,Llama 4 Maverick,Code Generation,medium,correctness,8.0,True,"Queries mostly correct, but average revenue logic flawed."
+BD_CODE_MEDIUM_01,Llama 4 Maverick,Code Generation,medium,completeness,8.0,True,All four queries provided with explanations.
+BD_CODE_MEDIUM_01,Llama 4 Maverick,Code Generation,medium,key_point_coverage,7.0,True,Missing COALESCE revenue and NULL handling.
+BD_CODE_MEDIUM_01,Llama 4 Maverick,Code Generation,medium,instruction_following,9.0,True,Used clear SQL and brief explanations.
+BD_CODE_MEDIUM_01,Llama 4 Maverick,Code Generation,medium,reasoning_depth,6.0,True,Average revenue per user logic is incorrect.
+BD_CODE_MEDIUM_01,Llama 4 Maverick,Code Generation,medium,production_readiness,6.0,True,"Missing null checks for user_id, event_time, session_id."
+BD_CODE_MEDIUM_01,Llama 4 Maverick,Code Generation,medium,clarity_structure,9.0,True,Well-structured with clear sections.
+BD_CODE_MEDIUM_01,Llama 4 Maverick,Code Generation,medium,factual_grounding,8.0,True,"Mostly accurate Spark SQL, minor errors."
+BD_CODE_MEDIUM_01,Llama 4 Maverick,Code Generation,medium,code_sql_quality,8.0,True,SQL is clean but has logical error.
+BD_CODE_HARD_01,Llama 4 Maverick,Code Generation,hard,correctness,8.0,True,"Correct dedup, join, aggregations, top event logic"
+BD_CODE_HARD_01,Llama 4 Maverick,Code Generation,hard,completeness,7.0,True,Missing revenue null handling and event_time dropna
+BD_CODE_HARD_01,Llama 4 Maverick,Code Generation,hard,key_point_coverage,8.0,True,Covers all key points except data cleaning
+BD_CODE_HARD_01,Llama 4 Maverick,Code Generation,hard,instruction_following,9.0,True,Follows all explicit requirements
+BD_CODE_HARD_01,Llama 4 Maverick,Code Generation,hard,reasoning_depth,8.0,True,"Good performance notes, missing skew handling"
+BD_CODE_HARD_01,Llama 4 Maverick,Code Generation,hard,production_readiness,7.0,True,Missing data validation and error handling
+BD_CODE_HARD_01,Llama 4 Maverick,Code Generation,hard,clarity_structure,9.0,True,Well-structured code with comments
+BD_CODE_HARD_01,Llama 4 Maverick,Code Generation,hard,factual_grounding,8.0,True,"No hallucinations, minor omissions"
+BD_CODE_HARD_01,Llama 4 Maverick,Code Generation,hard,code_sql_quality,8.0,True,"Clean PySpark, efficient window usage"
+BD_ANALYSIS_HARD_01,Llama 4 Maverick,Incident Analysis,hard,correctness,6.0,True,Identifies key issues but lacks depth.
+BD_ANALYSIS_HARD_01,Llama 4 Maverick,Incident Analysis,hard,completeness,5.0,True,"Missing AQE, detailed skew handling, and validation specifics."
+BD_ANALYSIS_HARD_01,Llama 4 Maverick,Incident Analysis,hard,key_point_coverage,6.0,True,"Covers skew, shuffle, broadcast, small files, and partition."
+BD_ANALYSIS_HARD_01,Llama 4 Maverick,Incident Analysis,hard,instruction_following,7.0,True,Follows structure but sections are incomplete.
+BD_ANALYSIS_HARD_01,Llama 4 Maverick,Incident Analysis,hard,reasoning_depth,5.0,True,"Surface-level analysis, lacks diagnostic linkage."
+BD_ANALYSIS_HARD_01,Llama 4 Maverick,Incident Analysis,hard,production_readiness,5.0,True,"Generic plan, lacks prioritization and safety."
+BD_ANALYSIS_HARD_01,Llama 4 Maverick,Incident Analysis,hard,clarity_structure,7.0,True,Clear sections but verbose step-by-step.
+BD_ANALYSIS_HARD_01,Llama 4 Maverick,Incident Analysis,hard,factual_grounding,7.0,True,Mostly correct but misses AQE and spill causes.
+BD_ANALYSIS_HARD_01,Llama 4 Maverick,Incident Analysis,hard,code_sql_quality,,False,No code requested.
+BD_THEORY_EASY_01,Llama 4 Scout,Theory Q&A,easy,correctness,9.0,True,"Accurate on ownership, DROP behavior, and use cases."
+BD_THEORY_EASY_01,Llama 4 Scout,Theory Q&A,easy,completeness,7.0,True,Covers all required aspects but misses some nuances.
+BD_THEORY_EASY_01,Llama 4 Scout,Theory Q&A,easy,key_point_coverage,8.0,True,Covers all key points except accidental deletion risk.
+BD_THEORY_EASY_01,Llama 4 Scout,Theory Q&A,easy,instruction_following,9.0,True,"Follows prompt, includes all requested sections."
+BD_THEORY_EASY_01,Llama 4 Scout,Theory Q&A,easy,reasoning_depth,8.0,True,Explains concepts clearly with practical advice.
+BD_THEORY_EASY_01,Llama 4 Scout,Theory Q&A,easy,production_readiness,7.0,True,Good best practices but misses risk emphasis.
+BD_THEORY_EASY_01,Llama 4 Scout,Theory Q&A,easy,clarity_structure,9.0,True,Well-structured with clear sections and examples.
+BD_THEORY_EASY_01,Llama 4 Scout,Theory Q&A,easy,factual_grounding,8.0,True,Factually correct with minor terminology quibble.
+BD_THEORY_EASY_01,Llama 4 Scout,Theory Q&A,easy,code_sql_quality,,False,Task did not require code.
+BD_THEORY_EASY_02,Llama 4 Scout,Theory Q&A,easy,correctness,7.0,True,Mostly accurate but has one storage location error
+BD_THEORY_EASY_02,Llama 4 Scout,Theory Q&A,easy,completeness,7.0,True,Covers all requested aspects but missing details
+BD_THEORY_EASY_02,Llama 4 Scout,Theory Q&A,easy,key_point_coverage,7.0,True,Covers most key points but misses some
+BD_THEORY_EASY_02,Llama 4 Scout,Theory Q&A,easy,instruction_following,8.0,True,Addresses all prompt sections adequately
+BD_THEORY_EASY_02,Llama 4 Scout,Theory Q&A,easy,reasoning_depth,8.0,True,Explains concepts clearly with practical context
+BD_THEORY_EASY_02,Llama 4 Scout,Theory Q&A,easy,production_readiness,9.0,True,"Safe advice, no dangerous recommendations"
+BD_THEORY_EASY_02,Llama 4 Scout,Theory Q&A,easy,clarity_structure,9.0,True,Well-structured with clear sections
+BD_THEORY_EASY_02,Llama 4 Scout,Theory Q&A,easy,factual_grounding,7.0,True,"Good on core concepts, minor error on /mnt"
+BD_THEORY_EASY_02,Llama 4 Scout,Theory Q&A,easy,code_sql_quality,,False,No code requested
+BD_THEORY_MEDIUM_01,Llama 4 Scout,Theory Q&A,medium,correctness,5.0,True,"Partially correct, some inaccuracies"
+BD_THEORY_MEDIUM_01,Llama 4 Scout,Theory Q&A,medium,completeness,4.0,True,Missing key points
+BD_THEORY_MEDIUM_01,Llama 4 Scout,Theory Q&A,medium,key_point_coverage,4.0,True,"Misses shuffle cost, small-file"
+BD_THEORY_MEDIUM_01,Llama 4 Scout,Theory Q&A,medium,instruction_following,6.0,True,"Followed structure, incomplete"
+BD_THEORY_MEDIUM_01,Llama 4 Scout,Theory Q&A,medium,reasoning_depth,4.0,True,"Shallow, lacks practical depth"
+BD_THEORY_MEDIUM_01,Llama 4 Scout,Theory Q&A,medium,production_readiness,3.0,True,"No cost details, unsafe advice"
+BD_THEORY_MEDIUM_01,Llama 4 Scout,Theory Q&A,medium,clarity_structure,7.0,True,Clear but truncated
+BD_THEORY_MEDIUM_01,Llama 4 Scout,Theory Q&A,medium,factual_grounding,5.0,True,Mixed accuracy
+BD_THEORY_MEDIUM_01,Llama 4 Scout,Theory Q&A,medium,code_sql_quality,,False,No code required
+BD_THEORY_MEDIUM_02,Llama 4 Scout,Theory Q&A,medium,correctness,7.0,True,Correct core concept but incomplete example.
+BD_THEORY_MEDIUM_02,Llama 4 Scout,Theory Q&A,medium,completeness,6.0,True,Missing explicit fact-dimension example.
+BD_THEORY_MEDIUM_02,Llama 4 Scout,Theory Q&A,medium,key_point_coverage,7.0,True,Covers most key points but lacks detail.
+BD_THEORY_MEDIUM_02,Llama 4 Scout,Theory Q&A,medium,instruction_following,6.0,True,Includes sections but example truncated.
+BD_THEORY_MEDIUM_02,Llama 4 Scout,Theory Q&A,medium,reasoning_depth,6.0,True,Explains mechanism and trade-off.
+BD_THEORY_MEDIUM_02,Llama 4 Scout,Theory Q&A,medium,production_readiness,5.0,True,Mentions OOM but lacks tuning advice.
+BD_THEORY_MEDIUM_02,Llama 4 Scout,Theory Q&A,medium,clarity_structure,8.0,True,Well-structured with clear sections.
+BD_THEORY_MEDIUM_02,Llama 4 Scout,Theory Q&A,medium,factual_grounding,7.0,True,Accurate but minor omission on selectivity.
+BD_THEORY_MEDIUM_02,Llama 4 Scout,Theory Q&A,medium,code_sql_quality,5.0,True,Code examples are incomplete.
+BD_THEORY_HARD_01,Llama 4 Scout,Theory Q&A,hard,correctness,4.0,True,Partially correct but misses key causes.
+BD_THEORY_HARD_01,Llama 4 Scout,Theory Q&A,hard,completeness,3.0,True,Missing many expected key points.
+BD_THEORY_HARD_01,Llama 4 Scout,Theory Q&A,hard,key_point_coverage,3.0,True,Covers few expected points.
+BD_THEORY_HARD_01,Llama 4 Scout,Theory Q&A,hard,instruction_following,4.0,True,Partially follows prompt.
+BD_THEORY_HARD_01,Llama 4 Scout,Theory Q&A,hard,reasoning_depth,4.0,True,Some reasoning but shallow.
+BD_THEORY_HARD_01,Llama 4 Scout,Theory Q&A,hard,production_readiness,3.0,True,Advice is generic or incorrect.
+BD_THEORY_HARD_01,Llama 4 Scout,Theory Q&A,hard,clarity_structure,7.0,True,Clear sections and structure.
+BD_THEORY_HARD_01,Llama 4 Scout,Theory Q&A,hard,factual_grounding,4.0,True,Contains factual errors.
+BD_THEORY_HARD_01,Llama 4 Scout,Theory Q&A,hard,code_sql_quality,,False,Task not code-focused.
+BD_THEORY_HARD_02,Llama 4 Scout,Theory Q&A,hard,correctness,3.0,True,Partially correct but misses key bottlenecks
+BD_THEORY_HARD_02,Llama 4 Scout,Theory Q&A,hard,completeness,2.0,True,"Missing profiling, shuffle, scan, skew"
+BD_THEORY_HARD_02,Llama 4 Scout,Theory Q&A,hard,key_point_coverage,2.0,True,"Only covers partitioning, caching"
+BD_THEORY_HARD_02,Llama 4 Scout,Theory Q&A,hard,instruction_following,3.0,True,Prioritized by bottleneck but incomplete
+BD_THEORY_HARD_02,Llama 4 Scout,Theory Q&A,hard,reasoning_depth,3.0,True,Some bottleneck reasoning but shallow
+BD_THEORY_HARD_02,Llama 4 Scout,Theory Q&A,hard,production_readiness,3.0,True,Code examples but misses critical optimizations
+BD_THEORY_HARD_02,Llama 4 Scout,Theory Q&A,hard,clarity_structure,7.0,True,Well-structured but content lacking
+BD_THEORY_HARD_02,Llama 4 Scout,Theory Q&A,hard,factual_grounding,4.0,True,Some correct techniques but many missing
+BD_THEORY_HARD_02,Llama 4 Scout,Theory Q&A,hard,code_sql_quality,,False,Not required
+BD_CODE_EASY_01,Llama 4 Scout,Code Generation,easy,correctness,4.0,True,"Wrong user count, inefficient join"
+BD_CODE_EASY_01,Llama 4 Scout,Code Generation,easy,completeness,6.0,True,Misses revenue null handling
+BD_CODE_EASY_01,Llama 4 Scout,Code Generation,easy,key_point_coverage,6.0,True,Covers most key points but with flaws
+BD_CODE_EASY_01,Llama 4 Scout,Code Generation,easy,instruction_following,6.0,True,Follows most steps but misses details
+BD_CODE_EASY_01,Llama 4 Scout,Code Generation,easy,reasoning_depth,5.0,True,Basic logic but flawed implementation
+BD_CODE_EASY_01,Llama 4 Scout,Code Generation,easy,production_readiness,4.0,True,Inefficient and missing write mode
+BD_CODE_EASY_01,Llama 4 Scout,Code Generation,easy,clarity_structure,8.0,True,Code is readable and structured
+BD_CODE_EASY_01,Llama 4 Scout,Code Generation,easy,factual_grounding,5.0,True,Uses incorrect functions
+BD_CODE_EASY_01,Llama 4 Scout,Code Generation,easy,code_sql_quality,4.0,True,Logic errors in aggregation and date
+BD_CODE_MEDIUM_01,Llama 4 Scout,Code Generation,medium,correctness,5.0,True,"Query 3 logic flawed, others mostly correct"
+BD_CODE_MEDIUM_01,Llama 4 Scout,Code Generation,medium,completeness,6.0,True,All queries attempted but missing key parts
+BD_CODE_MEDIUM_01,Llama 4 Scout,Code Generation,medium,key_point_coverage,5.0,True,Missing null handling and correct revenue logic
+BD_CODE_MEDIUM_01,Llama 4 Scout,Code Generation,medium,instruction_following,7.0,True,Explanations provided but incomplete for Query 3
+BD_CODE_MEDIUM_01,Llama 4 Scout,Code Generation,medium,reasoning_depth,6.0,True,Identified Query 3 issue but fix is incomplete
+BD_CODE_MEDIUM_01,Llama 4 Scout,Code Generation,medium,production_readiness,4.0,True,"No null safety, weak error handling"
+BD_CODE_MEDIUM_01,Llama 4 Scout,Code Generation,medium,clarity_structure,8.0,True,Clear sectioning and explanations
+BD_CODE_MEDIUM_01,Llama 4 Scout,Code Generation,medium,factual_grounding,6.0,True,"DATE instead of TO_DATE, missing Spark SQL specifics"
+BD_CODE_MEDIUM_01,Llama 4 Scout,Code Generation,medium,code_sql_quality,6.0,True,Mostly correct syntax but missing null handling
+BD_CODE_HARD_01,Llama 4 Scout,Code Generation,hard,correctness,5.0,True,"Dedup and join correct, top event_type logic flawed."
+BD_CODE_HARD_01,Llama 4 Scout,Code Generation,hard,completeness,6.0,True,"Covers most steps, but missing revenue cast and null handling."
+BD_CODE_HARD_01,Llama 4 Scout,Code Generation,hard,key_point_coverage,5.0,True,"Missing revenue cast, event_date extraction flawed."
+BD_CODE_HARD_01,Llama 4 Scout,Code Generation,hard,instruction_following,5.0,True,"Includes code and explanation, but top event_type logic incorrect."
+BD_CODE_HARD_01,Llama 4 Scout,Code Generation,hard,reasoning_depth,4.0,True,"Shallow performance comments, flawed top event_type reasoning."
+BD_CODE_HARD_01,Llama 4 Scout,Code Generation,hard,production_readiness,4.0,True,"Missing data quality checks, flawed event_date extraction."
+BD_CODE_HARD_01,Llama 4 Scout,Code Generation,hard,clarity_structure,7.0,True,"Code structured, but explanation lacks depth."
+BD_CODE_HARD_01,Llama 4 Scout,Code Generation,hard,factual_grounding,5.0,True,"Some Spark functions correct, but event_date extraction wrong."
+BD_CODE_HARD_01,Llama 4 Scout,Code Generation,hard,code_sql_quality,5.0,True,Code runs but has logical errors and inefficiencies.
+BD_ANALYSIS_HARD_01,Llama 4 Scout,Incident Analysis,hard,correctness,6.0,True,Identifies skew and shuffle but misses AQE and small-file root cause.
+BD_ANALYSIS_HARD_01,Llama 4 Scout,Incident Analysis,hard,completeness,5.0,True,"Missing AQE, skew handling, and detailed validation metrics."
+BD_ANALYSIS_HARD_01,Llama 4 Scout,Incident Analysis,hard,key_point_coverage,5.0,True,"Covers skew, broadcast, shuffle but omits AQE, spill, small-file root."
+BD_ANALYSIS_HARD_01,Llama 4 Scout,Incident Analysis,hard,instruction_following,7.0,True,Follows structure but remediation lacks prioritization realism.
+BD_ANALYSIS_HARD_01,Llama 4 Scout,Incident Analysis,hard,reasoning_depth,5.0,True,"Surface-level analysis, misses multiple root causes."
+BD_ANALYSIS_HARD_01,Llama 4 Scout,Incident Analysis,hard,production_readiness,4.0,True,"Unsafe cache-broadcast, vague configs, no AQE or skew fixes."
+BD_ANALYSIS_HARD_01,Llama 4 Scout,Incident Analysis,hard,clarity_structure,8.0,True,Clear sections but remediation order is illogical.
+BD_ANALYSIS_HARD_01,Llama 4 Scout,Incident Analysis,hard,factual_grounding,6.0,True,Mostly correct but has unsafe code and missing Spark features.
+BD_ANALYSIS_HARD_01,Llama 4 Scout,Incident Analysis,hard,code_sql_quality,4.0,True,"Cache before broadcast is unsafe, coalesce number arbitrary."
+BD_THEORY_EASY_01,Phi-3 Medium 4K,Theory Q&A,easy,correctness,8.0,True,Correctly explains ownership and DROP behavior.
+BD_THEORY_EASY_01,Phi-3 Medium 4K,Theory Q&A,easy,completeness,7.0,True,Missing explicit mention of accidental deletion risk.
+BD_THEORY_EASY_01,Phi-3 Medium 4K,Theory Q&A,easy,key_point_coverage,7.0,True,Covers most key points but lacks risk detail.
+BD_THEORY_EASY_01,Phi-3 Medium 4K,Theory Q&A,easy,instruction_following,8.0,True,Concise and includes requested sections.
+BD_THEORY_EASY_01,Phi-3 Medium 4K,Theory Q&A,easy,reasoning_depth,7.0,True,Good but lacks deeper production reasoning.
+BD_THEORY_EASY_01,Phi-3 Medium 4K,Theory Q&A,easy,production_readiness,7.0,True,Advises external for production but generic.
+BD_THEORY_EASY_01,Phi-3 Medium 4K,Theory Q&A,easy,clarity_structure,8.0,True,"Clear, well-structured paragraphs."
+BD_THEORY_EASY_01,Phi-3 Medium 4K,Theory Q&A,easy,factual_grounding,8.0,True,Factually accurate on core concepts.
+BD_THEORY_EASY_01,Phi-3 Medium 4K,Theory Q&A,easy,code_sql_quality,,False,"Task is theory, not code."
+BD_THEORY_EASY_02,Phi-3 Medium 4K,Theory Q&A,easy,correctness,5.0,True,Partially correct but errors in metadata location.
+BD_THEORY_EASY_02,Phi-3 Medium 4K,Theory Q&A,easy,completeness,5.0,True,Covers main points but incomplete use cases.
+BD_THEORY_EASY_02,Phi-3 Medium 4K,Theory Q&A,easy,key_point_coverage,5.0,True,Hits some key points but misses others.
+BD_THEORY_EASY_02,Phi-3 Medium 4K,Theory Q&A,easy,instruction_following,5.0,True,Includes sections but answer cut off.
+BD_THEORY_EASY_02,Phi-3 Medium 4K,Theory Q&A,easy,reasoning_depth,5.0,True,"Basic comparison, lacks deeper architecture."
+BD_THEORY_EASY_02,Phi-3 Medium 4K,Theory Q&A,easy,production_readiness,5.0,True,Advice is generic and incomplete.
+BD_THEORY_EASY_02,Phi-3 Medium 4K,Theory Q&A,easy,clarity_structure,7.0,True,Clear structure with numbered sections.
+BD_THEORY_EASY_02,Phi-3 Medium 4K,Theory Q&A,easy,factual_grounding,3.0,True,Incorrectly states metadata stored in DBFS.
+BD_THEORY_EASY_02,Phi-3 Medium 4K,Theory Q&A,easy,code_sql_quality,,False,No code or SQL requested.
+BD_THEORY_MEDIUM_01,Phi-3 Medium 4K,Theory Q&A,medium,correctness,6.0,True,Mostly correct but has one factual error.
+BD_THEORY_MEDIUM_01,Phi-3 Medium 4K,Theory Q&A,medium,completeness,5.0,True,Covers main differences but misses key limitations.
+BD_THEORY_MEDIUM_01,Phi-3 Medium 4K,Theory Q&A,medium,key_point_coverage,5.0,True,"Covers repartition shuffle, partition change, coalesce decrease, but misses shuffle cost emphasis and specific use cases."
+BD_THEORY_MEDIUM_01,Phi-3 Medium 4K,Theory Q&A,medium,instruction_following,6.0,True,Follows prompt but omits some key points.
+BD_THEORY_MEDIUM_01,Phi-3 Medium 4K,Theory Q&A,medium,reasoning_depth,5.0,True,Explains mechanisms but shallow on practical implications.
+BD_THEORY_MEDIUM_01,Phi-3 Medium 4K,Theory Q&A,medium,production_readiness,5.0,True,Mentions cost but lacks specific production advice like avoiding small files.
+BD_THEORY_MEDIUM_01,Phi-3 Medium 4K,Theory Q&A,medium,clarity_structure,8.0,True,Clear structure with sections.
+BD_THEORY_MEDIUM_01,Phi-3 Medium 4K,Theory Q&A,medium,factual_grounding,6.0,True,Generally accurate but one misleading statement.
+BD_THEORY_MEDIUM_01,Phi-3 Medium 4K,Theory Q&A,medium,code_sql_quality,,False,No code requested.
+BD_THEORY_MEDIUM_02,Phi-3 Medium 4K,Theory Q&A,medium,correctness,5.0,True,Core mechanism correct but has errors
+BD_THEORY_MEDIUM_02,Phi-3 Medium 4K,Theory Q&A,medium,completeness,4.0,True,Missing example and some key points
+BD_THEORY_MEDIUM_02,Phi-3 Medium 4K,Theory Q&A,medium,key_point_coverage,6.0,True,Covers most but not all expected points
+BD_THEORY_MEDIUM_02,Phi-3 Medium 4K,Theory Q&A,medium,instruction_following,4.0,True,Missed practical example requirement
+BD_THEORY_MEDIUM_02,Phi-3 Medium 4K,Theory Q&A,medium,reasoning_depth,7.0,True,Explains shuffle avoidance and trade-offs
+BD_THEORY_MEDIUM_02,Phi-3 Medium 4K,Theory Q&A,medium,production_readiness,5.0,True,Aware of memory risk but lacks depth
+BD_THEORY_MEDIUM_02,Phi-3 Medium 4K,Theory Q&A,medium,clarity_structure,6.0,True,Well-structured but spelling errors
+BD_THEORY_MEDIUM_02,Phi-3 Medium 4K,Theory Q&A,medium,factual_grounding,6.0,True,Mostly accurate but with minor inaccuracies
+BD_THEORY_MEDIUM_02,Phi-3 Medium 4K,Theory Q&A,medium,code_sql_quality,,False,No code requested
+BD_THEORY_HARD_01,Phi-3 Medium 4K,Theory Q&A,hard,correctness,5.0,True,Partially correct but misses key details.
+BD_THEORY_HARD_01,Phi-3 Medium 4K,Theory Q&A,hard,completeness,4.0,True,Missing object store costs and compaction.
+BD_THEORY_HARD_01,Phi-3 Medium 4K,Theory Q&A,hard,key_point_coverage,5.0,True,"Covers some points, misses others."
+BD_THEORY_HARD_01,Phi-3 Medium 4K,Theory Q&A,hard,instruction_following,5.0,True,Explains causes but lacks depth.
+BD_THEORY_HARD_01,Phi-3 Medium 4K,Theory Q&A,hard,reasoning_depth,4.0,True,"Surface-level, lacks trade-offs."
+BD_THEORY_HARD_01,Phi-3 Medium 4K,Theory Q&A,hard,production_readiness,5.0,True,"Some techniques, but incomplete."
+BD_THEORY_HARD_01,Phi-3 Medium 4K,Theory Q&A,hard,clarity_structure,7.0,True,"Clear sections, but truncated."
+BD_THEORY_HARD_01,Phi-3 Medium 4K,Theory Q&A,hard,factual_grounding,6.0,True,"Mostly correct, some inaccuracies."
+BD_THEORY_HARD_01,Phi-3 Medium 4K,Theory Q&A,hard,code_sql_quality,,False,No code requested.
+BD_THEORY_HARD_02,Phi-3 Medium 4K,Theory Q&A,hard,correctness,5.0,True,Some correct techniques but mislabels bottlenecks.
+BD_THEORY_HARD_02,Phi-3 Medium 4K,Theory Q&A,hard,completeness,5.0,True,Lists five techniques but misses key ones.
+BD_THEORY_HARD_02,Phi-3 Medium 4K,Theory Q&A,hard,key_point_coverage,5.0,True,"Covers some points but omits profiling, predicate pushdown, skew handling."
+BD_THEORY_HARD_02,Phi-3 Medium 4K,Theory Q&A,hard,instruction_following,5.0,True,Prioritizes by bottleneck but reasoning is flawed.
+BD_THEORY_HARD_02,Phi-3 Medium 4K,Theory Q&A,hard,reasoning_depth,5.0,True,Explains each technique but lacks deep bottleneck analysis.
+BD_THEORY_HARD_02,Phi-3 Medium 4K,Theory Q&A,hard,production_readiness,5.0,True,Includes practical tips but some advice is generic.
+BD_THEORY_HARD_02,Phi-3 Medium 4K,Theory Q&A,hard,clarity_structure,7.0,True,Well-structured with clear sections.
+BD_THEORY_HARD_02,Phi-3 Medium 4K,Theory Q&A,hard,factual_grounding,5.0,True,Mix of correct and incorrect facts.
+BD_THEORY_HARD_02,Phi-3 Medium 4K,Theory Q&A,hard,code_sql_quality,,False,No code or SQL requested.
+BD_CODE_EASY_01,Phi-3 Medium 4K,Code Generation,easy,correctness,4.0,True,"Separate aggregations, missing revenue coalesce"
+BD_CODE_EASY_01,Phi-3 Medium 4K,Code Generation,easy,completeness,3.0,True,"Missed combined result, two outputs"
+BD_CODE_EASY_01,Phi-3 Medium 4K,Code Generation,easy,key_point_coverage,5.0,True,Has most key points but flawed
+BD_CODE_EASY_01,Phi-3 Medium 4K,Code Generation,easy,instruction_following,3.0,True,Ignored single output requirement
+BD_CODE_EASY_01,Phi-3 Medium 4K,Code Generation,easy,reasoning_depth,4.0,True,Basic logic but inefficient approach
+BD_CODE_EASY_01,Phi-3 Medium 4K,Code Generation,easy,production_readiness,3.0,True,"Two writes, no mode specified"
+BD_CODE_EASY_01,Phi-3 Medium 4K,Code Generation,easy,clarity_structure,6.0,True,Clear steps but redundant code
+BD_CODE_EASY_01,Phi-3 Medium 4K,Code Generation,easy,factual_grounding,5.0,True,Mostly correct but revenue handling weak
+BD_CODE_EASY_01,Phi-3 Medium 4K,Code Generation,easy,code_sql_quality,4.0,True,Syntax ok but logic flawed
+BD_CODE_MEDIUM_01,Phi-3 Medium 4K,Code Generation,medium,correctness,4.0,True,"Queries 1,2,4 have errors; 3 is wrong logic."
+BD_CODE_MEDIUM_01,Phi-3 Medium 4K,Code Generation,medium,completeness,6.0,True,All four queries attempted.
+BD_CODE_MEDIUM_01,Phi-3 Medium 4K,Code Generation,medium,key_point_coverage,4.0,True,"Missing DISTINCT, COALESCE, correct avg revenue."
+BD_CODE_MEDIUM_01,Phi-3 Medium 4K,Code Generation,medium,instruction_following,5.0,True,Explanations given but queries flawed.
+BD_CODE_MEDIUM_01,Phi-3 Medium 4K,Code Generation,medium,reasoning_depth,4.0,True,Shallow; misses null handling and revenue per user.
+BD_CODE_MEDIUM_01,Phi-3 Medium 4K,Code Generation,medium,production_readiness,3.0,True,No null handling; wrong column name.
+BD_CODE_MEDIUM_01,Phi-3 Medium 4K,Code Generation,medium,clarity_structure,7.0,True,Clear sections and explanations.
+BD_CODE_MEDIUM_01,Phi-3 Medium 4K,Code Generation,medium,factual_grounding,4.0,True,DATE function okay; avg revenue logic wrong.
+BD_CODE_MEDIUM_01,Phi-3 Medium 4K,Code Generation,medium,code_sql_quality,4.0,True,Syntax errors and flawed logic.
+BD_CODE_HARD_01,Phi-3 Medium 4K,Code Generation,hard,correctness,4.0,True,"Dedup uses rank not row_number, top event_type logic wrong, join missing left handling."
+BD_CODE_HARD_01,Phi-3 Medium 4K,Code Generation,hard,completeness,5.0,True,"Has dedup, join, group, output. Missing revenue cast, null handling, proper top event_type."
+BD_CODE_HARD_01,Phi-3 Medium 4K,Code Generation,hard,key_point_coverage,5.0,True,"Covers read, dedup, join, group, partition. Misses correct top event_type, performance details."
+BD_CODE_HARD_01,Phi-3 Medium 4K,Code Generation,hard,instruction_following,4.0,True,"Code provided but ignores explicit top event_type method, missing Delta option."
+BD_CODE_HARD_01,Phi-3 Medium 4K,Code Generation,hard,reasoning_depth,4.0,True,"Shallow performance comments, no broadcast, skew, file size considerations."
+BD_CODE_HARD_01,Phi-3 Medium 4K,Code Generation,hard,production_readiness,4.0,True,"Missing data quality steps, unsafe first for top event_type, no error handling."
+BD_CODE_HARD_01,Phi-3 Medium 4K,Code Generation,hard,clarity_structure,7.0,True,"Code structured, comments present, explanation clear but brief."
+BD_CODE_HARD_01,Phi-3 Medium 4K,Code Generation,hard,factual_grounding,6.0,True,"Uses Spark functions correctly but rank dedup can keep ties, top event_type wrong."
+BD_CODE_HARD_01,Phi-3 Medium 4K,Code Generation,hard,code_sql_quality,5.0,True,"Code runs but has logical errors in dedup and top event_type, missing imports."
+BD_ANALYSIS_HARD_01,Phi-3 Medium 4K,Incident Analysis,hard,correctness,5.0,True,Identifies skew and small files but misses key causes like AQE and spill specifics.
+BD_ANALYSIS_HARD_01,Phi-3 Medium 4K,Incident Analysis,hard,completeness,4.0,True,"Missing AQE, shuffle partition tuning, and detailed spill handling."
+BD_ANALYSIS_HARD_01,Phi-3 Medium 4K,Incident Analysis,hard,key_point_coverage,5.0,True,"Covers skew, broadcast, small files, and partitioning but misses AQE and validation specifics."
+BD_ANALYSIS_HARD_01,Phi-3 Medium 4K,Incident Analysis,hard,instruction_following,7.0,True,Follows required structure but remediation lacks prioritization and depth.
+BD_ANALYSIS_HARD_01,Phi-3 Medium 4K,Incident Analysis,hard,reasoning_depth,4.0,True,Surface-level analysis; lacks linking symptoms to specific Spark mechanisms.
+BD_ANALYSIS_HARD_01,Phi-3 Medium 4K,Incident Analysis,hard,production_readiness,4.0,True,Vague plan; co-location suggestion is impractical for cloud storage.
+BD_ANALYSIS_HARD_01,Phi-3 Medium 4K,Incident Analysis,hard,clarity_structure,8.0,True,Clear sections and bullet points enhance readability.
+BD_ANALYSIS_HARD_01,Phi-3 Medium 4K,Incident Analysis,hard,factual_grounding,6.0,True,Generally accurate but includes impractical co-location advice.
+BD_ANALYSIS_HARD_01,Phi-3 Medium 4K,Incident Analysis,hard,code_sql_quality,,False,Task does not require code or SQL.
+BD_THEORY_EASY_01,Phi-3 Mini 4K,Theory Q&A,easy,correctness,3.0,True,Contains multiple factual errors about storage and features.
+BD_THEORY_EASY_01,Phi-3 Mini 4K,Theory Q&A,easy,completeness,4.0,True,Covers some points but omits key DROP behavior.
+BD_THEORY_EASY_01,Phi-3 Mini 4K,Theory Q&A,easy,key_point_coverage,3.0,True,Misses critical DROP TABLE difference and ownership clarity.
+BD_THEORY_EASY_01,Phi-3 Mini 4K,Theory Q&A,easy,instruction_following,4.0,True,Partially addresses prompt but misses explicit DROP details.
+BD_THEORY_EASY_01,Phi-3 Mini 4K,Theory Q&A,easy,reasoning_depth,3.0,True,Superficial with incorrect technical claims.
+BD_THEORY_EASY_01,Phi-3 Mini 4K,Theory Q&A,easy,production_readiness,3.0,True,"Advises managed for operational data, which is risky."
+BD_THEORY_EASY_01,Phi-3 Mini 4K,Theory Q&A,easy,clarity_structure,5.0,True,Answer is structured but contains misleading details.
+BD_THEORY_EASY_01,Phi-3 Mini 4K,Theory Q&A,easy,factual_grounding,3.0,True,Incorrectly describes HDFS requirement and ACID support.
+BD_THEORY_EASY_01,Phi-3 Mini 4K,Theory Q&A,easy,code_sql_quality,,False,No code or SQL requested.
+BD_THEORY_EASY_02,Phi-3 Mini 4K,Theory Q&A,easy,correctness,3.0,True,Major error in metadata management claim
+BD_THEORY_EASY_02,Phi-3 Mini 4K,Theory Q&A,easy,completeness,4.0,True,Missing key details and truncated
+BD_THEORY_EASY_02,Phi-3 Mini 4K,Theory Q&A,easy,key_point_coverage,6.0,True,"Covers storage, drop behavior, partial use cases"
+BD_THEORY_EASY_02,Phi-3 Mini 4K,Theory Q&A,easy,instruction_following,5.0,True,Covers requested aspects but with errors
+BD_THEORY_EASY_02,Phi-3 Mini 4K,Theory Q&A,easy,reasoning_depth,4.0,True,Surface-level with critical inaccuracies
+BD_THEORY_EASY_02,Phi-3 Mini 4K,Theory Q&A,easy,production_readiness,3.0,True,Inaccurate metadata advice could cause issues
+BD_THEORY_EASY_02,Phi-3 Mini 4K,Theory Q&A,easy,clarity_structure,8.0,True,Well-structured with clear sections
+BD_THEORY_EASY_02,Phi-3 Mini 4K,Theory Q&A,easy,factual_grounding,3.0,True,Incorrect on external metadata handling
+BD_THEORY_EASY_02,Phi-3 Mini 4K,Theory Q&A,easy,code_sql_quality,,False,No code requested
+BD_THEORY_MEDIUM_01,Phi-3 Mini 4K,Theory Q&A,medium,correctness,5.0,True,Partially correct but has factual errors.
+BD_THEORY_MEDIUM_01,Phi-3 Mini 4K,Theory Q&A,medium,completeness,4.0,True,Missing key use cases and shuffle details.
+BD_THEORY_MEDIUM_01,Phi-3 Mini 4K,Theory Q&A,medium,key_point_coverage,4.0,True,Misses several expected key points.
+BD_THEORY_MEDIUM_01,Phi-3 Mini 4K,Theory Q&A,medium,instruction_following,5.0,True,Covers some points but omits others.
+BD_THEORY_MEDIUM_01,Phi-3 Mini 4K,Theory Q&A,medium,reasoning_depth,5.0,True,"Surface-level explanation, no deep cost analysis."
+BD_THEORY_MEDIUM_01,Phi-3 Mini 4K,Theory Q&A,medium,production_readiness,4.0,True,Lacks practical advice for production use.
+BD_THEORY_MEDIUM_01,Phi-3 Mini 4K,Theory Q&A,medium,clarity_structure,6.0,True,Clear sections but incomplete.
+BD_THEORY_MEDIUM_01,Phi-3 Mini 4K,Theory Q&A,medium,factual_grounding,4.0,True,Inaccurate on repartition merge behavior.
+BD_THEORY_MEDIUM_01,Phi-3 Mini 4K,Theory Q&A,medium,code_sql_quality,,False,No code requested.
+BD_THEORY_MEDIUM_02,Phi-3 Mini 4K,Theory Q&A,medium,correctness,6.0,True,Basic concept correct but details flawed.
+BD_THEORY_MEDIUM_02,Phi-3 Mini 4K,Theory Q&A,medium,completeness,4.0,True,Missing key config and example.
+BD_THEORY_MEDIUM_02,Phi-3 Mini 4K,Theory Q&A,medium,key_point_coverage,4.0,True,Covers small table and memory risk.
+BD_THEORY_MEDIUM_02,Phi-3 Mini 4K,Theory Q&A,medium,instruction_following,4.0,True,Sections present but incomplete.
+BD_THEORY_MEDIUM_02,Phi-3 Mini 4K,Theory Q&A,medium,reasoning_depth,5.0,True,Shallow on mechanism and trade-offs.
+BD_THEORY_MEDIUM_02,Phi-3 Mini 4K,Theory Q&A,medium,production_readiness,4.0,True,Missing threshold tuning advice.
+BD_THEORY_MEDIUM_02,Phi-3 Mini 4K,Theory Q&A,medium,clarity_structure,7.0,True,Clear sections but truncated.
+BD_THEORY_MEDIUM_02,Phi-3 Mini 4K,Theory Q&A,medium,factual_grounding,3.0,True,ORM is incorrect; code incomplete.
+BD_THEORY_MEDIUM_02,Phi-3 Mini 4K,Theory Q&A,medium,code_sql_quality,3.0,True,Code snippet is incomplete.
+BD_THEORY_HARD_01,Phi-3 Mini 4K,Theory Q&A,hard,correctness,4.0,True,"Some correct points, but core causes wrong"
+BD_THEORY_HARD_01,Phi-3 Mini 4K,Theory Q&A,hard,completeness,4.0,True,Misses key causes and solutions
+BD_THEORY_HARD_01,Phi-3 Mini 4K,Theory Q&A,hard,key_point_coverage,3.0,True,Covers only 3 of 9 expected points
+BD_THEORY_HARD_01,Phi-3 Mini 4K,Theory Q&A,hard,instruction_following,5.0,True,"Partially explains causes, but misses specifics"
+BD_THEORY_HARD_01,Phi-3 Mini 4K,Theory Q&A,hard,reasoning_depth,4.0,True,Superficial on root causes
+BD_THEORY_HARD_01,Phi-3 Mini 4K,Theory Q&A,hard,production_readiness,4.0,True,"Generic advice, lacks practical compaction details"
+BD_THEORY_HARD_01,Phi-3 Mini 4K,Theory Q&A,hard,clarity_structure,8.0,True,Well-organized with sections
+BD_THEORY_HARD_01,Phi-3 Mini 4K,Theory Q&A,hard,factual_grounding,3.0,True,Inaccurate on shuffle and memory causes
+BD_THEORY_HARD_01,Phi-3 Mini 4K,Theory Q&A,hard,code_sql_quality,,False,No code requested
+BD_THEORY_HARD_02,Phi-3 Mini 4K,Theory Q&A,hard,correctness,6.0,True,Some correct techniques but lacks key specifics.
+BD_THEORY_HARD_02,Phi-3 Mini 4K,Theory Q&A,hard,completeness,4.0,True,"Missing profiling, shuffle tuning, and many key points."
+BD_THEORY_HARD_02,Phi-3 Mini 4K,Theory Q&A,hard,key_point_coverage,4.0,True,Covers only caching and partitioning partially.
+BD_THEORY_HARD_02,Phi-3 Mini 4K,Theory Q&A,hard,instruction_following,5.0,True,Prioritized by bottleneck but list is generic.
+BD_THEORY_HARD_02,Phi-3 Mini 4K,Theory Q&A,hard,reasoning_depth,5.0,True,Basic bottleneck reasoning but shallow.
+BD_THEORY_HARD_02,Phi-3 Mini 4K,Theory Q&A,hard,production_readiness,5.0,True,Lacks concrete production tuning details.
+BD_THEORY_HARD_02,Phi-3 Mini 4K,Theory Q&A,hard,clarity_structure,8.0,True,Well-structured with bottleneck mapping.
+BD_THEORY_HARD_02,Phi-3 Mini 4K,Theory Q&A,hard,factual_grounding,6.0,True,Mostly correct but some vague advice.
+BD_THEORY_HARD_02,Phi-3 Mini 4K,Theory Q&A,hard,code_sql_quality,,False,No code or SQL requested.
+BD_CODE_EASY_01,Phi-3 Mini 4K,Code Generation,easy,correctness,2.0,True,Incorrect timestamp and aggregation logic
+BD_CODE_EASY_01,Phi-3 Mini 4K,Code Generation,easy,completeness,1.0,True,Missing key steps and code truncated
+BD_CODE_EASY_01,Phi-3 Mini 4K,Code Generation,easy,key_point_coverage,2.0,True,Misses most expected key points
+BD_CODE_EASY_01,Phi-3 Mini 4K,Code Generation,easy,instruction_following,2.0,True,"Ignores Parquet requirement, adds unrelated filters"
+BD_CODE_EASY_01,Phi-3 Mini 4K,Code Generation,easy,reasoning_depth,2.0,True,No logical flow in implementation
+BD_CODE_EASY_01,Phi-3 Mini 4K,Code Generation,easy,production_readiness,1.0,True,Unsafe with append mode and wrong partitioning
+BD_CODE_EASY_01,Phi-3 Mini 4K,Code Generation,easy,clarity_structure,3.0,True,Code structure is messy with duplicates
+BD_CODE_EASY_01,Phi-3 Mini 4K,Code Generation,easy,factual_grounding,2.0,True,Violates requirements with wrong output format
+BD_CODE_EASY_01,Phi-3 Mini 4K,Code Generation,easy,code_sql_quality,2.0,True,Multiple syntax errors and incomplete
+BD_CODE_MEDIUM_01,Phi-3 Mini 4K,Code Generation,medium,correctness,5.0,True,"Partial correctness, missing null handling"
+BD_CODE_MEDIUM_01,Phi-3 Mini 4K,Code Generation,medium,completeness,5.0,True,Missing required sections and logic
+BD_CODE_MEDIUM_01,Phi-3 Mini 4K,Code Generation,medium,key_point_coverage,5.0,True,"Some key points covered, others missed"
+BD_CODE_MEDIUM_01,Phi-3 Mini 4K,Code Generation,medium,instruction_following,5.0,True,Ignored explicit instructions
+BD_CODE_MEDIUM_01,Phi-3 Mini 4K,Code Generation,medium,reasoning_depth,5.0,True,"Basic explanations, lacks depth"
+BD_CODE_MEDIUM_01,Phi-3 Mini 4K,Code Generation,medium,production_readiness,5.0,True,"Missing null handling, unsafe"
+BD_CODE_MEDIUM_01,Phi-3 Mini 4K,Code Generation,medium,clarity_structure,7.0,True,Clear structure and explanations
+BD_CODE_MEDIUM_01,Phi-3 Mini 4K,Code Generation,medium,factual_grounding,5.0,True,Incorrect Spark SQL syntax
+BD_CODE_MEDIUM_01,Phi-3 Mini 4K,Code Generation,medium,code_sql_quality,5.0,True,"Syntax errors, missing logic"
+BD_CODE_HARD_01,Phi-3 Mini 4K,Code Generation,hard,correctness,2.0,True,Dedup and top event wrong
+BD_CODE_HARD_01,Phi-3 Mini 4K,Code Generation,hard,completeness,3.0,True,Missing key steps
+BD_CODE_HARD_01,Phi-3 Mini 4K,Code Generation,hard,key_point_coverage,3.0,True,Few points covered
+BD_CODE_HARD_01,Phi-3 Mini 4K,Code Generation,hard,instruction_following,3.0,True,Ignored explicit requirements
+BD_CODE_HARD_01,Phi-3 Mini 4K,Code Generation,hard,reasoning_depth,4.0,True,Shallow performance notes
+BD_CODE_HARD_01,Phi-3 Mini 4K,Code Generation,hard,production_readiness,2.0,True,Unsafe config and logic
+BD_CODE_HARD_01,Phi-3 Mini 4K,Code Generation,hard,clarity_structure,5.0,True,Code structured but flawed
+BD_CODE_HARD_01,Phi-3 Mini 4K,Code Generation,hard,factual_grounding,3.0,True,Incorrect Spark methods
+BD_CODE_HARD_01,Phi-3 Mini 4K,Code Generation,hard,code_sql_quality,2.0,True,Multiple logic errors
+BD_ANALYSIS_HARD_01,Phi-3 Mini 4K,Incident Analysis,hard,correctness,5.0,True,Partially correct but misses key details.
+BD_ANALYSIS_HARD_01,Phi-3 Mini 4K,Incident Analysis,hard,completeness,4.0,True,Missing several expected key points.
+BD_ANALYSIS_HARD_01,Phi-3 Mini 4K,Incident Analysis,hard,key_point_coverage,4.0,True,"Covers skew and small files but misses AQE, broadcast join specifics, and partition layout."
+BD_ANALYSIS_HARD_01,Phi-3 Mini 4K,Incident Analysis,hard,instruction_following,7.0,True,Follows required structure but lacks depth in sections.
+BD_ANALYSIS_HARD_01,Phi-3 Mini 4K,Incident Analysis,hard,reasoning_depth,4.0,True,"Surface-level analysis, lacks detailed Spark-specific reasoning."
+BD_ANALYSIS_HARD_01,Phi-3 Mini 4K,Incident Analysis,hard,production_readiness,4.0,True,"Plan is generic, lacks actionable Spark configs and prioritization."
+BD_ANALYSIS_HARD_01,Phi-3 Mini 4K,Incident Analysis,hard,clarity_structure,8.0,True,Clear sections and logical flow.
+BD_ANALYSIS_HARD_01,Phi-3 Mini 4K,Incident Analysis,hard,factual_grounding,6.0,True,Some correct Spark concepts but vague on specifics.
+BD_ANALYSIS_HARD_01,Phi-3 Mini 4K,Incident Analysis,hard,code_sql_quality,,False,Task did not require code.

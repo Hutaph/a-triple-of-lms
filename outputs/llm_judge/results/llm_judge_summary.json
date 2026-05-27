@@ -1,0 +1,76 @@
+{
+  "overall": {
+    "count": 40,
+    "scored": 40,
+    "judge_errors": 0,
+    "avg_weighted_score": 5.315,
+    "avg_judge_overall_score": 5.4
+  },
+  "by_model": {
+    "Llama 4 Maverick": {
+      "count": 10,
+      "avg_weighted_score": 6.508,
+      "avg_judge_overall_score": 6.6
+    },
+    "Llama 4 Scout": {
+      "count": 10,
+      "avg_weighted_score": 5.488,
+      "avg_judge_overall_score": 5.5
+    },
+    "Phi-3 Medium 4K": {
+      "count": 10,
+      "avg_weighted_score": 5.17,
+      "avg_judge_overall_score": 5.2
+    },
+    "Phi-3 Mini 4K": {
+      "count": 10,
+      "avg_weighted_score": 4.095,
+      "avg_judge_overall_score": 4.3
+    }
+  },
+  "by_difficulty": {
+    "easy": {
+      "count": 12,
+      "avg_weighted_score": 5.802,
+      "avg_judge_overall_score": 5.833
+    },
+    "hard": {
+      "count": 16,
+      "avg_weighted_score": 4.938,
+      "avg_judge_overall_score": 4.969
+    },
+    "medium": {
+      "count": 12,
+      "avg_weighted_score": 5.332,
+      "avg_judge_overall_score": 5.542
+    }
+  },
+  "by_category": {
+    "Code Generation": {
+      "count": 12,
+      "avg_weighted_score": 5.072,
+      "avg_judge_overall_score": 5.167
+    },
+    "Incident Analysis": {
+      "count": 4,
+      "avg_weighted_score": 5.35,
+      "avg_judge_overall_score": 5.375
+    },
+    "Theory Q&A": {
+      "count": 24,
+      "avg_weighted_score": 5.431,
+      "avg_judge_overall_score": 5.521
+    }
+  },
+  "metric_averages": {
+    "correctness": 5.35,
+    "completeness": 4.925,
+    "key_point_coverage": 5.125,
+    "instruction_following": 5.725,
+    "reasoning_depth": 5.05,
+    "production_readiness": 4.625,
+    "clarity_structure": 7.375,
+    "factual_grounding": 5.45,
+    "code_sql_quality": 4.8
+  }
+}
