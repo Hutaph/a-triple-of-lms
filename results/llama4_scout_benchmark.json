@@ -1,0 +1,635 @@
+{
+  "benchmark_metadata": {
+    "benchmark_name": "General Big Data LM Benchmark",
+    "benchmark_version": "v1.0",
+    "created_at": "2026-05-27T14:30:00+07:00",
+    "score_scale": "0-10",
+    "source_output_file": "outputs/llama4/llama4_scout_outputs.json",
+    "dataset_file": "data/bigdata_10_questions.json",
+    "num_samples": 10,
+    "num_success": 10,
+    "num_failed": 0
+  },
+  "candidate_model": {
+    "model_name": "Llama 4 Scout",
+    "model_id": "meta-llama/llama-4-scout",
+    "model_key": "llama4_scout",
+    "provider": "OpenRouter",
+    "system_prompt": "You are a senior Big Data engineer and Spark expert. Answer accurately, practically, and follow the user's instructions. For code tasks, provide correct and production-aware code.",
+    "generation_params_summary": {
+      "temperatures_used": [
+        0.2
+      ],
+      "max_tokens_values_used": [
+        400,
+        450,
+        550,
+        650,
+        700,
+        800,
+        900,
+        1200
+      ],
+      "max_tokens_policy": "Per-sample max_tokens from benchmark dataset"
+    }
+  },
+  "judge_model": {
+    "model_name": "Manual GPT Judge",
+    "model_id": "manual-chatgpt-judge",
+    "provider": "ChatGPT",
+    "score_scale": "0-10",
+    "rubric": {
+      "correctness": "Technical correctness of the answer.",
+      "completeness": "Coverage of required points and expected key concepts.",
+      "reasoning_quality": "Logical structure, depth, and explanation quality.",
+      "big_data_relevance": "Relevance to Spark, Big Data, and production data engineering.",
+      "practicality": "Usefulness in real engineering scenarios.",
+      "code_quality": "Correctness, idiomatic style, scalability, and maintainability of code. Null for non-code tasks.",
+      "instruction_following": "How well the answer follows the prompt constraints."
+    }
+  },
+  "sample_evaluations": [
+    {
+      "sample_id": "BD_THEORY_EASY_01",
+      "category": "Theory Q&A",
+      "difficulty": "easy",
+      "topic": "Managed vs External tables in Hive/Spark",
+      "prompt": "What is the difference between Managed and External tables in Hive/Spark?\nAnswer concisely, but include data ownership, DROP TABLE behavior, common use cases, and production best practices.",
+      "ground_truth": "Managed tables are tables where Spark/Hive owns both the metadata and the underlying data. If the table is dropped, the metastore entry and the managed data are deleted. External tables keep table metadata in Spark/Hive, but the data is stored at an explicitly specified external location such as HDFS, S3, ADLS, or GCS. Dropping an external table removes only the metadata; the underlying files remain.\n\nExternal tables are preferred for production datasets, shared data lakes, compliance/retention scenarios, and data accessed by multiple engines such as Spark, Hive, Athena, Trino, or Glue. Managed tables are simpler for temporary, staging, or ephemeral outputs where Spark/Hive should control the whole lifecycle. A strong answer should mention ownership, drop behavior, data lifecycle, and the risk of accidental recursive deletion for managed production data.",
+      "expected_key_points": "managed owns metadata and data; external owns metadata only; DROP TABLE difference; external for production/shared data; managed for staging/temp; lifecycle and accidental deletion risk",
+      "model_output": "**Managed vs External Tables in Hive/Spark**\n\n### Key Differences\n\n*   **Data Ownership**:\n    *   **Managed Tables**: Hive/Spark owns the data. When a managed table is dropped, the data is deleted.\n    *   **External Tables**: The user owns the data. When an external table is dropped, only the metadata is deleted.\n*   **DROP TABLE Behavior**:\n    *   **Managed Tables**: Drops the table and deletes the data.\n    *   **External Tables**: Drops the table but preserves the data.\n\n### Common Use Cases\n\n*   **Managed Tables**:\n    *   Temporary or intermediate data.\n    *   Data that can be recreated easily.\n*   **External Tables**:\n    *   Data shared across multiple teams or applications.\n    *   Data that cannot be recreated easily (e.g., raw logs).\n\n### Production Best Practices\n\n*   **Use External Tables** for critical or large datasets to prevent accidental data loss.\n*   **Use Managed Tables** for temporary or intermediate data that can be recreated easily.\n\n**Example (Spark SQL):**\n\n```scala\n// Managed Table\nspark.sql(\"CREATE TABLE managed_table (id INT, name STRING) USING PARQUET\")\nspark.sql(\"INSERT INTO managed_table VALUES (1, 'John')\")\n\n// External Table\nspark.sql(\"CREATE EXTERNAL TABLE external_table (id INT, name STRING) USING PARQUET LOCATION '/path/to/data'\")\n```",
+      "candidate_model": {
+        "model_name": "Llama 4 Scout",
+        "model_id": "meta-llama/llama-4-scout"
+      },
+      "raw_output_metrics": {
+        "latency_s": 2.032,
+        "tokens_per_second": 143.701,
+        "prompt_tokens": 84,
+        "completion_tokens": 292,
+        "total_tokens": 376,
+        "output_char_count": 1294,
+        "output_word_count": 182
+      },
+      "scores": {
+        "correctness": 9,
+        "completeness": 9,
+        "reasoning_quality": 8,
+        "big_data_relevance": 9,
+        "practicality": 9,
+        "code_quality": null,
+        "instruction_following": 8
+      },
+      "quality_score": 8.67,
+      "judge_feedback": {
+        "strengths": [
+          "Clearly explains ownership and DROP TABLE behavior.",
+          "Gives appropriate production guidance for external tables."
+        ],
+        "weaknesses": [
+          "Adds an example despite the concise-answer request.",
+          "Could mention multi-engine access and accidental recursive deletion more explicitly."
+        ],
+        "main_errors": [],
+        "short_comment": "Strong concise answer; minor missing production nuance."
+      },
+      "metadata": {
+        "candidate_started_at": "2026-05-27T06:22:04.782927+00:00",
+        "candidate_ended_at": "2026-05-27T06:22:06.815093+00:00",
+        "judged_at": "2026-05-27T14:30:00+07:00"
+      }
+    },
+    {
+      "sample_id": "BD_THEORY_EASY_02",
+      "category": "Theory Q&A",
+      "difficulty": "easy",
+      "topic": "Managed vs External tables in Databricks",
+      "prompt": "What is the difference between Managed and External Tables in Databricks?\nInclude storage location, metadata/catalog behavior, DROP TABLE behavior, and when each type should be used.",
+      "ground_truth": "In Databricks, a managed table is controlled by Databricks/Spark: the catalog stores metadata and Databricks manages the underlying table storage. Dropping a managed table removes both metadata and the managed data. An external table stores metadata in the catalog, but the actual data lives in an external location such as S3, ADLS, or GCS. Dropping an external table removes the catalog metadata but preserves the files.\n\nArchitecturally, managed tables couple schema and storage lifecycle, which is convenient for transient tables or Databricks-owned datasets. External tables decouple compute/catalog from storage, making them better for raw/curated lake layers, shared datasets, multi-engine access, governance, compliance retention, and independent storage lifecycle. A good answer should mention CREATE EXTERNAL TABLE ... LOCATION or equivalent external locations, and should avoid saying that external tables delete data when dropped.",
+      "expected_key_points": "Databricks/Spark owns managed metadata and data; external data stored in cloud object storage; DROP behavior; external locations; shared data lake; managed for transient/Databricks-owned tables",
+      "model_output": "**Managed vs External Tables in Databricks**\n=====================================================\n\nIn Databricks, tables can be classified into two categories: Managed Tables and External Tables. The primary difference between them lies in their storage location, metadata/catalog behavior, and DROP TABLE behavior.\n\n### **Storage Location**\n\n*   **Managed Tables**: The data is stored in the Databricks managed storage, which is a proprietary storage system. The data is stored in a directory within the Databricks File System (DBFS).\n*   **External Tables**: The data is stored in an external location, such as Amazon S3, Azure Blob Storage, or Google Cloud Storage. The data is not managed by Databricks.\n\n### **Metadata/Catalog Behavior**\n\n*   **Managed Tables**: The metadata (schema, table name, etc.) is stored in the Databricks metastore (also known as the Unity Catalog). The metastore is a centralized repository that stores metadata about all tables in the Databricks workspace.\n*   **External Tables**: The metadata is also stored in the Databricks metastore, but the data itself is stored externally. The metastore maintains a reference to the external data location.\n\n### **DROP TABLE Behavior**\n\n*   **Managed Tables**: When a managed table is dropped, the data is deleted from the DBFS, and the metadata is removed from the metastore.\n*   **External Tables**: When an external table is dropped, only the metadata is removed from the metastore. The data remains in the external storage location.\n\n### **When to Use Each Type**\n\n*   **Use Managed Tables**:\n    *   When you want to store data within the Databricks ecosystem.\n    *   When you want to leverage Databricks' optimized storage and performance features.\n    *   When you want to easily manage and delete data.\n*   **Use External Tables**:\n    *   When you want to integrate with external data sources or systems.\n    *   When you want to use existing data stored in external storage locations.\n   ",
+      "candidate_model": {
+        "model_name": "Llama 4 Scout",
+        "model_id": "meta-llama/llama-4-scout"
+      },
+      "raw_output_metrics": {
+        "latency_s": 9.691,
+        "tokens_per_second": 41.275,
+        "prompt_tokens": 81,
+        "completion_tokens": 400,
+        "total_tokens": 481,
+        "output_char_count": 1974,
+        "output_word_count": 294
+      },
+      "scores": {
+        "correctness": 8,
+        "completeness": 7,
+        "reasoning_quality": 8,
+        "big_data_relevance": 8,
+        "practicality": 7,
+        "code_quality": null,
+        "instruction_following": 7
+      },
+      "quality_score": 7.5,
+      "judge_feedback": {
+        "strengths": [
+          "Covers storage location, catalog metadata, and DROP TABLE behavior.",
+          "Distinguishes Databricks-managed and external storage use cases."
+        ],
+        "weaknesses": [
+          "Output appears truncated before completing external-table use cases.",
+          "Calling Databricks storage proprietary/DBFS-centric is imprecise."
+        ],
+        "main_errors": [
+          "Incomplete response due to truncation.",
+          "Over-simplifies managed storage as proprietary DBFS storage."
+        ],
+        "short_comment": "Mostly correct but truncated and slightly imprecise."
+      },
+      "metadata": {
+        "candidate_started_at": "2026-05-27T06:22:10.075965+00:00",
+        "candidate_ended_at": "2026-05-27T06:22:19.766998+00:00",
+        "judged_at": "2026-05-27T14:30:00+07:00"
+      }
+    },
+    {
+      "sample_id": "BD_THEORY_MEDIUM_01",
+      "category": "Theory Q&A",
+      "difficulty": "medium",
+      "topic": "repartition vs coalesce in Apache Spark",
+      "prompt": "What is the difference between repartition(n) and coalesce(n) in Apache Spark?\nExplain shuffle behavior, whether each can increase/decrease partitions, when to use each, and cost implications.",
+      "ground_truth": "repartition(n) performs a full shuffle to redistribute records across exactly n partitions. It can increase or decrease the number of partitions and usually uses hash partitioning unless a partitioning expression is specified. Because it exchanges data across the network, it is expensive but useful when increasing parallelism, rebalancing skewed data, or preparing for a heavy wide transformation.\n\ncoalesce(n) merges existing partitions into fewer partitions with minimal shuffle by default. It is normally used only to decrease partition count, often before writing output files to reduce the small-file problem. It is cheaper than repartition, but coalescing too aggressively can create uneven partitions, poor parallelism, or skewed output.\n\nA good production answer should mention that shuffle is one of the most expensive Spark operations, causing network I/O, serialization, disk spill, and memory pressure. Use repartition when better distribution or more parallelism is needed; use coalesce when reducing partition count before writes.",
+      "expected_key_points": "repartition full shuffle; can increase or decrease partitions; coalesce decreases partitions; minimal shuffle; use repartition for parallelism/skew; use coalesce before writes; shuffle cost",
+      "model_output": "**Repartitioning and Coalescing in Apache Spark**\n=====================================================\n\nIn Apache Spark, `repartition(n)` and `coalesce(n)` are two methods used to change the number of partitions in a DataFrame or RDD. While they share a similar purpose, they differ in their approach and use cases.\n\n**Repartition(n)**\n-----------------\n\n*   `repartition(n)` is a wide transformation that always shuffles data across the network.\n*   It can **increase or decrease** the number of partitions.\n*   It uses the `HashPartitioner` to redistribute the data.\n\n**Coalesce(n)**\n----------------\n\n*   `coalesce(n)` is a narrow transformation that tries to **decrease** the number of partitions.\n*   It does not shuffle data if the number of partitions is decreased.\n*   If the number of partitions is increased, it will shuffle data.\n\n**Shuffle Behavior**\n-------------------\n\n*   **Shuffle**: When Spark shuffles data, it redistributes the data across the cluster, which can be expensive in terms of network I/O and computation.\n*   `repartition(n)` always shuffles data, while `coalesce(n)` only shuffles data when increasing the number of partitions.\n\n**When to Use Each**\n--------------------\n\n*   Use `repartition(n)` when:\n    *   You need to increase or decrease the number of partitions significantly.\n    *   You want to ensure that the data is evenly distributed across the partitions.\n*   Use `coalesce(n)` when:\n    *   You want to decrease the number of partitions and avoid shuffling data.\n    *   You are working with a large dataset and want to reduce the number of partitions to improve performance.\n\n**Cost Implications**\n---------------------\n\n*   **Shuffle Cost**: Shuffling data can be expensive, especially for large datasets. It involves serializing and deserializing data, as well as network I/O.\n*   `repartition(n)` can be more expensive than `coalesce(n)` when decreasing the number of partitions, since it always shuffles data.\n\n**Example Code (PySpark)**\n---------------------------\n\n```python\nfrom pyspark.sql import SparkSession\n\n# Create a",
+      "candidate_model": {
+        "model_name": "Llama 4 Scout",
+        "model_id": "meta-llama/llama-4-scout"
+      },
+      "raw_output_metrics": {
+        "latency_s": 7.998,
+        "tokens_per_second": 56.264,
+        "prompt_tokens": 86,
+        "completion_tokens": 450,
+        "total_tokens": 536,
+        "output_char_count": 2079,
+        "output_word_count": 288
+      },
+      "scores": {
+        "correctness": 7,
+        "completeness": 8,
+        "reasoning_quality": 8,
+        "big_data_relevance": 9,
+        "practicality": 8,
+        "code_quality": null,
+        "instruction_following": 7
+      },
+      "quality_score": 7.83,
+      "judge_feedback": {
+        "strengths": [
+          "Explains repartition full shuffle and typical coalesce usage.",
+          "Mentions cost from network I/O and serialization."
+        ],
+        "weaknesses": [
+          "Output is truncated at the example section.",
+          "Coalesce increasing partitions/shuffle behavior is stated too loosely."
+        ],
+        "main_errors": [
+          "Misleading statement that coalesce shuffles when increasing partitions."
+        ],
+        "short_comment": "Good core explanation, but truncated and slightly inaccurate."
+      },
+      "metadata": {
+        "candidate_started_at": "2026-05-27T06:22:20.768184+00:00",
+        "candidate_ended_at": "2026-05-27T06:22:28.766104+00:00",
+        "judged_at": "2026-05-27T14:30:00+07:00"
+      }
+    },
+    {
+      "sample_id": "BD_THEORY_MEDIUM_02",
+      "category": "Theory Q&A",
+      "difficulty": "medium",
+      "topic": "Broadcast Join in Spark",
+      "prompt": "Explain the concept of Broadcast Join in Spark. When should it be used?\nInclude mechanism, configuration or hint, memory trade-off, and a practical example.",
+      "ground_truth": "A broadcast join sends the smaller side of a join to every executor so that each executor can join its local partitions of the large table without shuffling the large table. It is triggered automatically when the smaller relation is below spark.sql.autoBroadcastJoinThreshold, or manually using a broadcast() hint.\n\nIt should be used for fact-dimension joins where one table is small enough to fit in executor memory, for example joining a multi-terabyte fact_events table with a small dim_product or dim_country table. The benefit is avoiding an expensive shuffle of the large table, which can significantly reduce runtime and network I/O.\n\nThe trade-off is memory pressure: the broadcasted table is replicated across executors, and if it is too large it may cause driver or executor OOM. A good answer should mention threshold tuning, monitoring memory, using broadcast for MB-scale or small dimension tables, and avoiding it for large fact tables.",
+      "expected_key_points": "small table sent to all executors; local join; avoids large shuffle; autoBroadcastJoinThreshold; broadcast hint; fact-dimension joins; memory/OOM risk",
+      "model_output": "**Broadcast Join in Spark**\n==========================\n\n### Overview\n\nBroadcast Join is a type of join operation in Apache Spark that allows joining a large dataset with a small dataset by broadcasting the small dataset to all nodes in the cluster. This approach can significantly improve the performance of join operations by reducing the amount of data that needs to be shuffled.\n\n### Mechanism\n\nThe Broadcast Join mechanism works as follows:\n\n1. **Identify the small dataset**: Spark identifies the smaller dataset, which is typically the one that fits in memory.\n2. **Broadcast the small dataset**: Spark broadcasts the small dataset to all nodes in the cluster, so that each node has a copy of the entire small dataset.\n3. **Join with the large dataset**: Each node then joins the large dataset with the broadcasted small dataset using a simple loop.\n\n### Configuration or Hint\n\nTo use Broadcast Join in Spark, you can:\n\n* **Use the `broadcast` method**: Call the `broadcast` method on the small dataset before joining it with the large dataset.\n* **Use the `hint` method**: Use the `hint` method to specify the join type as `broadcast` on the join operation.\n\nExample:\n```scala\n// Using broadcast method\nval smallDf = spark.createDataFrame(Seq((1, \"a\"), (2, \"b\")))\nval largeDf = spark.createDataFrame(Seq((1, \"x\"), (2, \"y\"), (3, \"z\")))\n\nval broadcastedSmallDf = spark.sparkContext.broadcast(smallDf)\nval joinedDf = largeDf.join(broadcastedSmallDf.value, Seq(\"_1\"), \"inner\")\n\n// Using hint method\nval smallDf = spark.createDataFrame(Seq((1, \"a\"), (2, \"b\")))\nval largeDf = spark.createDataFrame(Seq((1, \"x\"), (2, \"y\"), (3, \"z\")))\n\nval joinedDf = largeDf.join(smallDf, Seq(\"_1\")).hint(\"broadcast\")\n```\n\n### Memory Trade-off\n\nBroadcast Join requires that the small dataset fits in memory on each node in the cluster. If the small dataset is too large to fit in memory, Spark will throw an `OutOfMemoryError`. Therefore",
+      "candidate_model": {
+        "model_name": "Llama 4 Scout",
+        "model_id": "meta-llama/llama-4-scout"
+      },
+      "raw_output_metrics": {
+        "latency_s": 7.747,
+        "tokens_per_second": 58.087,
+        "prompt_tokens": 79,
+        "completion_tokens": 450,
+        "total_tokens": 529,
+        "output_char_count": 1920,
+        "output_word_count": 284
+      },
+      "scores": {
+        "correctness": 7,
+        "completeness": 6,
+        "reasoning_quality": 7,
+        "big_data_relevance": 8,
+        "practicality": 6,
+        "code_quality": null,
+        "instruction_following": 7
+      },
+      "quality_score": 6.83,
+      "judge_feedback": {
+        "strengths": [
+          "Explains the basic broadcast mechanism and shuffle reduction.",
+          "Mentions executor memory risk."
+        ],
+        "weaknesses": [
+          "Does not mention autoBroadcastJoinThreshold.",
+          "Example uses non-idiomatic/incorrect Spark broadcast patterns and is truncated."
+        ],
+        "main_errors": [
+          "Uses sparkContext.broadcast on a DataFrame instead of Spark SQL broadcast correctly.",
+          "Missing automatic threshold configuration detail."
+        ],
+        "short_comment": "Concept is right, but configuration/example quality is weak."
+      },
+      "metadata": {
+        "candidate_started_at": "2026-05-27T06:22:29.767655+00:00",
+        "candidate_ended_at": "2026-05-27T06:22:37.514835+00:00",
+        "judged_at": "2026-05-27T14:30:00+07:00"
+      }
+    },
+    {
+      "sample_id": "BD_THEORY_HARD_01",
+      "category": "Theory Q&A",
+      "difficulty": "hard",
+      "topic": "Small-file problem in Spark",
+      "prompt": "What is the small-file problem in Spark, and how do you solve it?\nExplain root causes, why it hurts performance, and practical mitigation techniques.",
+      "ground_truth": "The small-file problem occurs when a table or data lake path contains many tiny files, often KB to a few MB each. It is common with high parallelism, over-partitioned writes, frequent streaming micro-batches, or writing too many partition directories. It hurts performance because each file creates metadata overhead, file listing overhead, and often a separate task or scan unit. On object stores such as S3 or ADLS, listing and opening many files increases latency and request cost; on Spark, thousands of files can create thousands of tiny tasks, scheduler overhead, I/O inefficiency, and poor scan throughput.\n\nSolutions include coalescing or repartitioning before writes to target reasonable file sizes, using Delta Lake OPTIMIZE/auto-compaction where available, tuning partition columns and partition counts, batching small streaming writes, avoiding over-partitioning, and monitoring file counts and file sizes. A common target is roughly 128 MB to 1 GB per file depending on storage, workload, and downstream query patterns. The answer should also mention trade-offs: using too few output files can reduce parallelism, while too many files hurts metadata and scheduling performance.",
+      "expected_key_points": "many tiny files; metadata/listing overhead; many small Spark tasks; object store request cost; root causes high parallelism/streaming/over-partitioning; coalesce/repartition; compaction/OPTIMIZE; target file size; trade-off with parallelism",
+      "model_output": "**The Small-File Problem in Spark**\n=====================================\n\nThe small-file problem in Spark refers to the performance degradation that occurs when dealing with a large number of small files. This issue arises when the input data is split into many small files, each with a size significantly smaller than the block size of the underlying storage system.\n\n**Root Causes**\n---------------\n\nThe small-file problem has several root causes:\n\n1. **Metadata overhead**: When Spark reads a file, it needs to fetch the file's metadata, such as the file's location, size, and block information. With a large number of small files, the metadata overhead becomes significant, leading to increased processing time.\n2. **File splitting and merging**: Spark splits large files into smaller blocks for parallel processing. However, when dealing with small files, the overhead of splitting and merging these files becomes substantial, leading to performance degradation.\n3. **Shuffle and sorting**: When processing small files, the shuffle and sorting operations become more frequent, resulting in increased overhead due to data serialization, deserialization, and network transfer.\n\n**Performance Impact**\n----------------------\n\nThe small-file problem hurts performance in several ways:\n\n1. **Increased processing time**: The overhead of metadata fetching, file splitting, and merging leads to increased processing time, making jobs slower.\n2. **Higher memory usage**: The increased number of files leads to higher memory usage, as Spark needs to store more file metadata and block information.\n3. **Reduced parallelism**: The small-file problem can reduce parallelism, as Spark may need to process multiple small files sequentially, reducing the overall processing efficiency.\n\n**Practical Mitigation Techniques**\n------------------------------------\n\nTo mitigate the small-file problem in Spark, consider the following practical techniques:\n\n### 1. **File Consolidation**\n\nConsolidate small files into larger files to reduce the number of files and the associated metadata overhead.\n\n**Example (Scala):**\n```scala\nimport org.apache.spark.sql.SparkSession\n\nval spark = SparkSession.builder.appName(\"File Consolidation\").getOrCreate()\n\n// Read small files\nval smallFilesDF = spark.read.text(\"small_files\")\n\n// Consolidate small files into larger files\nval consolidatedDF = smallFilesDF\n  .groupBy(\"file_name\")\n  .agg(org.apache.spark.sql.functions.col(\"value\").collectList())\n  .withColumn(\"consolidated_value\", org.apache.spark.sql.functions.udf((values: Seq[String]) => values.mkString(\"\\n\")).apply(\"value\"))\n\nconsolidatedDF.write.text(\"consolidated_files\")\n```\n\n### 2. **File Reorganization**\n\nReorganize small files into a directory structure with a balanced number of files per directory.\n\n**Example (Python):**\n```python\nimport os\nfrom",
+      "candidate_model": {
+        "model_name": "Llama 4 Scout",
+        "model_id": "meta-llama/llama-4-scout"
+      },
+      "raw_output_metrics": {
+        "latency_s": 8.783,
+        "tokens_per_second": 62.621,
+        "prompt_tokens": 78,
+        "completion_tokens": 550,
+        "total_tokens": 628,
+        "output_char_count": 2841,
+        "output_word_count": 350
+      },
+      "scores": {
+        "correctness": 5,
+        "completeness": 4,
+        "reasoning_quality": 5,
+        "big_data_relevance": 6,
+        "practicality": 4,
+        "code_quality": null,
+        "instruction_following": 4
+      },
+      "quality_score": 4.67,
+      "judge_feedback": {
+        "strengths": [
+          "Identifies metadata overhead as a major issue.",
+          "Recognizes consolidation as a mitigation direction."
+        ],
+        "weaknesses": [
+          "Misses object-store cost, streaming/high-parallelism root causes, target file sizes, and compaction strategy.",
+          "Output is truncated and includes questionable/non-working examples."
+        ],
+        "main_errors": [
+          "Incorrect or confused explanation of splitting/merging and shuffle as root causes.",
+          "Mitigation code is not production-sound and response is incomplete."
+        ],
+        "short_comment": "Partial answer with major production gaps and truncation."
+      },
+      "metadata": {
+        "candidate_started_at": "2026-05-27T06:22:38.516350+00:00",
+        "candidate_ended_at": "2026-05-27T06:22:49.562290+00:00",
+        "judged_at": "2026-05-27T14:30:00+07:00"
+      }
+    },
+    {
+      "sample_id": "BD_THEORY_HARD_02",
+      "category": "Theory Q&A",
+      "difficulty": "hard",
+      "topic": "Spark performance optimization techniques",
+      "prompt": "How do you optimize Spark jobs for better performance? Mention at least 5 techniques.\nPrioritize the techniques by bottleneck type and explain why each one helps.",
+      "ground_truth": "A strong answer should start by profiling the job with Spark UI or query plans, then optimize the largest bottleneck first. Common techniques include:\n\n1. Reduce shuffle cost: choose better join strategies, use broadcast joins for small dimension tables, reduce unnecessary groupBy/orderBy/distinct operations, and tune spark.sql.shuffle.partitions.\n2. Improve scan efficiency: use columnar formats such as Parquet/ORC/Delta, predicate pushdown, partition pruning, and select only needed columns.\n3. Tune partitioning: avoid too many tiny partitions or too few huge partitions; choose partition columns based on query filters and join keys.\n4. Cache only reused data: cache/persist intermediate DataFrames that are reused multiple times, and unpersist when done to avoid memory pressure.\n5. Avoid slow UDFs when possible: prefer built-in Spark SQL functions so Catalyst can optimize the query.\n6. Handle skew: use salting, AQE skew join handling, split heavy keys, or custom partitioning.\n7. Control output file layout: coalesce/repartition before writes, compact files, and avoid the small-file problem.\n8. Tune serialization and resources: use Kryo for RDD-heavy workloads when appropriate, set executor memory/cores carefully, and monitor spill and GC.\n\nThe key idea is not to list random tips, but to connect each technique to a bottleneck: shuffle, scan, skew, memory, serialization, output layout, or resource configuration.",
+      "expected_key_points": "profile with Spark UI; shuffle reduction; broadcast joins; predicate pushdown; partition pruning; partition tuning; cache only reused data; avoid UDFs; handle skew; coalesce/compaction; resource tuning",
+      "model_output": "Optimizing Spark Jobs for Better Performance\n=============================================\n\nSpark job optimization is crucial for achieving better performance, especially when dealing with large-scale data processing. Here are 5 techniques to optimize Spark jobs, prioritized by bottleneck type:\n\n### 1. **Data Serialization and Deserialization** (CPU-bound bottleneck)\n\n*   **Technique:** Use efficient serialization libraries like Kryo or Arrow.\n*   **Why it helps:** Serialization and deserialization can be a significant bottleneck in Spark jobs, especially when dealing with large amounts of data. Kryo and Arrow provide more efficient serialization mechanisms than the default Java serialization.\n\nExample (Scala):\n```scala\n// Enable Kryo serialization\nval conf = new SparkConf()\nconf.set(\"spark.serializer\", \"org.apache.spark.serializer.KryoSerializer\")\n\n// Create a SparkContext with Kryo serialization\nval sc = new SparkContext(conf)\n\n// Register classes to be serialized using Kryo\nconf.registerKryoClasses(Array(classOf[MyClass]))\n```\n\n### 2. **Data Shuffle and Skew** (I/O-bound bottleneck)\n\n*   **Technique:** Use `repartition` or `coalesce` to optimize data partitioning, and `mapPartitions` to handle skew.\n*   **Why it helps:** Data shuffle and skew can cause significant performance issues in Spark jobs. Optimizing data partitioning and handling skew can reduce the amount of data that needs to be shuffled.\n\nExample (Python):\n```python\n# Optimize data partitioning using repartition\nfrom pyspark.sql import SparkSession\nspark = SparkSession.builder.appName(\"My App\").getOrCreate()\ndf = spark.read.parquet(\"data.parquet\").repartition(10)\n\n# Handle skew using mapPartitions\nfrom pyspark import RDD\nrdd = sc.parallelize([1, 2, 3, 4, 5])\nskewed_rdd = rdd.mapPartitions(lambda x: [sum(x)])\n```\n\n### 3. **Memory Optimization** (Memory-bound bottleneck)\n\n*   **Technique:** Use `cache` and `unpersist` to manage memory usage, and `spark.executor.memory` to configure executor memory.\n*   **Why it helps:** Memory optimization is crucial in Spark jobs, as excessive memory usage can lead to out-of-memory errors. Using `cache` and `unpersist` can help manage memory usage, while configuring `spark.executor.memory` can ensure sufficient memory allocation.\n\nExample (Scala):\n```scala\n// Cache an RDD in memory\nval rdd = sc.parallelize(1 to 1000000)\nrdd.cache()\n\n// Unpersist the RDD when no longer needed\nrdd.unpersist()\n\n// Configure executor memory\nval conf = new SparkConf()\nconf.set(\"spark.executor.memory\", \"4g\")\n```\n\n### 4. **Executor Configuration** (Resource-bound bottleneck)\n\n*   **Technique:** Configure `spark.executor.instances`, `spark.executor.cores`, and `spark.executor.memory` to optimize resource allocation.\n*   **Why it helps:** Optimizing executor configuration can ensure sufficient resources are allocated for Spark jobs. This can significantly impact performance, especially in large-scale data processing.\n\nExample (Python):\n```",
+      "candidate_model": {
+        "model_name": "Llama 4 Scout",
+        "model_id": "meta-llama/llama-4-scout"
+      },
+      "raw_output_metrics": {
+        "latency_s": 13.077,
+        "tokens_per_second": 49.706,
+        "prompt_tokens": 79,
+        "completion_tokens": 650,
+        "total_tokens": 729,
+        "output_char_count": 2964,
+        "output_word_count": 365
+      },
+      "scores": {
+        "correctness": 5,
+        "completeness": 4,
+        "reasoning_quality": 5,
+        "big_data_relevance": 6,
+        "practicality": 4,
+        "code_quality": null,
+        "instruction_following": 4
+      },
+      "quality_score": 4.67,
+      "judge_feedback": {
+        "strengths": [
+          "Attempts to organize techniques by bottleneck type.",
+          "Mentions serialization, skew, cache/unpersist, and executor resources."
+        ],
+        "weaknesses": [
+          "Truncated before giving at least five complete techniques.",
+          "Omits profiling/Spark UI, scan pruning, broadcast joins, UDF avoidance, and output layout."
+        ],
+        "main_errors": [
+          "mapPartitions example does not meaningfully solve skew.",
+          "Fails the at-least-five-techniques requirement due to truncation."
+        ],
+        "short_comment": "Too incomplete and generic for a hard optimization prompt."
+      },
+      "metadata": {
+        "candidate_started_at": "2026-05-27T06:22:50.563895+00:00",
+        "candidate_ended_at": "2026-05-27T06:23:03.640936+00:00",
+        "judged_at": "2026-05-27T14:30:00+07:00"
+      }
+    },
+    {
+      "sample_id": "BD_CODE_EASY_01",
+      "category": "Code Generation",
+      "difficulty": "easy",
+      "topic": "PySpark batch aggregation",
+      "prompt": "Write PySpark code for this task.\n\nInput: a CSV file at /data/events.csv with columns:\nuser_id, event_time, event_type, country, revenue\n\nRequirements:\n1. Read the CSV with header and infer schema.\n2. Drop rows where user_id or event_time is null.\n3. Convert event_time to a timestamp.\n4. Compute daily active users by country.\n5. Compute total revenue by country and day.\n6. Save the result as Parquet partitioned by event_date.\n\nProvide only the code plus brief comments.",
+      "ground_truth": "A correct PySpark solution should read the CSV, clean null user_id/event_time, cast event_time to timestamp, derive event_date, aggregate by country and event_date, and write Parquet partitioned by event_date. One acceptable implementation:\n\nfrom pyspark.sql import SparkSession\nfrom pyspark.sql.functions import col, to_timestamp, to_date, countDistinct, sum as spark_sum, coalesce, lit\n\nspark = SparkSession.builder.appName(\"DailyCountryMetrics\").getOrCreate()\n\nevents = (\n    spark.read\n         .option(\"header\", True)\n         .option(\"inferSchema\", True)\n         .csv(\"/data/events.csv\")\n)\n\ncleaned = (\n    events\n    .dropna(subset=[\"user_id\", \"event_time\"])\n    .withColumn(\"event_ts\", to_timestamp(col(\"event_time\")))\n    .dropna(subset=[\"event_ts\"])\n    .withColumn(\"event_date\", to_date(col(\"event_ts\")))\n    .withColumn(\"revenue\", coalesce(col(\"revenue\").cast(\"double\"), lit(0.0)))\n)\n\nresult = (\n    cleaned\n    .groupBy(\"country\", \"event_date\")\n    .agg(\n        countDistinct(\"user_id\").alias(\"daily_active_users\"),\n        spark_sum(\"revenue\").alias(\"total_revenue\")\n    )\n)\n\n(\n    result.write\n          .mode(\"overwrite\")\n          .partitionBy(\"event_date\")\n          .parquet(\"/output/daily_country_metrics\")\n)\n\nMinor variations are acceptable if they satisfy the same logic.",
+      "expected_key_points": "SparkSession; read CSV with header/inferSchema; drop null user_id/event_time; to_timestamp; event_date; groupBy country/date; countDistinct user_id; sum revenue; write Parquet partitioned by event_date",
+      "model_output": "```python\nfrom pyspark.sql import SparkSession\nfrom pyspark.sql.functions import col, to_timestamp, date_format\n\n# Create SparkSession\nspark = SparkSession.builder.appName(\"Event Processing\").getOrCreate()\n\n# Read CSV with header and infer schema\ndf = spark.read.csv(\"/data/events.csv\", header=True, inferSchema=True)\n\n# Drop rows where user_id or event_time is null\ndf = df.dropna(subset=[\"user_id\", \"event_time\"])\n\n# Convert event_time to a timestamp\ndf = df.withColumn(\"event_time\", to_timestamp(\"event_time\"))\n\n# Add event_date column\ndf = df.withColumn(\"event_date\", date_format(\"event_time\", \"yyyy-MM-dd\"))\n\n# Compute daily active users by country\ndaily_active_users = df.groupBy(\"country\", \"event_date\").agg({\"user_id\": \"countDistinct\"}).withColumnRenamed(\"countDistinct(user_id)\", \"active_users\")\n\n# Compute total revenue by country and day\ntotal_revenue = df.groupBy(\"country\", \"event_date\").agg({\"revenue\": \"sum\"}).withColumnRenamed(\"sum(revenue)\", \"total_revenue\")\n\n# Combine results\nresult = df.select(\"country\", \"event_date\", \"revenue\").groupBy(\"country\", \"event_date\").agg({\"revenue\": \"sum\"}).withColumnRenamed(\"sum(revenue)\", \"total_revenue\")\n\n# Alternatively, use daily_active_users and total_revenue for more accurate results\n# result = daily_active_users.join(total_revenue, [\"country\", \"event_date\"])\n\n# Save result as Parquet partitioned by event_date\nresult.write.partitionBy(\"event_date\").parquet(\"/data/processed_events\")\n``` \n\nHowever, A more idiomatic and production-ready solution would look something like:\n\n```python\nfrom pyspark.sql import SparkSession\nfrom pyspark.sql.functions import col, to_timestamp, date_format, sum as _sum, countDistinct as _countDistinct\n\n# Create SparkSession\nspark = SparkSession.builder.appName(\"Event Processing\").getOrCreate()\n\n# Read CSV with header and infer schema\ndf = spark.read.csv(\"/data/events.csv\", header=True, inferSchema=True)\n\n# Drop rows where user_id or event_time is null\ndf = df.dropna(subset=[\"user_id\", \"event_time\"])\n\n# Convert event_time to a timestamp\ndf = df.withColumn(\"event_time\", to_timestamp(\"event_time\")) \\\n       .withColumn(\"event_date\", date_format(\"event_time\", \"yyyy-MM-dd\"))\n\n# Compute daily active users by country\ndaily_active_users = df.groupBy(\"country\", \"event_date\").agg(_countDistinct(\"user_id\").alias(\"active_users\"))\n\n# Compute total revenue by country and day\ntotal_revenue = df.groupBy(\"country\", \"event_date\").agg(_sum(\"revenue\").alias(\"total_revenue\"))\n\n# Save results as Parquet partitioned by event_date\ndaily_active_users.write.partitionBy(\"event_date\").parquet(\"/data/daily_active_users\")\ntotal_revenue.write.partitionBy(\"event_date\").parquet(\"/data/total_revenue\")\n```",
+      "candidate_model": {
+        "model_name": "Llama 4 Scout",
+        "model_id": "meta-llama/llama-4-scout"
+      },
+      "raw_output_metrics": {
+        "latency_s": 1.908,
+        "tokens_per_second": 336.478,
+        "prompt_tokens": 157,
+        "completion_tokens": 642,
+        "total_tokens": 799,
+        "output_char_count": 2682,
+        "output_word_count": 236
+      },
+      "scores": {
+        "correctness": 5,
+        "completeness": 6,
+        "reasoning_quality": 5,
+        "big_data_relevance": 7,
+        "practicality": 5,
+        "code_quality": 4,
+        "instruction_following": 4
+      },
+      "quality_score": 5.14,
+      "judge_feedback": {
+        "strengths": [
+          "Reads CSV, drops required nulls, converts timestamps, and partitions output.",
+          "Uses countDistinct and sum in parts of the answer."
+        ],
+        "weaknesses": [
+          "Final result omits daily active users or writes two separate outputs instead of one combined metric table.",
+          "Violates 'only code plus brief comments' with alternatives and extra explanation."
+        ],
+        "main_errors": [
+          "Primary result only contains revenue, not DAU.",
+          "Second solution writes DAU and revenue separately rather than one required result."
+        ],
+        "short_comment": "Basic pieces exist, but final output logic is wrong."
+      },
+      "metadata": {
+        "candidate_started_at": "2026-05-27T06:23:04.642710+00:00",
+        "candidate_ended_at": "2026-05-27T06:23:06.551017+00:00",
+        "judged_at": "2026-05-27T14:30:00+07:00"
+      }
+    },
+    {
+      "sample_id": "BD_CODE_MEDIUM_01",
+      "category": "Code Generation",
+      "difficulty": "medium",
+      "topic": "Spark SQL event analytics",
+      "prompt": "Given a Spark SQL table events(user_id, event_time, event_type, session_id, revenue), write Spark SQL queries to calculate:\n\n1. Daily active users.\n2. Top 5 event types by frequency.\n3. Average revenue per user by day.\n4. Sessions with more than 50 events.\n\nUse clear SQL and briefly explain each query.",
+      "ground_truth": "A correct answer should use proper aggregation, date extraction, COUNT(DISTINCT), GROUP BY, ORDER BY, and HAVING. Acceptable Spark SQL:\n\n-- 1. Daily active users\nSELECT\n  TO_DATE(event_time) AS event_date,\n  COUNT(DISTINCT user_id) AS daily_active_users\nFROM events\nWHERE user_id IS NOT NULL AND event_time IS NOT NULL\nGROUP BY TO_DATE(event_time)\nORDER BY event_date;\n\n-- 2. Top 5 event types by frequency\nSELECT\n  event_type,\n  COUNT(*) AS event_count\nFROM events\nWHERE event_type IS NOT NULL\nGROUP BY event_type\nORDER BY event_count DESC\nLIMIT 5;\n\n-- 3. Average revenue per user by day\nSELECT\n  event_date,\n  total_revenue / NULLIF(active_users, 0) AS avg_revenue_per_user\nFROM (\n  SELECT\n    TO_DATE(event_time) AS event_date,\n    SUM(COALESCE(revenue, 0)) AS total_revenue,\n    COUNT(DISTINCT user_id) AS active_users\n  FROM events\n  WHERE user_id IS NOT NULL AND event_time IS NOT NULL\n  GROUP BY TO_DATE(event_time)\n) t\nORDER BY event_date;\n\n-- 4. Sessions with more than 50 events\nSELECT\n  session_id,\n  COUNT(*) AS event_count\nFROM events\nWHERE session_id IS NOT NULL\nGROUP BY session_id\nHAVING COUNT(*) > 50\nORDER BY event_count DESC;\n\nEquivalent Spark SQL variants are acceptable.",
+      "expected_key_points": "TO_DATE event_time; COUNT DISTINCT user_id; top 5 event_type by count; average revenue per user by day; COALESCE revenue; GROUP BY; HAVING COUNT > 50; order results",
+      "model_output": "### Spark SQL Queries\n\nHere are the Spark SQL queries to solve the given problems:\n\n#### 1. Daily Active Users\n\n```sql\nSELECT \n    DATE(event_time) AS date,\n    COUNT(DISTINCT user_id) AS active_users\nFROM \n    events\nGROUP BY \n    DATE(event_time)\nORDER BY \n    date;\n```\n\nThis query calculates the number of unique active users for each day by grouping the events table by date and counting the distinct user_ids.\n\n#### 2. Top 5 Event Types by Frequency\n\n```sql\nSELECT \n    event_type,\n    COUNT(*) AS frequency\nFROM \n    events\nGROUP BY \n    event_type\nORDER BY \n    frequency DESC\nLIMIT 5;\n```\n\nThis query counts the frequency of each event type and returns the top 5 event types with the highest frequency.\n\n#### 3. Average Revenue per User by Day\n\n```sql\nSELECT \n    DATE(event_time) AS date,\n    AVG(revenue) AS avg_revenue,\n    COUNT(DISTINCT user_id) AS active_users,\n    SUM(revenue) / COUNT(DISTINCT user_id) AS avg_revenue_per_user\nFROM \n    events\nGROUP BY \n    DATE(event_time)\nORDER BY \n    date;\n```\n\nHowever, to get accurate average revenue per user, consider the following optimized query:\n\n```sql\nSELECT \n    DATE(e1.event_time) AS date,\n    SUM(e1.revenue) AS total_revenue,\n    COUNT(DISTINCT e1.user_id) AS active_users,\n    SUM(e1.revenue) / COUNT(DISTINCT e1.user_id) AS avg_revenue_per_user\nFROM \n    events e1\nGROUP BY \n    DATE(e1.event_time)\nORDER BY \n    date;\n```\n\nThis query accurately calculates the average revenue per user by day.\n\n#### 4. Sessions with More than 50 Events\n\n```sql\nSELECT \n    session_id,\n    COUNT(*) AS event_count\nFROM \n    events\nGROUP BY \n    session_id\nHAVING \n    COUNT(*) > 50;\n```\n\nThis query groups the events table by session_id and counts the number of events for each session. It then returns only the sessions with more than 50 events.\n\n### Example Usage\n\nAssuming you have a SparkSession named `spark`, you can create a DataFrame from a given DataFrame or read from a data source.\n\n```python\nfrom pyspark.sql import SparkSession\n\n# create SparkSession\nspark = SparkSession.builder.appName(\"Events Analysis\").getOrCreate()\n\n# create a sample DataFrame\ndata = [\n    (1, \"2022-01-01 12:00:00\", \"click\", 101, 10.0),\n    (2, \"2022-01-01 12:05:00\", \"click\", 101, 15.0),\n    (3, \"2022-01-02 13:00:00\", \"purchase\", 102, 20.0),\n    (4, \"2022-01-02 13:05:00\", \"click\", 103, 0.0),\n    (5, \"2022-01-03 14:00:00\", \"purchase\", 101, 30.0),\n    (6, \"2022-01-03 14:05:00\", \"click\", 101, 0.0),\n    (7, \"2022-01-03 14:10:00\", \"click\", 101, 0.0),\n    # ... more data\n]\n\ncolumns = [\"user_id\", \"event_time\", \"event_type\", \"session_id\", \"revenue\"]\nevents_df = spark.createDataFrame(data, schema=columns)\n\n# register the DataFrame as a Spark SQL table\nevents_df.createOrReplaceTempView(\"events\")\n\n# execute the Spark SQL queries",
+      "candidate_model": {
+        "model_name": "Llama 4 Scout",
+        "model_id": "meta-llama/llama-4-scout"
+      },
+      "raw_output_metrics": {
+        "latency_s": 2.722,
+        "tokens_per_second": 293.902,
+        "prompt_tokens": 119,
+        "completion_tokens": 800,
+        "total_tokens": 919,
+        "output_char_count": 2770,
+        "output_word_count": 366
+      },
+      "scores": {
+        "correctness": 8,
+        "completeness": 7,
+        "reasoning_quality": 7,
+        "big_data_relevance": 8,
+        "practicality": 7,
+        "code_quality": 8,
+        "instruction_following": 6
+      },
+      "quality_score": 7.29,
+      "judge_feedback": {
+        "strengths": [
+          "Core SQL aggregations are mostly correct.",
+          "Uses COUNT DISTINCT, GROUP BY, ORDER BY, LIMIT, and HAVING appropriately."
+        ],
+        "weaknesses": [
+          "No null handling or COALESCE revenue handling.",
+          "Adds unnecessary example usage and is truncated at the end."
+        ],
+        "main_errors": [
+          "Missing null filters for event_time/user_id/session_id/event_type.",
+          "Output includes extra unfinished sample code beyond requested SQL."
+        ],
+        "short_comment": "SQL logic is mostly correct but not cleanly scoped."
+      },
+      "metadata": {
+        "candidate_started_at": "2026-05-27T06:23:07.552407+00:00",
+        "candidate_ended_at": "2026-05-27T06:23:10.274110+00:00",
+        "judged_at": "2026-05-27T14:30:00+07:00"
+      }
+    },
+    {
+      "sample_id": "BD_CODE_HARD_01",
+      "category": "Code Generation",
+      "difficulty": "hard",
+      "topic": "Production-style PySpark pipeline with deduplication and window functions",
+      "prompt": "Write a production-style PySpark batch pipeline.\n\nInput 1: /data/events_parquet with columns:\nevent_id, user_id, event_time, ingestion_time, event_type, session_id, revenue\n\nInput 2: /data/users_parquet with columns:\nuser_id, country, signup_date\n\nRequirements:\n1. Read both datasets from Parquet.\n2. Deduplicate events by event_id, keeping the row with the latest ingestion_time.\n3. Convert event_time to timestamp and create event_date.\n4. Join events with users by user_id.\n5. For each country and event_date, compute:\n   - daily active users\n   - total revenue\n   - number of sessions\n   - top event_type by frequency\n6. Save result as Delta or Parquet partitioned by event_date.\n7. Include comments about performance considerations.\n\nProvide code and short explanation.",
+      "ground_truth": "A correct solution should use Parquet reads, window-based deduplication, timestamp/date conversion, a join, aggregations, a method for top event_type per group, and partitioned output. One acceptable implementation:\n\nfrom pyspark.sql import SparkSession, Window\nfrom pyspark.sql.functions import (\n    col, row_number, to_timestamp, to_date, countDistinct,\n    count, sum as spark_sum, coalesce, lit, desc\n)\n\nspark = SparkSession.builder.appName(\"CountryDailyEventPipeline\").getOrCreate()\n\nevents = spark.read.parquet(\"/data/events_parquet\")\nusers = spark.read.parquet(\"/data/users_parquet\")\n\n# Deduplicate by event_id, keeping the latest ingestion_time.\ndedup_window = Window.partitionBy(\"event_id\").orderBy(desc(\"ingestion_time\"))\nevents_dedup = (\n    events\n    .filter(col(\"event_id\").isNotNull())\n    .withColumn(\"rn\", row_number().over(dedup_window))\n    .filter(col(\"rn\") == 1)\n    .drop(\"rn\")\n)\n\nevents_clean = (\n    events_dedup\n    .dropna(subset=[\"user_id\", \"event_time\"])\n    .withColumn(\"event_ts\", to_timestamp(col(\"event_time\")))\n    .dropna(subset=[\"event_ts\"])\n    .withColumn(\"event_date\", to_date(col(\"event_ts\")))\n    .withColumn(\"revenue\", coalesce(col(\"revenue\").cast(\"double\"), lit(0.0)))\n)\n\njoined = events_clean.join(users.select(\"user_id\", \"country\"), on=\"user_id\", how=\"left\")\n\nbase_metrics = (\n    joined\n    .groupBy(\"country\", \"event_date\")\n    .agg(\n        countDistinct(\"user_id\").alias(\"daily_active_users\"),\n        spark_sum(\"revenue\").alias(\"total_revenue\"),\n        countDistinct(\"session_id\").alias(\"num_sessions\")\n    )\n)\n\nevent_type_counts = (\n    joined\n    .groupBy(\"country\", \"event_date\", \"event_type\")\n    .agg(count(\"*\").alias(\"event_type_count\"))\n)\n\nrank_window = Window.partitionBy(\"country\", \"event_date\").orderBy(desc(\"event_type_count\"), col(\"event_type\"))\ntop_event_type = (\n    event_type_counts\n    .withColumn(\"rank\", row_number().over(rank_window))\n    .filter(col(\"rank\") == 1)\n    .select(\"country\", \"event_date\", col(\"event_type\").alias(\"top_event_type\"))\n)\n\nresult = base_metrics.join(top_event_type, on=[\"country\", \"event_date\"], how=\"left\")\n\n(\n    result.write\n          .format(\"delta\")   # or .parquet(...) if Delta is unavailable\n          .mode(\"overwrite\")\n          .partitionBy(\"event_date\")\n          .save(\"/output/country_daily_metrics\")\n)\n\nPerformance notes: select only required columns, avoid unnecessary shuffles, ensure event_date partitioning matches query patterns, consider broadcast(users) only if the users table is small, monitor skew by country/date, and compact output files if many small files are produced.",
+      "expected_key_points": "read parquet; window row_number by event_id latest ingestion_time; to_timestamp and event_date; join users; groupBy country/date; DAU; sum revenue; countDistinct session; top event_type via count and window rank; partitioned Delta/Parquet output; performance comments",
+      "model_output": "**Production-Style PySpark Batch Pipeline**\n=============================================\n\n### Pipeline Overview\n\nThis pipeline processes two input datasets: `events_parquet` and `users_parquet`. It deduplicates events, converts `event_time` to a timestamp, joins events with users, and computes daily metrics for each country.\n\n### Code\n```python\nfrom pyspark.sql import SparkSession\nfrom pyspark.sql.functions import col, to_timestamp, sum as _sum, count, max, when, row_number\nfrom pyspark.sql import Window\n\n# Create SparkSession with Delta Lake support\nspark = SparkSession.builder.appName(\"Event Processing Pipeline\") \\\n    .config(\"spark.jars.packages\", \"io.delta:delta-lake_2.12:2.2.1\") \\\n    .getOrCreate()\n\n# Read input datasets\nevents_df = spark.read.parquet(\"/data/events_parquet\")\nusers_df = spark.read.parquet(\"/data/users_parquet\")\n\n# Deduplicate events by event_id, keeping the row with the latest ingestion_time\ndeduplicated_events_df = events_df.withColumn(\"ingestion_time_ts\", to_timestamp(\"ingestion_time\")) \\\n    .withColumn(\"event_time_ts\", to_timestamp(\"event_time\")) \\\n    .withColumn(\"event_date\", col(\"event_time_ts\").cast(\"string\").substr(0, 10)) \\\n    .withColumnRenamed(\"event_time_ts\", \"event_time\") \\\n    .withColumnRenamed(\"ingestion_time_ts\", \"ingestion_time\") \\\n    .withColumn(\"rn\", row_number().over(Window.partitionBy(\"event_id\").orderBy(col(\"ingestion_time\").desc()))) \\\n    .filter(col(\"rn\") == 1) \\\n    .drop(\"rn\", \"ingestion_time\")\n\n# Join events with users by user_id\njoined_df = deduplicated_events_df.join(users_df, on=\"user_id\", how=\"left\")\n\n# Compute daily metrics for each country and event_date\nmetrics_df = joined_df.groupBy(\"country\", \"event_date\") \\\n    .agg(\n        count(\"user_id\").alias(\"daily_active_users\"),\n        _sum(\"revenue\").alias(\"total_revenue\"),\n        count(\"session_id\").alias(\"number_of_sessions\"),\n        count(\"*\").alias(\"total_events\")\n    ) \\\n    .withColumn(\"top_event_type\", \n                when(col(\"total_events\") > 0, \n                     joined_df.filter(col(\"country\") == joined_df[\"country\"]) \n                     .filter(col(\"event_date\") == joined_df[\"event_date\"]) \n                     .groupBy(\"country\", \"event_date\", \"event_type\") \n                     .agg(count(\"*\").alias(\"event_type_count\")) \n                     .orderBy(col(\"event_date\"), col(\"event_type_count\").desc()) \n                     .limit(1).withColumnRenamed(\"event_type\", \"top_event_type\").col(\"top_event_type\")))\n\n# To get top event_type correctly, we use a subquery with rank() or dense_rank()\n# Here we use dense_rank() for demonstration\ntop_event_type_df = joined_df.withColumn(\"event_type_rank\", \n                                        count(\"*\").over(Window.partitionBy(\"country\", \"event_date\", \"event_type\"))) \\\n    .withColumn(\"event_type_rank\", \n                dense_rank().over(Window.partitionBy(\"country\", \"event_date\").orderBy(col(\"event_type_rank\").desc()))) \\\n    .filter(col(\"event_type_rank\") == 1) \\\n    .select(\"country\", \"event_date\", \"event_type\").withColumnRenamed(\"event_type\", \"top_event_type\")\n\nmetrics_df = metrics_df.join(top_event_type_df, on=[\"country\", \"event_date\"], how=\"left\")\n\n# Save result as Delta Lake table partitioned by event_date\nmetrics_df.write.partitionBy(\"event_date\").format(\"delta\").mode(\"overwrite\").saveAsTable(\"event_metrics\")\n\n# Stop SparkSession\nspark.stop()\n```\n\n### Explanation\n\n*   We start by creating a SparkSession with Delta Lake support.\n*   We read the input datasets `events_parquet` and `users_parquet` into DataFrames.\n*   We deduplicate events by `event_id`, keeping the row with the latest `ingestion_time`.\n*   We convert `event_time` to a timestamp and create `event_date`.\n*   We join events with users by `user_id`.\n*   We compute daily metrics for each country and `event_date`, including daily active users, total revenue, number of sessions, and top `event_type` by frequency.\n*   We save the result as a Delta Lake table partitioned by `event_date`.\n\n### Performance Considerations\n\n*   We use `row_number()` with a Window to deduplicate events, which is more efficient than self-joins.\n*   We use `groupBy()` and aggregations to compute daily metrics, which is more efficient than using self-joins or subqueries.\n*   We use `partitionBy()` to save the result as a Delta Lake table partitioned by `event_date`, which allows for efficient querying and data management.\n\n### Advice\n\n*   Make sure to optimize the Spark configuration for your cluster and workload.\n*   Consider using Spark's built-in data quality features, such as data validation and data cleansing.\n*   Use Delta Lake's features, such as data versioning and data validation, to ensure data quality and integrity.",
+      "candidate_model": {
+        "model_name": "Llama 4 Scout",
+        "model_id": "meta-llama/llama-4-scout"
+      },
+      "raw_output_metrics": {
+        "latency_s": 22.01,
+        "tokens_per_second": 50.341,
+        "prompt_tokens": 225,
+        "completion_tokens": 1108,
+        "total_tokens": 1333,
+        "output_char_count": 4718,
+        "output_word_count": 440
+      },
+      "scores": {
+        "correctness": 4,
+        "completeness": 6,
+        "reasoning_quality": 5,
+        "big_data_relevance": 7,
+        "practicality": 4,
+        "code_quality": 3,
+        "instruction_following": 7
+      },
+      "quality_score": 5.14,
+      "judge_feedback": {
+        "strengths": [
+          "Includes Parquet reads, window deduplication, join, partitioned Delta output, and performance notes.",
+          "Attempts separate logic for top event_type."
+        ],
+        "weaknesses": [
+          "Code has serious correctness issues and likely will not run.",
+          "DAU/session counts and top_event_type logic are wrong."
+        ],
+        "main_errors": [
+          "Uses count instead of countDistinct for daily active users and sessions.",
+          "top_event_type computation references DataFrames/columns incorrectly and dense_rank is not imported."
+        ],
+        "short_comment": "Production-looking structure, but core code correctness is poor."
+      },
+      "metadata": {
+        "candidate_started_at": "2026-05-27T06:23:11.275026+00:00",
+        "candidate_ended_at": "2026-05-27T06:23:35.616015+00:00",
+        "judged_at": "2026-05-27T14:30:00+07:00"
+      }
+    },
+    {
+      "sample_id": "BD_ANALYSIS_HARD_01",
+      "category": "Incident Analysis",
+      "difficulty": "hard",
+      "topic": "Spark performance diagnosis: skew, spill, and small files",
+      "prompt": "You are reviewing a slow Spark job that processes 2 TB of clickstream logs daily.\n\nSymptoms:\n- Runtime increased from 35 minutes to 3 hours.\n- Spark UI shows one stage taking 80% of total runtime.\n- A few tasks run much longer than the rest.\n- Shuffle read is very high and several tasks spill to disk.\n- Output table has about 75,000 small Parquet files per day.\n- The job joins a huge events table with a small country_code dimension table.\n- Most queries filter by event_date and country.\n\nAnalyze the likely root causes and propose a prioritized remediation plan.\nYour answer should be structured as: Observations, Likely Root Causes, Remediation Plan, and Validation Metrics.",
+      "ground_truth": "A strong answer should identify multiple interacting issues rather than one generic cause.\n\nObservations:\nThe runtime regression, one dominant stage, long-tail tasks, high shuffle read, and disk spill suggest shuffle-heavy processing and possible data skew. The huge number of output files indicates a small-file problem. The join with a small dimension table suggests that a broadcast join may be appropriate. Query filters by event_date and country imply the table layout should support partition pruning or clustering.\n\nLikely Root Causes:\n1. Data skew: a few hot keys or countries may cause some tasks to process much more data than others.\n2. Expensive shuffle join: Spark may be using sort-merge join instead of broadcasting the small country_code dimension table.\n3. Poor partition configuration: too many shuffle partitions or badly chosen partitioning may create many tiny tasks/files.\n4. Disk spill and memory pressure: shuffle or aggregation does not fit memory for some tasks.\n5. Small-file problem: 75,000 files/day causes slow reads, metadata overhead, object-store listing cost, and scheduler overhead.\n\nRemediation Plan:\n1. Inspect Spark UI and query plan first: identify the slow stage, join strategy, skewed keys, shuffle size, spill amount, and file counts.\n2. Broadcast the country_code dimension table if it fits safely in executor memory, using broadcast() or Spark SQL broadcast hints, and tune autoBroadcastJoinThreshold if needed.\n3. Enable or verify Adaptive Query Execution, including skew join handling and shuffle partition coalescing.\n4. Fix skew if AQE is insufficient: salt hot keys, split heavy keys, pre-aggregate, or handle skewed countries separately.\n5. Tune shuffle partitions based on cluster cores and data size; avoid both huge partitions and excessive tiny partitions.\n6. Reduce output small files: coalesce/repartition before write, use Delta OPTIMIZE/auto-compaction if available, and target a reasonable file size such as 128 MB to 1 GB.\n7. Align layout with access patterns: partition by event_date; consider clustering/Z-ordering/bucketing by country depending on platform and workload.\n8. Review executor memory, cores, and spill; adjust resources only after query and data-layout issues are addressed.\n\nValidation Metrics:\nCompare runtime, shuffle read/write size, spill bytes, number of skewed tasks, task duration distribution, output file count and average file size, query latency for event_date/country filters, cloud storage LIST/GET cost, and success rate across multiple daily runs.",
+      "expected_key_points": "identify skew; high shuffle; broadcast small dimension; AQE; spill/memory; small-file problem; partition by event_date; country layout; prioritized plan; validation metrics",
+      "model_output": "**Observations**\n\n1. **Runtime increase**: The job's runtime has increased from 35 minutes to 3 hours, indicating a significant performance degradation.\n2. **Stage performance**: One stage is taking 80% of the total runtime, suggesting a bottleneck in that stage.\n3. **Task performance skew**: A few tasks are running much longer than the rest, indicating task performance skew.\n4. **High shuffle read**: The shuffle read is very high, and several tasks are spilling to disk, indicating excessive data shuffling.\n5. **Small Parquet files**: The output table has about 75,000 small Parquet files per day, which can lead to performance issues during future queries.\n6. **Join and filter patterns**: The job joins a huge events table with a small country_code dimension table and filters by event_date and country.\n\n**Likely Root Causes**\n\n1. **Inefficient join strategy**: The join between the huge events table and the small country_code dimension table might be causing excessive data shuffling.\n2. **Inadequate data partitioning**: The data might not be properly partitioned, leading to skew and excessive shuffling.\n3. **Insufficient filtering**: The filter by event_date and country might not be effective, causing unnecessary data processing.\n4. **Small Parquet files**: The large number of small Parquet files might be causing performance issues during future queries.\n\n**Remediation Plan**\n\n**Short-term (urgent) fixes**\n\n1. **Optimize join strategy**: Use a broadcast join for the small country_code dimension table to reduce shuffling.\n2. **Improve data partitioning**: Re-partition the data by event_date and country to reduce skew and shuffling.\n3. **Enhance filtering**: Ensure that the filter by event_date and country is effective and pushed down to the data source.\n\n**Medium-term fixes**\n\n1. **Use efficient data storage**: Consider using a columnar storage format like Parquet or ORC to reduce storage size and improve query performance.\n2. **Consolidate small Parquet files**: Use a process to consolidate the small Parquet files into larger files to improve query performance.\n\n**Long-term fixes**\n\n1. **Implement data warehousing best practices**: Implement data warehousing best practices, such as using a star or snowflake schema, to improve query performance.\n2. **Use Spark's built-in optimizations**: Use Spark's built-in optimizations, such as predicate pushdown and columnar storage, to improve query performance.\n\n**Validation Metrics**\n\n1. **Runtime**: Monitor the job's runtime to ensure it returns to the expected range (e.g., 35 minutes).\n2. **Shuffle read**: Monitor the shuffle read to ensure it decreases significantly.\n3. **Task performance skew**: Monitor task performance skew to ensure it decreases.\n4. **Parquet file count**: Monitor the number of Parquet files to ensure it decreases.\n5. **Query performance**: Monitor query performance on the output table to ensure it improves.\n\n**Example Code (Scala)**\n```scala\n// Assume 'events' and 'countryCode' are DataFrames\nval countryCodeDF = spark.read.parquet(\"country_code.parquet\")\nval eventsDF = spark.read.parquet(\"events.parquet\")\n\n// Use broadcast join for small country_code dimension table\nval joinedDF = eventsDF.join(broadcast(countryCodeDF), \"country_code\")\n\n// Re-partition data by event_date and country\nval partitionedDF = joinedDF.repartitionByRange(100, \"event_date\", \"country\")\n\n// Write to Parquet with consolidation\npartitionedDF.write.partitionBy(\"event_date\", \"country\").parquet(\"output.parquet\")\n```\nNote: The remediation plan and code snippets are prioritized and might need to be adjusted based on the specific use case and requirements.",
+      "candidate_model": {
+        "model_name": "Llama 4 Scout",
+        "model_id": "meta-llama/llama-4-scout"
+      },
+      "raw_output_metrics": {
+        "latency_s": 17.842,
+        "tokens_per_second": 43.157,
+        "prompt_tokens": 196,
+        "completion_tokens": 770,
+        "total_tokens": 966,
+        "output_char_count": 3647,
+        "output_word_count": 502
+      },
+      "scores": {
+        "correctness": 8,
+        "completeness": 7,
+        "reasoning_quality": 8,
+        "big_data_relevance": 9,
+        "practicality": 7,
+        "code_quality": null,
+        "instruction_following": 8
+      },
+      "quality_score": 7.83,
+      "judge_feedback": {
+        "strengths": [
+          "Links symptoms to skew, shuffle, broadcast-join opportunity, and small files.",
+          "Uses the requested Observations, Root Causes, Remediation, and Metrics structure."
+        ],
+        "weaknesses": [
+          "Does not mention AQE or detailed spill/memory remediation.",
+          "Validation and file-size strategy could be more specific."
+        ],
+        "main_errors": [
+          "Repartitioning by event_date and country may worsen small files if not controlled.",
+          "No explicit target file size or AQE skew handling."
+        ],
+        "short_comment": "Good incident analysis with some missing production details."
+      },
+      "metadata": {
+        "candidate_started_at": "2026-05-27T06:23:36.617794+00:00",
+        "candidate_ended_at": "2026-05-27T06:23:54.459844+00:00",
+        "judged_at": "2026-05-27T14:30:00+07:00"
+      }
+    }
+  ],
+  "summary": {
+    "average_quality_score": 6.56,
+    "average_correctness": 6.6,
+    "average_completeness": 6.4,
+    "average_reasoning_quality": 6.6,
+    "average_big_data_relevance": 7.7,
+    "average_practicality": 6.1,
+    "average_code_quality": 5.0,
+    "average_instruction_following": 6.2,
+    "average_latency_s": 9.38,
+    "median_latency_s": 8.39,
+    "average_tokens_per_second": 113.55,
+    "total_prompt_tokens": 1184,
+    "total_completion_tokens": 6112,
+    "total_tokens": 7296,
+    "average_by_category": {
+      "Theory Q&A": {
+        "num_samples": 6,
+        "average_quality_score": 6.7,
+        "average_latency_s": 8.22
+      },
+      "Code Generation": {
+        "num_samples": 3,
+        "average_quality_score": 5.86,
+        "average_latency_s": 8.88
+      },
+      "Incident Analysis": {
+        "num_samples": 1,
+        "average_quality_score": 7.83,
+        "average_latency_s": 17.84
+      }
+    },
+    "average_by_difficulty": {
+      "easy": {
+        "num_samples": 3,
+        "average_quality_score": 7.1,
+        "average_latency_s": 4.54
+      },
+      "medium": {
+        "num_samples": 3,
+        "average_quality_score": 7.32,
+        "average_latency_s": 6.16
+      },
+      "hard": {
+        "num_samples": 4,
+        "average_quality_score": 5.58,
+        "average_latency_s": 15.43
+      }
+    }
+  },
+  "limitations": [
+    "Each sample was evaluated once, so output variance across repeated runs was not measured.",
+    "Latency depends on API provider routing, network condition, provider load, and output length.",
+    "Manual LLM-as-a-judge evaluation may contain subjective bias despite using a fixed rubric.",
+    "The benchmark focuses on Big Data and Spark tasks, not general-purpose reasoning."
+  ]
+}
