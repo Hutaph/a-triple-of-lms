@@ -18,6 +18,12 @@ OUTPUT_DIR = PROJECT_ROOT / "outputs" / "llama4"
 DEFAULT_TEMPERATURE = 0.2
 DEFAULT_MAX_TOKENS = 900
 
+SYSTEM_PROMPT = (
+    "You are a senior Big Data engineer and Spark expert. "
+    "Answer accurately, practically, and follow the user's instructions. "
+    "For code tasks, provide correct and production-aware code."
+)
+
 def load_environment() -> tuple[OpenAI, dict]:
     load_dotenv(PROJECT_ROOT / ".env")
     
@@ -82,22 +88,18 @@ def parse_generation_params(param_text: str | None) -> tuple[float, int]:
     return temperature, max_tokens
 
 def call_openrouter_model(
-        client: OpenAI,
-        model_id: str,
-        prompt: str,
-        temperature: float,
-        max_tokens: int
-) -> str:
+    client: OpenAI,
+    model_id: str,
+    prompt: str,
+    temperature: float,
+    max_tokens: int,
+) -> tuple[str, dict | None]:
     response = client.chat.completions.create(
         model=model_id,
         messages=[
             {
                 "role": "system",
-                "content": (
-                    "You are a senior Big Data engineer and Spark expert. "
-                    "Answer accurately, practically, and follow the user's instructions. "
-                    "For code tasks, provide correct and production-aware code."
-                ),
+                "content": SYSTEM_PROMPT,
             },
             {
                 "role": "user",
@@ -108,7 +110,17 @@ def call_openrouter_model(
         max_tokens=max_tokens,
     )
 
-    return response.choices[0].message.content
+    output = response.choices[0].message.content
+
+    usage = None
+    if getattr(response, "usage", None):
+        usage = {
+            "prompt_tokens": getattr(response.usage, "prompt_tokens", None),
+            "completion_tokens": getattr(response.usage, "completion_tokens", None),
+            "total_tokens": getattr(response.usage, "total_tokens", None),
+        }
+
+    return output, usage
 
 def build_result_record(
     sample: dict,
@@ -120,7 +132,18 @@ def build_result_record(
     max_tokens: int,
     started_at: str,
     ended_at: str,
+    latency_s: float,
+    usage: dict | None
 ) -> dict:
+    completion_tokens = None
+    tokens_per_second = None
+
+    if usage:
+        completion_tokens = usage.get("completion_tokens")
+
+    if completion_tokens is not None and latency_s > 0:
+        tokens_per_second = round(completion_tokens / latency_s, 3)
+
     return {
         "sample_id": sample.get("sample_id"),
         "benchmark_scope": sample.get("benchmark_scope"),
@@ -129,12 +152,21 @@ def build_result_record(
         "topic": sample.get("topic"),
         "model_name": model_name,
         "model_id": model_id,
+        "system_prompt": SYSTEM_PROMPT,
         "prompt": sample.get("prompt"),
         "model_output": output,
         "error": error,
+        "status": "success" if error is None else "failed",
         "generation_params": {
             "temperature": temperature,
             "max_tokens": max_tokens,
+        },
+        "usage": usage,
+        "metrics": {
+            "latency_s": latency_s,
+            "tokens_per_second": tokens_per_second,
+            "output_char_count": len(output) if output else 0,
+            "output_word_count": len(output.split()) if output else 0,
         },
         "metadata": {
             "started_at": started_at,
@@ -153,13 +185,14 @@ def run_model_benchmark(
 
     print(f"Running benchmark for model: {model_name} ({model_id})")
 
-    for sample in tqdm(samples, desc=f"Evaluating {model_name}"):
+    for sample in tqdm(samples, desc=f"Running {model_name}"):
         temperature, max_tokens = parse_generation_params(sample.get("recommended_generation_params"))
 
         started_at = datetime.now(timezone.utc).isoformat()
+        start_timer = time.perf_counter()
 
         try:
-            output = call_openrouter_model(
+            output, usage = call_openrouter_model(
                 client=client,
                 model_id=model_id,
                 prompt=sample["prompt"],
@@ -169,8 +202,10 @@ def run_model_benchmark(
             error = None
         except Exception as e:
             output = None
+            usage = None
             error = str(e)
         
+        latency_s = round(time.perf_counter() - start_timer, 3)
         ended_at = datetime.now(timezone.utc).isoformat()
 
         record = build_result_record(
@@ -181,6 +216,8 @@ def run_model_benchmark(
             error=error,
             temperature=temperature,
             max_tokens=max_tokens,
+            latency_s=latency_s,
+            usage=usage,
             started_at=started_at,
             ended_at=ended_at,
         )
