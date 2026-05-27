@@ -64,6 +64,51 @@ Script ghi vao `benchmark_results/`:
 - `latency_by_difficulty.png`: latency trung binh theo do kho.
 - `score_vs_latency.png`: scatter plot giua diem va latency.
 
+## Cham bang GPT-5.5 lam LLM judge
+
+Dung script `benchmarks/gpt55_llm_judge.py` de cham cac file output da sinh ra trong `outputs/` bang OpenAI API. Mac dinh script dung `gpt-5.5`, Responses API va structured output de lay diem JSON on dinh.
+
+Them API key vao `.env`:
+
+```bash
+OPENAI_API_KEY=sk-...
+```
+
+Chay thu 3 cau:
+
+```bash
+python benchmarks/gpt55_llm_judge.py --limit 3
+```
+
+Cham mot hoac nhieu file cu the:
+
+```bash
+python benchmarks/gpt55_llm_judge.py ^
+  --predictions outputs/llama4/llama4_scout_outputs.json outputs/llama4/llama4_maverick_outputs.json ^
+  --output-dir outputs/gpt55_judge ^
+  --reasoning-effort medium ^
+  --resume
+```
+
+Metric LLM judge deu tren thang 0-10:
+
+- `correctness`: do chinh xac ky thuat so voi prompt va ground truth.
+- `completeness`: muc do tra loi du cac yeu cau cua de bai.
+- `key_point_coverage`: muc do bao phu cac y chinh bat buoc.
+- `instruction_following`: co theo dung dinh dang, vai tro, gioi han, section bat buoc hay khong.
+- `reasoning_depth`: do sau lap luan, trade-off, giai thich nguyen nhan.
+- `production_readiness`: tinh thuc chien, kha nang van hanh, scalability, monitoring, safety.
+- `clarity_structure`: cach trinh bay, ro rang, de doc.
+- `factual_grounding`: tranh hallucination hoac noi sai hanh vi Spark/Big Data.
+- `code_sql_quality`: chat luong code/SQL neu cau hoi yeu cau code; metric nay duoc bo qua neu khong ap dung.
+
+Output duoc ghi vao `outputs/gpt55_judge/`:
+
+- `gpt55_judge_results.json`: ket qua chi tiet tung cau, gom rubric, ly do, diem weighted.
+- `gpt55_judge_results.csv`: bang de mo bang spreadsheet.
+- `gpt55_judge_summary.json`: diem trung binh overall, theo model, difficulty, category, metric.
+- `gpt55_low_score_report.md`: cac cau diem thap nhat de review thu cong.
+
 ## Goi y bao cao seminar
 
 Dung cac bang sau trong slide demo:
