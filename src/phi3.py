@@ -6,6 +6,7 @@ import re
 import sys
 import time
 import traceback
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
@@ -445,7 +446,7 @@ def call_phi3_model(
     prompt: str,
     temperature: float,
     max_new_tokens: int,
-) -> tuple[str, float, int]:
+) -> tuple[str, float, int, int]:
     import torch
 
     text = build_chat_prompt(tokenizer, prompt)
@@ -475,7 +476,7 @@ def call_phi3_model(
 
     generated_ids = output_ids[0][inputs["input_ids"].shape[-1] :]
     output = tokenizer.decode(generated_ids, skip_special_tokens=True).strip()
-    return output, latency, len(generated_ids)
+    return output, latency, int(inputs["input_ids"].shape[-1]), len(generated_ids)
 
 
 def call_phi3_onnx_model(
@@ -484,7 +485,7 @@ def call_phi3_onnx_model(
     prompt: str,
     temperature: float,
     max_new_tokens: int,
-) -> tuple[str, float, int]:
+) -> tuple[str, float, int, int]:
     import onnxruntime_genai as og
 
     text = build_onnx_chat_prompt(prompt)
@@ -517,7 +518,7 @@ def call_phi3_onnx_model(
         del generator
 
     latency = time.perf_counter() - start
-    return "".join(output_chunks).strip(), latency, output_tokens
+    return "".join(output_chunks).strip(), latency, len(input_tokens), output_tokens
 
 
 def expected_points_to_list(text: str | None) -> list[str]:
@@ -549,10 +550,22 @@ def build_result_record(
     error: str | None,
     temperature: float,
     max_tokens: int,
+    started_at: str,
+    ended_at: str,
     latency_s: float | None,
-    output_tokens: int | None,
+    prompt_tokens: int | None,
+    completion_tokens: int | None,
     include_scores: bool,
 ) -> dict:
+    total_tokens = None
+    if prompt_tokens is not None and completion_tokens is not None:
+        total_tokens = prompt_tokens + completion_tokens
+
+    tokens_per_second = None
+    if completion_tokens is not None and latency_s and latency_s > 0:
+        tokens_per_second = round(completion_tokens / latency_s, 3)
+
+    output_text = output or ""
     record = {
         "sample_id": sample.get("sample_id"),
         "benchmark_scope": sample.get("benchmark_scope"),
@@ -561,14 +574,29 @@ def build_result_record(
         "topic": sample.get("topic"),
         "model_name": model_name,
         "model_id": model_id,
+        "system_prompt": SYSTEM_PROMPT,
         "prompt": sample.get("prompt"),
         "model_output": output,
         "error": error,
-        "latency_s": round(latency_s, 3) if latency_s is not None else None,
-        "output_tokens": output_tokens,
+        "status": "success" if error is None else "failed",
         "generation_params": {
             "temperature": temperature,
             "max_tokens": max_tokens,
+        },
+        "usage": {
+            "prompt_tokens": prompt_tokens,
+            "completion_tokens": completion_tokens,
+            "total_tokens": total_tokens,
+        },
+        "metrics": {
+            "latency_s": round(latency_s, 3) if latency_s is not None else None,
+            "tokens_per_second": tokens_per_second,
+            "output_char_count": len(output_text),
+            "output_word_count": len(output_text.split()),
+        },
+        "metadata": {
+            "started_at": started_at,
+            "ended_at": ended_at,
         },
     }
 
@@ -637,6 +665,7 @@ def run_model_benchmark(
             temperature, max_tokens = parse_generation_params(
                 sample.get("recommended_generation_params")
             )
+            timestamp = datetime.now(timezone.utc).isoformat()
             results.append(
                 build_result_record(
                     sample=sample,
@@ -646,8 +675,11 @@ def run_model_benchmark(
                     error=error,
                     temperature=temperature,
                     max_tokens=max_tokens,
+                    started_at=timestamp,
+                    ended_at=timestamp,
                     latency_s=None,
-                    output_tokens=None,
+                    prompt_tokens=None,
+                    completion_tokens=None,
                     include_scores=include_scores,
                 )
             )
@@ -663,9 +695,10 @@ def run_model_benchmark(
             temperature, max_tokens = parse_generation_params(
                 sample.get("recommended_generation_params")
             )
+            started_at = datetime.now(timezone.utc).isoformat()
             try:
                 if backend == "onnx":
-                    output, latency_s, output_tokens = call_phi3_onnx_model(
+                    output, latency_s, prompt_tokens, completion_tokens = call_phi3_onnx_model(
                         tokenizer=tokenizer,
                         model=model,
                         prompt=sample["prompt"],
@@ -673,7 +706,7 @@ def run_model_benchmark(
                         max_new_tokens=max_tokens,
                     )
                 else:
-                    output, latency_s, output_tokens = call_phi3_model(
+                    output, latency_s, prompt_tokens, completion_tokens = call_phi3_model(
                         tokenizer=tokenizer,
                         model=model,
                         prompt=sample["prompt"],
@@ -685,7 +718,9 @@ def run_model_benchmark(
                 output = None
                 error = str(exc)
                 latency_s = None
-                output_tokens = None
+                prompt_tokens = None
+                completion_tokens = None
+            ended_at = datetime.now(timezone.utc).isoformat()
 
             results.append(
                 build_result_record(
@@ -696,8 +731,11 @@ def run_model_benchmark(
                     error=error,
                     temperature=temperature,
                     max_tokens=max_tokens,
+                    started_at=started_at,
+                    ended_at=ended_at,
                     latency_s=latency_s,
-                    output_tokens=output_tokens,
+                    prompt_tokens=prompt_tokens,
+                    completion_tokens=completion_tokens,
                     include_scores=include_scores,
                 )
             )
@@ -731,8 +769,12 @@ def summarize(results: list[dict]) -> dict:
             "count": len(rows),
             "errors": len(errors),
             "first_error": errors[0] if errors else None,
-            "avg_latency_s": average([row.get("latency_s") for row in rows]),
-            "avg_output_tokens": average([row.get("output_tokens") for row in rows]),
+            "avg_latency_s": average(
+                [(row.get("metrics") or {}).get("latency_s") for row in rows]
+            ),
+            "avg_output_tokens": average(
+                [(row.get("usage") or {}).get("completion_tokens") for row in rows]
+            ),
             "avg_auto_score": average([row.get("auto_score") for row in rows]),
             "avg_auto_keyword_coverage": average(
                 [row.get("auto_keyword_coverage") for row in rows]
