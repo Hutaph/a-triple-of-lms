@@ -359,3 +359,363 @@ BD_ANALYSIS_HARD_01,Phi-3 Mini 4K,Incident Analysis,hard,production_readiness,4.
 BD_ANALYSIS_HARD_01,Phi-3 Mini 4K,Incident Analysis,hard,clarity_structure,8.0,True,Clear sections and logical flow.
 BD_ANALYSIS_HARD_01,Phi-3 Mini 4K,Incident Analysis,hard,factual_grounding,6.0,True,Some correct Spark concepts but vague on specifics.
 BD_ANALYSIS_HARD_01,Phi-3 Mini 4K,Incident Analysis,hard,code_sql_quality,,False,Task did not require code.
+BD_THEORY_EASY_01,Qwen3-14B,Theory Q&A,easy,correctness,9.0,True,Correctly explains ownership and DROP behavior.
+BD_THEORY_EASY_01,Qwen3-14B,Theory Q&A,easy,completeness,9.0,True,Covers all requested sections concisely.
+BD_THEORY_EASY_01,Qwen3-14B,Theory Q&A,easy,key_point_coverage,9.0,True,Hits all expected key points.
+BD_THEORY_EASY_01,Qwen3-14B,Theory Q&A,easy,instruction_following,10.0,True,Follows prompt structure exactly.
+BD_THEORY_EASY_01,Qwen3-14B,Theory Q&A,easy,reasoning_depth,8.0,True,Good but lacks explicit risk mention.
+BD_THEORY_EASY_01,Qwen3-14B,Theory Q&A,easy,production_readiness,9.0,True,Clear best practices for both types.
+BD_THEORY_EASY_01,Qwen3-14B,Theory Q&A,easy,clarity_structure,10.0,True,"Well-structured, clear bullet points."
+BD_THEORY_EASY_01,Qwen3-14B,Theory Q&A,easy,factual_grounding,9.0,True,"Accurate, no hallucination."
+BD_THEORY_EASY_01,Qwen3-14B,Theory Q&A,easy,code_sql_quality,,False,No code requested.
+BD_THEORY_EASY_02,Qwen3-14B,Theory Q&A,easy,correctness,10.0,True,"Accurate on storage, metadata, DROP behavior."
+BD_THEORY_EASY_02,Qwen3-14B,Theory Q&A,easy,completeness,9.0,True,Covers all requested aspects.
+BD_THEORY_EASY_02,Qwen3-14B,Theory Q&A,easy,key_point_coverage,9.0,True,Hits all expected key points.
+BD_THEORY_EASY_02,Qwen3-14B,Theory Q&A,easy,instruction_following,10.0,True,Includes all required points.
+BD_THEORY_EASY_02,Qwen3-14B,Theory Q&A,easy,reasoning_depth,9.0,True,Explains lifecycle and use cases well.
+BD_THEORY_EASY_02,Qwen3-14B,Theory Q&A,easy,production_readiness,9.0,True,"Safe, practical advice."
+BD_THEORY_EASY_02,Qwen3-14B,Theory Q&A,easy,clarity_structure,10.0,True,"Clear sections, table, examples."
+BD_THEORY_EASY_02,Qwen3-14B,Theory Q&A,easy,factual_grounding,10.0,True,Matches Databricks specifics.
+BD_THEORY_EASY_02,Qwen3-14B,Theory Q&A,easy,code_sql_quality,10.0,True,Correct SQL examples provided.
+BD_THEORY_MEDIUM_01,Qwen3-14B,Theory Q&A,medium,correctness,9.0,True,"Accurate on shuffle behavior, partition changes"
+BD_THEORY_MEDIUM_01,Qwen3-14B,Theory Q&A,medium,completeness,9.0,True,Covers all key points thoroughly
+BD_THEORY_MEDIUM_01,Qwen3-14B,Theory Q&A,medium,key_point_coverage,9.0,True,All expected points addressed clearly
+BD_THEORY_MEDIUM_01,Qwen3-14B,Theory Q&A,medium,instruction_following,9.0,True,Follows prompt structure and details
+BD_THEORY_MEDIUM_01,Qwen3-14B,Theory Q&A,medium,reasoning_depth,9.0,True,Explains use cases and costs well
+BD_THEORY_MEDIUM_01,Qwen3-14B,Theory Q&A,medium,production_readiness,8.0,True,Good advice but minor omission on skew
+BD_THEORY_MEDIUM_01,Qwen3-14B,Theory Q&A,medium,clarity_structure,10.0,True,Well-organized with clear sections
+BD_THEORY_MEDIUM_01,Qwen3-14B,Theory Q&A,medium,factual_grounding,9.0,True,Accurate Spark behavior description
+BD_THEORY_MEDIUM_01,Qwen3-14B,Theory Q&A,medium,code_sql_quality,,False,No code required in task
+BD_THEORY_MEDIUM_02,Qwen3-14B,Theory Q&A,medium,correctness,10.0,True,Accurate Spark behavior and mechanisms
+BD_THEORY_MEDIUM_02,Qwen3-14B,Theory Q&A,medium,completeness,8.0,True,Covers all key points except fact-dimension
+BD_THEORY_MEDIUM_02,Qwen3-14B,Theory Q&A,medium,key_point_coverage,8.0,True,Misses fact-dimension join context
+BD_THEORY_MEDIUM_02,Qwen3-14B,Theory Q&A,medium,instruction_following,9.0,True,Includes all requested sections
+BD_THEORY_MEDIUM_02,Qwen3-14B,Theory Q&A,medium,reasoning_depth,9.0,True,Explains shuffle avoidance and memory trade-offs
+BD_THEORY_MEDIUM_02,Qwen3-14B,Theory Q&A,medium,production_readiness,9.0,True,Good memory/OOM warnings
+BD_THEORY_MEDIUM_02,Qwen3-14B,Theory Q&A,medium,clarity_structure,9.0,True,Well-structured with clear sections
+BD_THEORY_MEDIUM_02,Qwen3-14B,Theory Q&A,medium,factual_grounding,10.0,True,"No hallucinations, correct thresholds"
+BD_THEORY_MEDIUM_02,Qwen3-14B,Theory Q&A,medium,code_sql_quality,,False,Task not code-focused
+BD_THEORY_HARD_01,Qwen3-14B,Theory Q&A,hard,correctness,8.0,True,Correctly defines problem and solutions.
+BD_THEORY_HARD_01,Qwen3-14B,Theory Q&A,hard,completeness,8.0,True,Covers most key points thoroughly.
+BD_THEORY_HARD_01,Qwen3-14B,Theory Q&A,hard,key_point_coverage,9.0,True,"Hits many tiny files, overhead, tasks, coalesce, target size."
+BD_THEORY_HARD_01,Qwen3-14B,Theory Q&A,hard,instruction_following,8.0,True,"Explains root causes, impact, and techniques."
+BD_THEORY_HARD_01,Qwen3-14B,Theory Q&A,hard,reasoning_depth,7.0,True,Good but lacks explicit trade-off discussion.
+BD_THEORY_HARD_01,Qwen3-14B,Theory Q&A,hard,production_readiness,7.0,True,Practical advice but some techniques are HDFS-specific.
+BD_THEORY_HARD_01,Qwen3-14B,Theory Q&A,hard,clarity_structure,9.0,True,Well-organized with sections and summary.
+BD_THEORY_HARD_01,Qwen3-14B,Theory Q&A,hard,factual_grounding,8.0,True,"Mostly accurate, minor HDFS focus."
+BD_THEORY_HARD_01,Qwen3-14B,Theory Q&A,hard,code_sql_quality,,False,"Task is theory Q&A, not code."
+BD_THEORY_HARD_02,Qwen3-14B,Theory Q&A,hard,correctness,5.0,True,Some techniques correct but RDD-focused
+BD_THEORY_HARD_02,Qwen3-14B,Theory Q&A,hard,completeness,4.0,True,Missing key techniques like skew handling
+BD_THEORY_HARD_02,Qwen3-14B,Theory Q&A,hard,key_point_coverage,4.0,True,Covered only 4 of 11 expected points
+BD_THEORY_HARD_02,Qwen3-14B,Theory Q&A,hard,instruction_following,5.0,True,Prioritized by bottleneck but missed profiling
+BD_THEORY_HARD_02,Qwen3-14B,Theory Q&A,hard,reasoning_depth,6.0,True,Explains why each helps but lacks depth
+BD_THEORY_HARD_02,Qwen3-14B,Theory Q&A,hard,production_readiness,4.0,True,Missing critical prod techniques like skew handling
+BD_THEORY_HARD_02,Qwen3-14B,Theory Q&A,hard,clarity_structure,8.0,True,Well-structured with clear sections
+BD_THEORY_HARD_02,Qwen3-14B,Theory Q&A,hard,factual_grounding,5.0,True,Mix of valid and RDD-specific advice
+BD_THEORY_HARD_02,Qwen3-14B,Theory Q&A,hard,code_sql_quality,,False,No code/SQL required
+BD_CODE_EASY_01,Qwen3-14B,Code Generation,easy,correctness,6.0,True,Aggregations correct but separate then join is inefficient.
+BD_CODE_EASY_01,Qwen3-14B,Code Generation,easy,completeness,7.0,True,All steps present but revenue handling incomplete.
+BD_CODE_EASY_01,Qwen3-14B,Code Generation,easy,key_point_coverage,7.0,True,Covers most points but missing revenue null handling.
+BD_CODE_EASY_01,Qwen3-14B,Code Generation,easy,instruction_following,8.0,True,Follows prompt but adds extra join step.
+BD_CODE_EASY_01,Qwen3-14B,Code Generation,easy,reasoning_depth,5.0,True,Shallow; no explanation for separate aggregations.
+BD_CODE_EASY_01,Qwen3-14B,Code Generation,easy,production_readiness,5.0,True,Separate aggregations waste resources; no null revenue handling.
+BD_CODE_EASY_01,Qwen3-14B,Code Generation,easy,clarity_structure,8.0,True,Code is clear with comments.
+BD_CODE_EASY_01,Qwen3-14B,Code Generation,easy,factual_grounding,7.0,True,Mostly correct but date_trunc usage is unusual.
+BD_CODE_EASY_01,Qwen3-14B,Code Generation,easy,code_sql_quality,6.0,True,Functional but not idiomatic; separate aggregations inefficient.
+BD_CODE_MEDIUM_01,Qwen3-14B,Code Generation,medium,correctness,9.0,True,"Queries correct, minor missing null handling."
+BD_CODE_MEDIUM_01,Qwen3-14B,Code Generation,medium,completeness,9.0,True,All four queries provided with explanations.
+BD_CODE_MEDIUM_01,Qwen3-14B,Code Generation,medium,key_point_coverage,8.0,True,Missing COALESCE revenue and explicit ordering for session query.
+BD_CODE_MEDIUM_01,Qwen3-14B,Code Generation,medium,instruction_following,9.0,True,Clear SQL and brief explanations provided.
+BD_CODE_MEDIUM_01,Qwen3-14B,Code Generation,medium,reasoning_depth,8.0,True,Explanations clear but lacks deeper null handling reasoning.
+BD_CODE_MEDIUM_01,Qwen3-14B,Code Generation,medium,production_readiness,7.0,True,Missing null checks and revenue handling for robustness.
+BD_CODE_MEDIUM_01,Qwen3-14B,Code Generation,medium,clarity_structure,10.0,True,"Well-structured, clear sections, and formatting."
+BD_CODE_MEDIUM_01,Qwen3-14B,Code Generation,medium,factual_grounding,9.0,True,"Spark SQL compatible, DATE function correct."
+BD_CODE_MEDIUM_01,Qwen3-14B,Code Generation,medium,code_sql_quality,8.0,True,"Good SQL, minor improvements needed for null safety."
+BD_CODE_HARD_01,Qwen3-14B,Code Generation,hard,correctness,7.0,True,Logic mostly correct but has minor flaws
+BD_CODE_HARD_01,Qwen3-14B,Code Generation,hard,completeness,6.0,True,Missing null handling and date conversion fix
+BD_CODE_HARD_01,Qwen3-14B,Code Generation,hard,key_point_coverage,7.0,True,Covers most key points
+BD_CODE_HARD_01,Qwen3-14B,Code Generation,hard,instruction_following,8.0,True,Follows all main steps
+BD_CODE_HARD_01,Qwen3-14B,Code Generation,hard,reasoning_depth,8.0,True,Explains performance considerations
+BD_CODE_HARD_01,Qwen3-14B,Code Generation,hard,production_readiness,8.0,True,Includes configs and performance notes
+BD_CODE_HARD_01,Qwen3-14B,Code Generation,hard,clarity_structure,9.0,True,Code is well-structured and commented
+BD_CODE_HARD_01,Qwen3-14B,Code Generation,hard,factual_grounding,8.0,True,Uses proper Spark functions
+BD_CODE_HARD_01,Qwen3-14B,Code Generation,hard,code_sql_quality,8.0,True,Correct dedup and top event logic
+BD_ANALYSIS_HARD_01,Qwen3-14B,Incident Analysis,hard,correctness,8.0,True,"Accurate root causes, minor omissions."
+BD_ANALYSIS_HARD_01,Qwen3-14B,Incident Analysis,hard,completeness,7.0,True,"Missing AQE, skew handling details."
+BD_ANALYSIS_HARD_01,Qwen3-14B,Incident Analysis,hard,key_point_coverage,8.0,True,Covers most key points.
+BD_ANALYSIS_HARD_01,Qwen3-14B,Incident Analysis,hard,instruction_following,9.0,True,Follows structure well.
+BD_ANALYSIS_HARD_01,Qwen3-14B,Incident Analysis,hard,reasoning_depth,8.0,True,Links symptoms to fixes.
+BD_ANALYSIS_HARD_01,Qwen3-14B,Incident Analysis,hard,production_readiness,7.0,True,Good but lacks AQE.
+BD_ANALYSIS_HARD_01,Qwen3-14B,Incident Analysis,hard,clarity_structure,9.0,True,Clear sections.
+BD_ANALYSIS_HARD_01,Qwen3-14B,Incident Analysis,hard,factual_grounding,8.0,True,Minor Spark tuning errors.
+BD_ANALYSIS_HARD_01,Qwen3-14B,Incident Analysis,hard,code_sql_quality,,False,Not required.
+BD_THEORY_EASY_01,Qwen3-235B-A22B-Thinking,Theory Q&A,easy,correctness,9.0,True,"Accurate on ownership, drop behavior, use cases"
+BD_THEORY_EASY_01,Qwen3-235B-A22B-Thinking,Theory Q&A,easy,completeness,9.0,True,Covers all key points clearly
+BD_THEORY_EASY_01,Qwen3-235B-A22B-Thinking,Theory Q&A,easy,key_point_coverage,9.0,True,Hits all expected key points
+BD_THEORY_EASY_01,Qwen3-235B-A22B-Thinking,Theory Q&A,easy,instruction_following,9.0,True,"Concise, includes all requested aspects"
+BD_THEORY_EASY_01,Qwen3-235B-A22B-Thinking,Theory Q&A,easy,reasoning_depth,8.0,True,"Good production awareness, minor depth lacking"
+BD_THEORY_EASY_01,Qwen3-235B-A22B-Thinking,Theory Q&A,easy,production_readiness,9.0,True,"Strong best practices, conversion warning"
+BD_THEORY_EASY_01,Qwen3-235B-A22B-Thinking,Theory Q&A,easy,clarity_structure,9.0,True,"Clear table format, concise summary"
+BD_THEORY_EASY_01,Qwen3-235B-A22B-Thinking,Theory Q&A,easy,factual_grounding,9.0,True,"Accurate details, minor nit on warehouse path"
+BD_THEORY_EASY_01,Qwen3-235B-A22B-Thinking,Theory Q&A,easy,code_sql_quality,,False,Not required for this task
+BD_THEORY_EASY_02,Qwen3-235B-A22B-Thinking,Theory Q&A,easy,correctness,9.0,True,Accurate on all core differences.
+BD_THEORY_EASY_02,Qwen3-235B-A22B-Thinking,Theory Q&A,easy,completeness,10.0,True,Covers all requested aspects thoroughly.
+BD_THEORY_EASY_02,Qwen3-235B-A22B-Thinking,Theory Q&A,easy,key_point_coverage,10.0,True,Hits all expected key points.
+BD_THEORY_EASY_02,Qwen3-235B-A22B-Thinking,Theory Q&A,easy,instruction_following,10.0,True,Includes all required sections.
+BD_THEORY_EASY_02,Qwen3-235B-A22B-Thinking,Theory Q&A,easy,reasoning_depth,9.0,True,Adds practical best practices.
+BD_THEORY_EASY_02,Qwen3-235B-A22B-Thinking,Theory Q&A,easy,production_readiness,9.0,True,Strong practical advice.
+BD_THEORY_EASY_02,Qwen3-235B-A22B-Thinking,Theory Q&A,easy,clarity_structure,10.0,True,"Clear, well-organized table format."
+BD_THEORY_EASY_02,Qwen3-235B-A22B-Thinking,Theory Q&A,easy,factual_grounding,9.0,True,Minor nuance on Unity Catalog.
+BD_THEORY_EASY_02,Qwen3-235B-A22B-Thinking,Theory Q&A,easy,code_sql_quality,,False,Task did not require code.
+BD_THEORY_MEDIUM_01,Qwen3-235B-A22B-Thinking,Theory Q&A,medium,correctness,9.0,True,Covers all key points accurately
+BD_THEORY_MEDIUM_01,Qwen3-235B-A22B-Thinking,Theory Q&A,medium,completeness,9.0,True,"Includes shuffle behavior, partition changes, use cases"
+BD_THEORY_MEDIUM_01,Qwen3-235B-A22B-Thinking,Theory Q&A,medium,key_point_coverage,9.0,True,Hits all expected points clearly
+BD_THEORY_MEDIUM_01,Qwen3-235B-A22B-Thinking,Theory Q&A,medium,instruction_following,9.0,True,Follows prompt and judge instructions
+BD_THEORY_MEDIUM_01,Qwen3-235B-A22B-Thinking,Theory Q&A,medium,reasoning_depth,9.0,True,Detailed examples and cost analysis
+BD_THEORY_MEDIUM_01,Qwen3-235B-A22B-Thinking,Theory Q&A,medium,production_readiness,9.0,True,Practical advice and warnings
+BD_THEORY_MEDIUM_01,Qwen3-235B-A22B-Thinking,Theory Q&A,medium,clarity_structure,9.0,True,Well-organized with tables
+BD_THEORY_MEDIUM_01,Qwen3-235B-A22B-Thinking,Theory Q&A,medium,factual_grounding,9.0,True,Accurate Spark behavior
+BD_THEORY_MEDIUM_01,Qwen3-235B-A22B-Thinking,Theory Q&A,medium,code_sql_quality,,False,No code requested
+BD_THEORY_MEDIUM_02,Qwen3-235B-A22B-Thinking,Theory Q&A,medium,correctness,10.0,True,Mechanism and use cases are fully correct.
+BD_THEORY_MEDIUM_02,Qwen3-235B-A22B-Thinking,Theory Q&A,medium,completeness,10.0,True,Covers all required aspects thoroughly.
+BD_THEORY_MEDIUM_02,Qwen3-235B-A22B-Thinking,Theory Q&A,medium,key_point_coverage,10.0,True,All expected key points are addressed.
+BD_THEORY_MEDIUM_02,Qwen3-235B-A22B-Thinking,Theory Q&A,medium,instruction_following,10.0,True,Follows prompt structure and includes all sections.
+BD_THEORY_MEDIUM_02,Qwen3-235B-A22B-Thinking,Theory Q&A,medium,reasoning_depth,10.0,True,Deep explanation of trade-offs and best practices.
+BD_THEORY_MEDIUM_02,Qwen3-235B-A22B-Thinking,Theory Q&A,medium,production_readiness,9.0,True,"Excellent practical advice, minor over-specification."
+BD_THEORY_MEDIUM_02,Qwen3-235B-A22B-Thinking,Theory Q&A,medium,clarity_structure,10.0,True,Well-organized with clear sections.
+BD_THEORY_MEDIUM_02,Qwen3-235B-A22B-Thinking,Theory Q&A,medium,factual_grounding,9.0,True,"Mostly accurate, minor detail on AQE."
+BD_THEORY_MEDIUM_02,Qwen3-235B-A22B-Thinking,Theory Q&A,medium,code_sql_quality,10.0,True,Code examples are correct and illustrative.
+BD_THEORY_HARD_01,Qwen3-235B-A22B-Thinking,Theory Q&A,hard,correctness,9.0,True,Accurate root causes and solutions.
+BD_THEORY_HARD_01,Qwen3-235B-A22B-Thinking,Theory Q&A,hard,completeness,9.0,True,Covers all key points thoroughly.
+BD_THEORY_HARD_01,Qwen3-235B-A22B-Thinking,Theory Q&A,hard,key_point_coverage,10.0,True,Hits all expected key points.
+BD_THEORY_HARD_01,Qwen3-235B-A22B-Thinking,Theory Q&A,hard,instruction_following,10.0,True,"Explains root causes, not just coalesce."
+BD_THEORY_HARD_01,Qwen3-235B-A22B-Thinking,Theory Q&A,hard,reasoning_depth,10.0,True,Deep analysis with real-world examples.
+BD_THEORY_HARD_01,Qwen3-235B-A22B-Thinking,Theory Q&A,hard,production_readiness,9.0,True,"Practical, production-aware advice."
+BD_THEORY_HARD_01,Qwen3-235B-A22B-Thinking,Theory Q&A,hard,clarity_structure,10.0,True,Well-organized with clear sections.
+BD_THEORY_HARD_01,Qwen3-235B-A22B-Thinking,Theory Q&A,hard,factual_grounding,8.0,True,"Minor HDFS focus, but mostly correct."
+BD_THEORY_HARD_01,Qwen3-235B-A22B-Thinking,Theory Q&A,hard,code_sql_quality,,False,"Task is theory, not code."
+BD_THEORY_HARD_02,Qwen3-235B-A22B-Thinking,Theory Q&A,hard,correctness,9.0,True,Techniques are correct and well-explained.
+BD_THEORY_HARD_02,Qwen3-235B-A22B-Thinking,Theory Q&A,hard,completeness,9.0,True,Covers many key points and adds extra detail.
+BD_THEORY_HARD_02,Qwen3-235B-A22B-Thinking,Theory Q&A,hard,key_point_coverage,8.0,True,"Covers most expected points, misses some like predicate pushdown."
+BD_THEORY_HARD_02,Qwen3-235B-A22B-Thinking,Theory Q&A,hard,instruction_following,10.0,True,Prioritizes by bottleneck and explains why each helps.
+BD_THEORY_HARD_02,Qwen3-235B-A22B-Thinking,Theory Q&A,hard,reasoning_depth,9.0,True,Deep production reasoning with practical examples.
+BD_THEORY_HARD_02,Qwen3-235B-A22B-Thinking,Theory Q&A,hard,production_readiness,9.0,True,Includes critical production notes and configurations.
+BD_THEORY_HARD_02,Qwen3-235B-A22B-Thinking,Theory Q&A,hard,clarity_structure,9.0,True,Well-structured with clear sections and code.
+BD_THEORY_HARD_02,Qwen3-235B-A22B-Thinking,Theory Q&A,hard,factual_grounding,9.0,True,Factually accurate with minor overstatement on UDF speed.
+BD_THEORY_HARD_02,Qwen3-235B-A22B-Thinking,Theory Q&A,hard,code_sql_quality,9.0,True,Code examples are relevant and well-commented.
+BD_CODE_EASY_01,Qwen3-235B-A22B-Thinking,Code Generation,easy,correctness,7.0,True,Core logic correct but missing revenue null handling.
+BD_CODE_EASY_01,Qwen3-235B-A22B-Thinking,Code Generation,easy,completeness,7.0,True,Missing SparkSession creation and revenue null handling.
+BD_CODE_EASY_01,Qwen3-235B-A22B-Thinking,Code Generation,easy,key_point_coverage,8.0,True,Covers most key points but misses SparkSession.
+BD_CODE_EASY_01,Qwen3-235B-A22B-Thinking,Code Generation,easy,instruction_following,8.0,True,Follows prompt but lacks brief comments as requested.
+BD_CODE_EASY_01,Qwen3-235B-A22B-Thinking,Code Generation,easy,reasoning_depth,6.0,True,"Basic steps, no handling of edge cases like null revenue."
+BD_CODE_EASY_01,Qwen3-235B-A22B-Thinking,Code Generation,easy,production_readiness,6.0,True,Missing write mode and null revenue handling.
+BD_CODE_EASY_01,Qwen3-235B-A22B-Thinking,Code Generation,easy,clarity_structure,8.0,True,Code is clear and well-structured.
+BD_CODE_EASY_01,Qwen3-235B-A22B-Thinking,Code Generation,easy,factual_grounding,8.0,True,Uses correct PySpark functions.
+BD_CODE_EASY_01,Qwen3-235B-A22B-Thinking,Code Generation,easy,code_sql_quality,7.0,True,Functional but incomplete for production.
+BD_CODE_MEDIUM_01,Qwen3-235B-A22B-Thinking,Code Generation,medium,correctness,8.0,True,Queries are mostly correct.
+BD_CODE_MEDIUM_01,Qwen3-235B-A22B-Thinking,Code Generation,medium,completeness,8.0,True,All four tasks answered.
+BD_CODE_MEDIUM_01,Qwen3-235B-A22B-Thinking,Code Generation,medium,key_point_coverage,8.0,True,Covers most key points.
+BD_CODE_MEDIUM_01,Qwen3-235B-A22B-Thinking,Code Generation,medium,instruction_following,7.0,True,Explains queries but misses some null checks.
+BD_CODE_MEDIUM_01,Qwen3-235B-A22B-Thinking,Code Generation,medium,reasoning_depth,9.0,True,Good explanations and production notes.
+BD_CODE_MEDIUM_01,Qwen3-235B-A22B-Thinking,Code Generation,medium,production_readiness,9.0,True,Strong production considerations.
+BD_CODE_MEDIUM_01,Qwen3-235B-A22B-Thinking,Code Generation,medium,clarity_structure,9.0,True,"Clear, well-structured sections."
+BD_CODE_MEDIUM_01,Qwen3-235B-A22B-Thinking,Code Generation,medium,factual_grounding,7.0,True,Minor factual issues in notes.
+BD_CODE_MEDIUM_01,Qwen3-235B-A22B-Thinking,Code Generation,medium,code_sql_quality,8.0,True,Good SQL but lacks explicit null filters.
+BD_CODE_HARD_01,Qwen3-235B-A22B-Thinking,Code Generation,hard,correctness,7.0,True,Mostly correct but join logic flawed
+BD_CODE_HARD_01,Qwen3-235B-A22B-Thinking,Code Generation,hard,completeness,8.0,True,Covers all requirements except join type
+BD_CODE_HARD_01,Qwen3-235B-A22B-Thinking,Code Generation,hard,key_point_coverage,8.0,True,Hit all key points except join type
+BD_CODE_HARD_01,Qwen3-235B-A22B-Thinking,Code Generation,hard,instruction_following,8.0,True,Followed prompt structure and requirements
+BD_CODE_HARD_01,Qwen3-235B-A22B-Thinking,Code Generation,hard,reasoning_depth,9.0,True,Deep performance and scalability insights
+BD_CODE_HARD_01,Qwen3-235B-A22B-Thinking,Code Generation,hard,production_readiness,9.0,True,Excellent production considerations and optimizations
+BD_CODE_HARD_01,Qwen3-235B-A22B-Thinking,Code Generation,hard,clarity_structure,9.0,True,Well-structured code with clear sections
+BD_CODE_HARD_01,Qwen3-235B-A22B-Thinking,Code Generation,hard,factual_grounding,9.0,True,Accurate Spark functions and patterns
+BD_CODE_HARD_01,Qwen3-235B-A22B-Thinking,Code Generation,hard,code_sql_quality,9.0,True,Production-quality code with good practices
+BD_ANALYSIS_HARD_01,Qwen3-235B-A22B-Thinking,Incident Analysis,hard,correctness,10.0,True,Accurately identifies all root causes.
+BD_ANALYSIS_HARD_01,Qwen3-235B-A22B-Thinking,Incident Analysis,hard,completeness,9.0,True,Covers all key points thoroughly.
+BD_ANALYSIS_HARD_01,Qwen3-235B-A22B-Thinking,Incident Analysis,hard,key_point_coverage,10.0,True,Hits all expected key points.
+BD_ANALYSIS_HARD_01,Qwen3-235B-A22B-Thinking,Incident Analysis,hard,instruction_following,10.0,True,Follows required structure exactly.
+BD_ANALYSIS_HARD_01,Qwen3-235B-A22B-Thinking,Incident Analysis,hard,reasoning_depth,9.0,True,"Deep, symptom-linked reasoning."
+BD_ANALYSIS_HARD_01,Qwen3-235B-A22B-Thinking,Incident Analysis,hard,production_readiness,9.0,True,"Actionable, phased, safe plan."
+BD_ANALYSIS_HARD_01,Qwen3-235B-A22B-Thinking,Incident Analysis,hard,clarity_structure,10.0,True,Clear sections and table.
+BD_ANALYSIS_HARD_01,Qwen3-235B-A22B-Thinking,Incident Analysis,hard,factual_grounding,9.0,True,Accurate Spark details.
+BD_ANALYSIS_HARD_01,Qwen3-235B-A22B-Thinking,Incident Analysis,hard,code_sql_quality,9.0,True,"Good code, minor over-specification."
+BD_THEORY_EASY_01,Qwen3-32B,Theory Q&A,easy,correctness,9.0,True,"Accurate on ownership, DROP, use cases."
+BD_THEORY_EASY_01,Qwen3-32B,Theory Q&A,easy,completeness,9.0,True,Covers all key points concisely.
+BD_THEORY_EASY_01,Qwen3-32B,Theory Q&A,easy,key_point_coverage,9.0,True,"Includes ownership, DROP, lifecycle, risk."
+BD_THEORY_EASY_01,Qwen3-32B,Theory Q&A,easy,instruction_following,9.0,True,Concisely addresses all prompt aspects.
+BD_THEORY_EASY_01,Qwen3-32B,Theory Q&A,easy,reasoning_depth,8.0,True,Good but lacks multi-engine mention.
+BD_THEORY_EASY_01,Qwen3-32B,Theory Q&A,easy,production_readiness,9.0,True,Clear best practices for both types.
+BD_THEORY_EASY_01,Qwen3-32B,Theory Q&A,easy,clarity_structure,10.0,True,Well-organized and easy to follow.
+BD_THEORY_EASY_01,Qwen3-32B,Theory Q&A,easy,factual_grounding,9.0,True,Accurate Spark/Hive behavior.
+BD_THEORY_EASY_01,Qwen3-32B,Theory Q&A,easy,code_sql_quality,,False,Not required for this task.
+BD_THEORY_EASY_02,Qwen3-32B,Theory Q&A,easy,correctness,9.0,True,Accurate on all core differences.
+BD_THEORY_EASY_02,Qwen3-32B,Theory Q&A,easy,completeness,9.0,True,Covers all requested aspects thoroughly.
+BD_THEORY_EASY_02,Qwen3-32B,Theory Q&A,easy,key_point_coverage,9.0,True,Hits all expected key points.
+BD_THEORY_EASY_02,Qwen3-32B,Theory Q&A,easy,instruction_following,9.0,True,Follows prompt structure exactly.
+BD_THEORY_EASY_02,Qwen3-32B,Theory Q&A,easy,reasoning_depth,8.0,True,Good practical examples and table.
+BD_THEORY_EASY_02,Qwen3-32B,Theory Q&A,easy,production_readiness,8.0,True,Includes best practices and examples.
+BD_THEORY_EASY_02,Qwen3-32B,Theory Q&A,easy,clarity_structure,9.0,True,Well-organized with clear sections.
+BD_THEORY_EASY_02,Qwen3-32B,Theory Q&A,easy,factual_grounding,9.0,True,No factual errors found.
+BD_THEORY_EASY_02,Qwen3-32B,Theory Q&A,easy,code_sql_quality,,False,"Task is theory Q&A, not code implementation."
+BD_THEORY_MEDIUM_01,Qwen3-32B,Theory Q&A,medium,correctness,9.0,True,"Accurate on shuffle, partition changes, and cost."
+BD_THEORY_MEDIUM_01,Qwen3-32B,Theory Q&A,medium,completeness,9.0,True,Covers all key points thoroughly.
+BD_THEORY_MEDIUM_01,Qwen3-32B,Theory Q&A,medium,key_point_coverage,10.0,True,All expected key points addressed.
+BD_THEORY_MEDIUM_01,Qwen3-32B,Theory Q&A,medium,instruction_following,9.0,True,"Follows prompt, includes required sections."
+BD_THEORY_MEDIUM_01,Qwen3-32B,Theory Q&A,medium,reasoning_depth,9.0,True,Explains use cases and cost implications well.
+BD_THEORY_MEDIUM_01,Qwen3-32B,Theory Q&A,medium,production_readiness,8.0,True,"Good advice, but could mention small-file problem."
+BD_THEORY_MEDIUM_01,Qwen3-32B,Theory Q&A,medium,clarity_structure,10.0,True,Well-structured with clear sections.
+BD_THEORY_MEDIUM_01,Qwen3-32B,Theory Q&A,medium,factual_grounding,9.0,True,"Factually correct, minor nuance on coalesce shuffle."
+BD_THEORY_MEDIUM_01,Qwen3-32B,Theory Q&A,medium,code_sql_quality,,False,Task not code-focused.
+BD_THEORY_MEDIUM_02,Qwen3-32B,Theory Q&A,medium,correctness,9.0,True,Accurate core concept and mechanism.
+BD_THEORY_MEDIUM_02,Qwen3-32B,Theory Q&A,medium,completeness,9.0,True,Covers all required aspects thoroughly.
+BD_THEORY_MEDIUM_02,Qwen3-32B,Theory Q&A,medium,key_point_coverage,10.0,True,Hits all expected key points.
+BD_THEORY_MEDIUM_02,Qwen3-32B,Theory Q&A,medium,instruction_following,10.0,True,Includes all requested sections.
+BD_THEORY_MEDIUM_02,Qwen3-32B,Theory Q&A,medium,reasoning_depth,9.0,True,Explains trade-offs and use cases well.
+BD_THEORY_MEDIUM_02,Qwen3-32B,Theory Q&A,medium,production_readiness,8.0,True,"Good practical advice, minor nuance missing."
+BD_THEORY_MEDIUM_02,Qwen3-32B,Theory Q&A,medium,clarity_structure,10.0,True,Well-organized and clear.
+BD_THEORY_MEDIUM_02,Qwen3-32B,Theory Q&A,medium,factual_grounding,9.0,True,"Mostly accurate, one minor imprecision."
+BD_THEORY_MEDIUM_02,Qwen3-32B,Theory Q&A,medium,code_sql_quality,,False,"Task is theory, not code implementation."
+BD_THEORY_HARD_01,Qwen3-32B,Theory Q&A,hard,correctness,8.0,True,"Covers root causes, solutions, and trade-offs well."
+BD_THEORY_HARD_01,Qwen3-32B,Theory Q&A,hard,completeness,7.0,True,Misses object store cost and Delta Lake OPTIMIZE.
+BD_THEORY_HARD_01,Qwen3-32B,Theory Q&A,hard,key_point_coverage,8.0,True,Hits most key points but lacks object store specifics.
+BD_THEORY_HARD_01,Qwen3-32B,Theory Q&A,hard,instruction_following,9.0,True,Explains root causes beyond just coalesce.
+BD_THEORY_HARD_01,Qwen3-32B,Theory Q&A,hard,reasoning_depth,8.0,True,Detailed but misses some production nuances.
+BD_THEORY_HARD_01,Qwen3-32B,Theory Q&A,hard,production_readiness,7.0,True,Good techniques but lacks storage-specific advice.
+BD_THEORY_HARD_01,Qwen3-32B,Theory Q&A,hard,clarity_structure,9.0,True,Well-organized and clear sections.
+BD_THEORY_HARD_01,Qwen3-32B,Theory Q&A,hard,factual_grounding,8.0,True,Accurate but minor omissions in storage overhead.
+BD_THEORY_HARD_01,Qwen3-32B,Theory Q&A,hard,code_sql_quality,,False,No SQL or code required for this task.
+BD_THEORY_HARD_02,Qwen3-32B,Theory Q&A,hard,correctness,6.0,True,Most techniques valid but some advice suboptimal.
+BD_THEORY_HARD_02,Qwen3-32B,Theory Q&A,hard,completeness,5.0,True,Covers 5+ techniques but misses key bottlenecks.
+BD_THEORY_HARD_02,Qwen3-32B,Theory Q&A,hard,key_point_coverage,6.0,True,"Covers shuffle, skew, cache, serialization, partitioning."
+BD_THEORY_HARD_02,Qwen3-32B,Theory Q&A,hard,instruction_following,6.0,True,Prioritizes by bottleneck but omits profiling focus.
+BD_THEORY_HARD_02,Qwen3-32B,Theory Q&A,hard,reasoning_depth,7.0,True,Explains why for each bottleneck.
+BD_THEORY_HARD_02,Qwen3-32B,Theory Q&A,hard,production_readiness,6.0,True,Practical examples but some unsafe advice.
+BD_THEORY_HARD_02,Qwen3-32B,Theory Q&A,hard,clarity_structure,8.0,True,Clear structure with table summary.
+BD_THEORY_HARD_02,Qwen3-32B,Theory Q&A,hard,factual_grounding,7.0,True,Generally accurate but has minor errors.
+BD_THEORY_HARD_02,Qwen3-32B,Theory Q&A,hard,code_sql_quality,,False,"Task is theory, not code."
+BD_CODE_EASY_01,Qwen3-32B,Code Generation,easy,correctness,7.0,True,Missing revenue null handling
+BD_CODE_EASY_01,Qwen3-32B,Code Generation,easy,completeness,7.0,True,No revenue default value
+BD_CODE_EASY_01,Qwen3-32B,Code Generation,easy,key_point_coverage,8.0,True,Covers most key points
+BD_CODE_EASY_01,Qwen3-32B,Code Generation,easy,instruction_following,8.0,True,Follows prompt structure
+BD_CODE_EASY_01,Qwen3-32B,Code Generation,easy,reasoning_depth,6.0,True,Shallow data cleaning
+BD_CODE_EASY_01,Qwen3-32B,Code Generation,easy,production_readiness,6.0,True,No write mode specified
+BD_CODE_EASY_01,Qwen3-32B,Code Generation,easy,clarity_structure,9.0,True,Clear and well-commented
+BD_CODE_EASY_01,Qwen3-32B,Code Generation,easy,factual_grounding,7.0,True,date_format instead of to_date
+BD_CODE_EASY_01,Qwen3-32B,Code Generation,easy,code_sql_quality,7.0,True,Functional but incomplete
+BD_CODE_MEDIUM_01,Qwen3-32B,Code Generation,medium,correctness,7.0,True,Logic is correct but missing NULL filtering and COALESCE.
+BD_CODE_MEDIUM_01,Qwen3-32B,Code Generation,medium,completeness,7.0,True,All queries provided but lack some robustness checks.
+BD_CODE_MEDIUM_01,Qwen3-32B,Code Generation,medium,key_point_coverage,7.0,True,Covers most key points but misses NULL handling.
+BD_CODE_MEDIUM_01,Qwen3-32B,Code Generation,medium,instruction_following,9.0,True,"Follows prompt, explains each query."
+BD_CODE_MEDIUM_01,Qwen3-32B,Code Generation,medium,reasoning_depth,7.0,True,Explanations are basic but adequate.
+BD_CODE_MEDIUM_01,Qwen3-32B,Code Generation,medium,production_readiness,6.0,True,Notes added but missing essential NULL checks.
+BD_CODE_MEDIUM_01,Qwen3-32B,Code Generation,medium,clarity_structure,9.0,True,"Clear structure, explanations are concise."
+BD_CODE_MEDIUM_01,Qwen3-32B,Code Generation,medium,factual_grounding,8.0,True,Uses proper Spark SQL syntax and functions.
+BD_CODE_MEDIUM_01,Qwen3-32B,Code Generation,medium,code_sql_quality,7.0,True,SQL is mostly correct but missing NULL handling.
+BD_CODE_HARD_01,Qwen3-32B,Code Generation,hard,correctness,7.0,True,Core logic correct but top event_type calculation is flawed.
+BD_CODE_HARD_01,Qwen3-32B,Code Generation,hard,completeness,8.0,True,Covers most steps; missing explicit null handling for revenue.
+BD_CODE_HARD_01,Qwen3-32B,Code Generation,hard,key_point_coverage,8.0,True,Hits most key points; top event_type method is incorrect.
+BD_CODE_HARD_01,Qwen3-32B,Code Generation,hard,instruction_following,7.0,True,Follows main instructions but uses inner join vs left.
+BD_CODE_HARD_01,Qwen3-32B,Code Generation,hard,reasoning_depth,8.0,True,Good performance reasoning; flawed top event_type logic.
+BD_CODE_HARD_01,Qwen3-32B,Code Generation,hard,production_readiness,8.0,True,Good production notes; includes unsafe broadcast hint.
+BD_CODE_HARD_01,Qwen3-32B,Code Generation,hard,clarity_structure,9.0,True,Well-structured code with clear comments.
+BD_CODE_HARD_01,Qwen3-32B,Code Generation,hard,factual_grounding,7.0,True,Mostly correct; array_sort logic is wrong for Spark.
+BD_CODE_HARD_01,Qwen3-32B,Code Generation,hard,code_sql_quality,7.0,True,Readable code but contains incorrect aggregation logic.
+BD_ANALYSIS_HARD_01,Qwen3-32B,Incident Analysis,hard,correctness,8.0,True,Correctly identifies key issues.
+BD_ANALYSIS_HARD_01,Qwen3-32B,Incident Analysis,hard,completeness,7.0,True,Missing AQE and some plan details.
+BD_ANALYSIS_HARD_01,Qwen3-32B,Incident Analysis,hard,key_point_coverage,8.0,True,Covers most key points.
+BD_ANALYSIS_HARD_01,Qwen3-32B,Incident Analysis,hard,instruction_following,9.0,True,Follows required structure.
+BD_ANALYSIS_HARD_01,Qwen3-32B,Incident Analysis,hard,reasoning_depth,8.0,True,Links symptoms to causes.
+BD_ANALYSIS_HARD_01,Qwen3-32B,Incident Analysis,hard,production_readiness,7.0,True,Some advice is generic.
+BD_ANALYSIS_HARD_01,Qwen3-32B,Incident Analysis,hard,clarity_structure,9.0,True,Clear sections and formatting.
+BD_ANALYSIS_HARD_01,Qwen3-32B,Incident Analysis,hard,factual_grounding,8.0,True,Mostly accurate Spark concepts.
+BD_ANALYSIS_HARD_01,Qwen3-32B,Incident Analysis,hard,code_sql_quality,8.0,True,Code snippets are relevant.
+BD_THEORY_EASY_01,Qwen3-4B-Thinking-HF,Theory Q&A,easy,correctness,10.0,True,All key points correct.
+BD_THEORY_EASY_01,Qwen3-4B-Thinking-HF,Theory Q&A,easy,completeness,9.0,True,Covers all required aspects.
+BD_THEORY_EASY_01,Qwen3-4B-Thinking-HF,Theory Q&A,easy,key_point_coverage,10.0,True,Covers all expected points.
+BD_THEORY_EASY_01,Qwen3-4B-Thinking-HF,Theory Q&A,easy,instruction_following,9.0,True,"Concise, includes all sections."
+BD_THEORY_EASY_01,Qwen3-4B-Thinking-HF,Theory Q&A,easy,reasoning_depth,9.0,True,Clear lifecycle explanation.
+BD_THEORY_EASY_01,Qwen3-4B-Thinking-HF,Theory Q&A,easy,production_readiness,10.0,True,Strong best practices.
+BD_THEORY_EASY_01,Qwen3-4B-Thinking-HF,Theory Q&A,easy,clarity_structure,10.0,True,Well-structured table.
+BD_THEORY_EASY_01,Qwen3-4B-Thinking-HF,Theory Q&A,easy,factual_grounding,10.0,True,No factual errors.
+BD_THEORY_EASY_01,Qwen3-4B-Thinking-HF,Theory Q&A,easy,code_sql_quality,,False,Task not code.
+BD_THEORY_EASY_02,Qwen3-4B-Thinking-HF,Theory Q&A,easy,correctness,9.0,True,"Accurate on storage, DROP behavior, use cases."
+BD_THEORY_EASY_02,Qwen3-4B-Thinking-HF,Theory Q&A,easy,completeness,9.0,True,Covers all key points thoroughly.
+BD_THEORY_EASY_02,Qwen3-4B-Thinking-HF,Theory Q&A,easy,key_point_coverage,9.0,True,Hits all expected key points.
+BD_THEORY_EASY_02,Qwen3-4B-Thinking-HF,Theory Q&A,easy,instruction_following,9.0,True,Follows prompt structure exactly.
+BD_THEORY_EASY_02,Qwen3-4B-Thinking-HF,Theory Q&A,easy,reasoning_depth,8.0,True,"Good depth, minor over-explanation."
+BD_THEORY_EASY_02,Qwen3-4B-Thinking-HF,Theory Q&A,easy,production_readiness,8.0,True,"Practical advice, minor verbosity."
+BD_THEORY_EASY_02,Qwen3-4B-Thinking-HF,Theory Q&A,easy,clarity_structure,9.0,True,"Clear, structured, easy to follow."
+BD_THEORY_EASY_02,Qwen3-4B-Thinking-HF,Theory Q&A,easy,factual_grounding,9.0,True,"Factually accurate, no hallucinations."
+BD_THEORY_EASY_02,Qwen3-4B-Thinking-HF,Theory Q&A,easy,code_sql_quality,,False,Not required for this task.
+BD_THEORY_MEDIUM_01,Qwen3-4B-Thinking-HF,Theory Q&A,medium,correctness,7.0,True,Mostly accurate but has two factual errors
+BD_THEORY_MEDIUM_01,Qwen3-4B-Thinking-HF,Theory Q&A,medium,completeness,8.0,True,Covers most key points but misses small-file context
+BD_THEORY_MEDIUM_01,Qwen3-4B-Thinking-HF,Theory Q&A,medium,key_point_coverage,8.0,True,Hits most expected points except small-file implications
+BD_THEORY_MEDIUM_01,Qwen3-4B-Thinking-HF,Theory Q&A,medium,instruction_following,9.0,True,Follows prompt structure and covers required aspects
+BD_THEORY_MEDIUM_01,Qwen3-4B-Thinking-HF,Theory Q&A,medium,reasoning_depth,9.0,True,Explains shuffle mechanics and use cases well
+BD_THEORY_MEDIUM_01,Qwen3-4B-Thinking-HF,Theory Q&A,medium,production_readiness,7.0,True,Provides practical guidance but with some inaccuracies
+BD_THEORY_MEDIUM_01,Qwen3-4B-Thinking-HF,Theory Q&A,medium,clarity_structure,9.0,True,Well-organized with tables and clear sections
+BD_THEORY_MEDIUM_01,Qwen3-4B-Thinking-HF,Theory Q&A,medium,factual_grounding,7.0,True,Generally correct but contains incorrect shuffle behavior claims
+BD_THEORY_MEDIUM_01,Qwen3-4B-Thinking-HF,Theory Q&A,medium,code_sql_quality,,False,No code requested
+BD_THEORY_MEDIUM_02,Qwen3-4B-Thinking-HF,Theory Q&A,medium,correctness,9.0,True,Accurate explanation of mechanism and use cases.
+BD_THEORY_MEDIUM_02,Qwen3-4B-Thinking-HF,Theory Q&A,medium,completeness,9.0,True,Covers all required sections thoroughly.
+BD_THEORY_MEDIUM_02,Qwen3-4B-Thinking-HF,Theory Q&A,medium,key_point_coverage,10.0,True,Hits all expected key points.
+BD_THEORY_MEDIUM_02,Qwen3-4B-Thinking-HF,Theory Q&A,medium,instruction_following,10.0,True,Includes all requested components.
+BD_THEORY_MEDIUM_02,Qwen3-4B-Thinking-HF,Theory Q&A,medium,reasoning_depth,9.0,True,Detailed reasoning on trade-offs and examples.
+BD_THEORY_MEDIUM_02,Qwen3-4B-Thinking-HF,Theory Q&A,medium,production_readiness,8.0,True,"Good practical advice, minor over-specificity."
+BD_THEORY_MEDIUM_02,Qwen3-4B-Thinking-HF,Theory Q&A,medium,clarity_structure,10.0,True,Well-organized with clear sections.
+BD_THEORY_MEDIUM_02,Qwen3-4B-Thinking-HF,Theory Q&A,medium,factual_grounding,8.0,True,"Mostly accurate, minor detail errors."
+BD_THEORY_MEDIUM_02,Qwen3-4B-Thinking-HF,Theory Q&A,medium,code_sql_quality,,False,"Task is theory, not code implementation."
+BD_THEORY_HARD_01,Qwen3-4B-Thinking-HF,Theory Q&A,hard,correctness,7.0,True,Covers most key points but has factual errors.
+BD_THEORY_HARD_01,Qwen3-4B-Thinking-HF,Theory Q&A,hard,completeness,7.0,True,Missing object store cost and trade-offs.
+BD_THEORY_HARD_01,Qwen3-4B-Thinking-HF,Theory Q&A,hard,key_point_coverage,7.0,True,Hits many but misses key details.
+BD_THEORY_HARD_01,Qwen3-4B-Thinking-HF,Theory Q&A,hard,instruction_following,7.0,True,Explains root causes but misses trade-offs.
+BD_THEORY_HARD_01,Qwen3-4B-Thinking-HF,Theory Q&A,hard,reasoning_depth,7.0,True,Detailed but includes incorrect advice.
+BD_THEORY_HARD_01,Qwen3-4B-Thinking-HF,Theory Q&A,hard,production_readiness,6.0,True,Some unsafe configs suggested.
+BD_THEORY_HARD_01,Qwen3-4B-Thinking-HF,Theory Q&A,hard,clarity_structure,9.0,True,Well-organized and clear.
+BD_THEORY_HARD_01,Qwen3-4B-Thinking-HF,Theory Q&A,hard,factual_grounding,6.0,True,Has incorrect Spark behavior claims.
+BD_THEORY_HARD_01,Qwen3-4B-Thinking-HF,Theory Q&A,hard,code_sql_quality,,False,Not applicable.
+BD_THEORY_HARD_02,Qwen3-4B-Thinking-HF,Theory Q&A,hard,correctness,6.0,True,Most techniques valid but priority order flawed
+BD_THEORY_HARD_02,Qwen3-4B-Thinking-HF,Theory Q&A,hard,completeness,5.0,True,Misses key optimizations like scan efficiency
+BD_THEORY_HARD_02,Qwen3-4B-Thinking-HF,Theory Q&A,hard,key_point_coverage,5.0,True,Covers shuffle/skew but omits scan/cache/pruning
+BD_THEORY_HARD_02,Qwen3-4B-Thinking-HF,Theory Q&A,hard,instruction_following,6.0,True,Prioritized by bottleneck but missed required techniques
+BD_THEORY_HARD_02,Qwen3-4B-Thinking-HF,Theory Q&A,hard,reasoning_depth,6.0,True,Explains bottleneck impact but misses core optimizations
+BD_THEORY_HARD_02,Qwen3-4B-Thinking-HF,Theory Q&A,hard,production_readiness,7.0,True,Practical examples but some oversimplifications
+BD_THEORY_HARD_02,Qwen3-4B-Thinking-HF,Theory Q&A,hard,clarity_structure,8.0,True,Well-structured with bottleneck prioritization
+BD_THEORY_HARD_02,Qwen3-4B-Thinking-HF,Theory Q&A,hard,factual_grounding,7.0,True,Statistics unverified but generally plausible
+BD_THEORY_HARD_02,Qwen3-4B-Thinking-HF,Theory Q&A,hard,code_sql_quality,,False,Task did not require code
+BD_CODE_EASY_01,Qwen3-4B-Thinking-HF,Code Generation,easy,correctness,7.0,True,Core logic correct but missing revenue null handling.
+BD_CODE_EASY_01,Qwen3-4B-Thinking-HF,Code Generation,easy,completeness,7.0,True,Missing revenue null handling and write mode.
+BD_CODE_EASY_01,Qwen3-4B-Thinking-HF,Code Generation,easy,key_point_coverage,8.0,True,Covers most key points except revenue cleaning.
+BD_CODE_EASY_01,Qwen3-4B-Thinking-HF,Code Generation,easy,instruction_following,8.0,True,Follows prompt but lacks brief comments.
+BD_CODE_EASY_01,Qwen3-4B-Thinking-HF,Code Generation,easy,reasoning_depth,6.0,True,No consideration for null revenue or write mode.
+BD_CODE_EASY_01,Qwen3-4B-Thinking-HF,Code Generation,easy,production_readiness,6.0,True,Missing write mode and revenue cleaning.
+BD_CODE_EASY_01,Qwen3-4B-Thinking-HF,Code Generation,easy,clarity_structure,8.0,True,Code is clear and well-structured.
+BD_CODE_EASY_01,Qwen3-4B-Thinking-HF,Code Generation,easy,factual_grounding,8.0,True,Uses correct PySpark functions.
+BD_CODE_EASY_01,Qwen3-4B-Thinking-HF,Code Generation,easy,code_sql_quality,7.0,True,Good code but missing robustness features.
+BD_CODE_MEDIUM_01,Qwen3-4B-Thinking-HF,Code Generation,medium,correctness,8.0,True,Queries mostly correct. Minor issues with null handling.
+BD_CODE_MEDIUM_01,Qwen3-4B-Thinking-HF,Code Generation,medium,completeness,8.0,True,All four queries provided with explanations.
+BD_CODE_MEDIUM_01,Qwen3-4B-Thinking-HF,Code Generation,medium,key_point_coverage,8.0,True,Covers most key points. Misses explicit COALESCE for revenue.
+BD_CODE_MEDIUM_01,Qwen3-4B-Thinking-HF,Code Generation,medium,instruction_following,7.0,True,Follows prompt but omits ORDER BY for some queries.
+BD_CODE_MEDIUM_01,Qwen3-4B-Thinking-HF,Code Generation,medium,reasoning_depth,7.0,True,Explanations are clear but lack deeper null handling rationale.
+BD_CODE_MEDIUM_01,Qwen3-4B-Thinking-HF,Code Generation,medium,production_readiness,7.0,True,Good notes but missing explicit null checks is a risk.
+BD_CODE_MEDIUM_01,Qwen3-4B-Thinking-HF,Code Generation,medium,clarity_structure,9.0,True,"Well-structured, clear sections, good formatting."
+BD_CODE_MEDIUM_01,Qwen3-4B-Thinking-HF,Code Generation,medium,factual_grounding,8.0,True,SQL is mostly accurate. DATE_FORMAT is acceptable Spark SQL.
+BD_CODE_MEDIUM_01,Qwen3-4B-Thinking-HF,Code Generation,medium,code_sql_quality,8.0,True,SQL is clean and readable. Lacks null handling in WHERE clauses.
+BD_CODE_HARD_01,Qwen3-4B-Thinking-HF,Code Generation,hard,correctness,6.0,True,Dedup logic correct. Top event_type uses first incorrectly. Revenue sum missing coalesce.
+BD_CODE_HARD_01,Qwen3-4B-Thinking-HF,Code Generation,hard,completeness,7.0,True,Most steps present. Missing null handling for revenue and event_time.
+BD_CODE_HARD_01,Qwen3-4B-Thinking-HF,Code Generation,hard,key_point_coverage,7.0,True,Covers most key points. Top event_type logic flawed.
+BD_CODE_HARD_01,Qwen3-4B-Thinking-HF,Code Generation,hard,instruction_following,7.0,True,Follows main instructions. Performance comments included but some configs generic.
+BD_CODE_HARD_01,Qwen3-4B-Thinking-HF,Code Generation,hard,reasoning_depth,7.0,True,Shows performance awareness. Lacks deeper data quality reasoning.
+BD_CODE_HARD_01,Qwen3-4B-Thinking-HF,Code Generation,hard,production_readiness,7.0,True,Includes configs and comments. Missing robust null handling.
+BD_CODE_HARD_01,Qwen3-4B-Thinking-HF,Code Generation,hard,clarity_structure,8.0,True,Code well-structured and commented.
+BD_CODE_HARD_01,Qwen3-4B-Thinking-HF,Code Generation,hard,factual_grounding,6.0,True,First over window is wrong for top event_type. Some configs may be inappropriate.
+BD_CODE_HARD_01,Qwen3-4B-Thinking-HF,Code Generation,hard,code_sql_quality,6.0,True,Code mostly works. Top event_type logic incorrect. Missing import for first.
+BD_ANALYSIS_HARD_01,Qwen3-4B-Thinking-HF,Incident Analysis,hard,correctness,8.0,True,"Correctly identifies skew, broadcast join, and small files."
+BD_ANALYSIS_HARD_01,Qwen3-4B-Thinking-HF,Incident Analysis,hard,completeness,8.0,True,Covers all major issues and provides a plan.
+BD_ANALYSIS_HARD_01,Qwen3-4B-Thinking-HF,Incident Analysis,hard,key_point_coverage,9.0,True,"Hits most key points like skew, broadcast, small files, and validation."
+BD_ANALYSIS_HARD_01,Qwen3-4B-Thinking-HF,Incident Analysis,hard,instruction_following,9.0,True,"Follows required structure: Observations, Causes, Plan, Metrics."
+BD_ANALYSIS_HARD_01,Qwen3-4B-Thinking-HF,Incident Analysis,hard,reasoning_depth,8.0,True,Links symptoms to causes and solutions logically.
+BD_ANALYSIS_HARD_01,Qwen3-4B-Thinking-HF,Incident Analysis,hard,production_readiness,7.0,True,Actionable but some code suggestions are suboptimal.
+BD_ANALYSIS_HARD_01,Qwen3-4B-Thinking-HF,Incident Analysis,hard,clarity_structure,9.0,True,Well-structured with clear sections and a table.
+BD_ANALYSIS_HARD_01,Qwen3-4B-Thinking-HF,Incident Analysis,hard,factual_grounding,7.0,True,Mostly accurate; minor Spark config errors.
+BD_ANALYSIS_HARD_01,Qwen3-4B-Thinking-HF,Incident Analysis,hard,code_sql_quality,6.0,True,"Code has issues: salting logic flawed, config property incorrect."

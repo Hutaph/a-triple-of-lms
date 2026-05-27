@@ -223,10 +223,23 @@ def merge_result_rows(existing_rows: list[dict], replacements: list[dict]) -> li
     return merged
 
 
+def normalized_path_key(value: Any) -> str:
+    if not value:
+        return ""
+    path = Path(str(value)).expanduser()
+    if not path.is_absolute():
+        path = PROJECT_ROOT / path
+    try:
+        path = path.resolve(strict=False)
+    except OSError:
+        pass
+    return os.path.normcase(str(path))
+
+
 def result_key(row: dict) -> str:
     return "::".join(
         [
-            str(row.get("prediction_file", "")),
+            normalized_path_key(row.get("prediction_file")),
             str(row.get("prediction_index", "")),
             str(row.get("sample_id", "")),
             str(row.get("model_name", "")),
@@ -803,48 +816,6 @@ def write_csv(results: list[dict], path: Path) -> None:
         writer.writerows(rows)
 
 
-def write_low_score_report(results: list[dict], path: Path, bottom_n: int = 10) -> None:
-    scored = [row for row in results if row.get("weighted_score") is not None]
-    lowest = sorted(scored, key=lambda row: row["weighted_score"])[:bottom_n]
-    lines = [
-        "# LLM Judge Low Score Report",
-        "",
-        "Lowest-scoring answers according to the weighted 0-10 rubric.",
-        "",
-    ]
-    for row in lowest:
-        judge = row.get("judge") or {}
-        lines.extend(
-            [
-                f"## {row.get('sample_id')} - {row.get('model_name')}",
-                "",
-                f"- Weighted score: `{row.get('weighted_score')}`",
-                f"- Judge overall score: `{judge.get('overall_score')}`",
-                f"- Category: `{row.get('category')}`",
-                f"- Difficulty: `{row.get('difficulty')}`",
-                f"- Topic: `{row.get('topic')}`",
-                f"- Verdict: {judge.get('verdict')}",
-                "",
-                "Missing or weak points:",
-            ]
-        )
-        for point in judge.get("missing_or_weak_points") or []:
-            lines.append(f"- {point}")
-        lines.extend(["", "Factual or logic issues:"])
-        for issue in judge.get("factual_or_logic_issues") or []:
-            lines.append(f"- {issue}")
-        lines.extend(
-            [
-                "",
-                "Candidate output:",
-                "",
-                str(row.get("candidate_output") or "").strip(),
-                "",
-            ]
-        )
-    path.write_text("\n".join(lines) + "\n", encoding="utf-8")
-
-
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(
         description="Judge Big Data benchmark outputs with an LLM on a 0-10 metric rubric."
@@ -902,11 +873,9 @@ def main() -> None:
     output_dir = Path(args.output_dir)
     results_dir = output_dir / "results"
     tables_dir = output_dir / "tables"
-    reports_dir = output_dir / "reports"
     results_path = results_dir / "llm_judge_results.json"
     summary_path = results_dir / "llm_judge_summary.json"
     csv_path = tables_dir / "llm_judge_results.csv"
-    low_score_path = reports_dir / "llm_low_score_report.md"
 
     samples = load_samples(data_path)
     prediction_paths = (
@@ -985,14 +954,12 @@ def main() -> None:
     dump_json(results, results_path)
     dump_json(summary, summary_path)
     write_csv(results, csv_path)
-    write_low_score_report(results, low_score_path)
 
     print("\nSummary")
     print(json.dumps(summary["overall"], ensure_ascii=False, indent=2))
     print(f"\nWrote: {results_path}")
     print(f"Wrote: {summary_path}")
     print(f"Wrote: {csv_path}")
-    print(f"Wrote: {low_score_path}")
 
 
 if __name__ == "__main__":

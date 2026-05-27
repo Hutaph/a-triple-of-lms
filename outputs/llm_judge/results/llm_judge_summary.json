@@ -1,10 +1,10 @@
 {
   "overall": {
-    "count": 40,
-    "scored": 40,
+    "count": 80,
+    "scored": 80,
     "judge_errors": 0,
-    "avg_weighted_score": 5.315,
-    "avg_judge_overall_score": 5.4
+    "avg_weighted_score": 6.739,
+    "avg_judge_overall_score": 6.713
   },
   "by_model": {
     "Llama 4 Maverick": {
@@ -26,51 +26,71 @@
       "count": 10,
       "avg_weighted_score": 4.095,
       "avg_judge_overall_score": 4.3
+    },
+    "Qwen3-14B": {
+      "count": 10,
+      "avg_weighted_score": 7.981,
+      "avg_judge_overall_score": 7.85
+    },
+    "Qwen3-235B-A22B-Thinking": {
+      "count": 10,
+      "avg_weighted_score": 8.852,
+      "avg_judge_overall_score": 8.6
+    },
+    "Qwen3-32B": {
+      "count": 10,
+      "avg_weighted_score": 8.015,
+      "avg_judge_overall_score": 7.9
+    },
+    "Qwen3-4B-Thinking-HF": {
+      "count": 10,
+      "avg_weighted_score": 7.805,
+      "avg_judge_overall_score": 7.75
     }
   },
   "by_difficulty": {
     "easy": {
-      "count": 12,
-      "avg_weighted_score": 5.802,
-      "avg_judge_overall_score": 5.833
+      "count": 24,
+      "avg_weighted_score": 7.117,
+      "avg_judge_overall_score": 7.042
     },
     "hard": {
-      "count": 16,
-      "avg_weighted_score": 4.938,
-      "avg_judge_overall_score": 4.969
+      "count": 32,
+      "avg_weighted_score": 6.263,
+      "avg_judge_overall_score": 6.203
     },
     "medium": {
-      "count": 12,
-      "avg_weighted_score": 5.332,
-      "avg_judge_overall_score": 5.542
+      "count": 24,
+      "avg_weighted_score": 6.995,
+      "avg_judge_overall_score": 7.062
     }
   },
   "by_category": {
     "Code Generation": {
-      "count": 12,
-      "avg_weighted_score": 5.072,
-      "avg_judge_overall_score": 5.167
+      "count": 24,
+      "avg_weighted_score": 6.267,
+      "avg_judge_overall_score": 6.208
     },
     "Incident Analysis": {
-      "count": 4,
-      "avg_weighted_score": 5.35,
-      "avg_judge_overall_score": 5.375
+      "count": 8,
+      "avg_weighted_score": 6.841,
+      "avg_judge_overall_score": 6.812
     },
     "Theory Q&A": {
-      "count": 24,
-      "avg_weighted_score": 5.431,
-      "avg_judge_overall_score": 5.521
+      "count": 48,
+      "avg_weighted_score": 6.958,
+      "avg_judge_overall_score": 6.948
     }
   },
   "metric_averages": {
-    "correctness": 5.35,
-    "completeness": 4.925,
-    "key_point_coverage": 5.125,
-    "instruction_following": 5.725,
-    "reasoning_depth": 5.05,
-    "production_readiness": 4.625,
-    "clarity_structure": 7.375,
-    "factual_grounding": 5.45,
-    "code_sql_quality": 4.8
+    "correctness": 6.725,
+    "completeness": 6.438,
+    "key_point_coverage": 6.713,
+    "instruction_following": 7.138,
+    "reasoning_depth": 6.513,
+    "production_readiness": 6.138,
+    "clarity_structure": 8.262,
+    "factual_grounding": 6.8,
+    "code_sql_quality": 6.424
   }
 }
