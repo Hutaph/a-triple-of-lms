@@ -6,7 +6,6 @@ import re
 import sys
 import time
 import traceback
-from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
@@ -24,6 +23,7 @@ DEFAULT_TEMPERATURE = 0.2
 DEFAULT_MAX_TOKENS = 900
 DEFAULT_SMALL_ONNX_MODEL_ID = "microsoft/Phi-3-small-8k-instruct-onnx-cuda"
 DEFAULT_SMALL_ONNX_VARIANT = "cuda-int4-rtn-block-32"
+DEFAULT_SMALL_ONNX_EXECUTION_PROVIDER = "cuda"
 
 SYSTEM_PROMPT = (
     "You are a senior Big Data engineer and Spark expert. "
@@ -222,6 +222,13 @@ def model_load_hints(exc: Exception, model_id_or_path: str) -> str:
         hints.append("Phi-3 Small requires flash-attention-capable GPU/runtime for its dense attention layers.")
     if "onnxruntime_genai" in message.lower():
         hints.append("Install ONNX Runtime GenAI CUDA with: pip install --pre onnxruntime-genai-cuda.")
+    if "load model from" in message.lower() and ".onnx" in message.lower():
+        hints.append(
+            "The ONNX cache may be incomplete. Re-download the variant with "
+            "hf download ... --include '<variant>/*' --local-dir <dir>, then pass --small-onnx-dir."
+        )
+    if "cuda" in message.lower() and ("provider" in message.lower() or "library" in message.lower()):
+        hints.append("Check that onnxruntime-genai-cuda can see CUDA/cuDNN in this runtime.")
     if ("phi-3-small" in model_ref or "phi3small" in message.lower()) and "onnx" not in model_ref:
         hints.append("Phi-3 Small is the only model in this script that uses custom Triton/block-sparse code.")
 
@@ -297,12 +304,89 @@ def resolve_onnx_model_dir(
     return snapshot_dir / onnx_variant
 
 
+def read_json_file(path: Path) -> dict:
+    with path.open("r", encoding="utf-8") as file:
+        data = json.load(file)
+    if not isinstance(data, dict):
+        raise ValueError(f"Expected JSON object in {path}")
+    return data
+
+
+def is_lfs_pointer(path: Path) -> bool:
+    if not path.exists() or path.stat().st_size > 4096:
+        return False
+    try:
+        head = path.read_text(encoding="utf-8", errors="ignore")[:256]
+    except OSError:
+        return False
+    return "version https://git-lfs.github.com/spec" in head or "oid sha256:" in head
+
+
+def download_hint(onnx_model_id: str, onnx_variant: str) -> str:
+    return (
+        f"Download a materialized copy with: hf download {onnx_model_id} "
+        f"--include {onnx_variant}/* --local-dir <dir>; then run with "
+        f"--small-onnx-dir <dir>/{onnx_variant}"
+    )
+
+
+def validate_onnx_model_dir(model_dir: Path, onnx_model_id: str, onnx_variant: str) -> None:
+    genai_config = model_dir / "genai_config.json"
+    if not genai_config.exists():
+        raise FileNotFoundError(
+            f"ONNX GenAI config not found: {genai_config}. "
+            f"{download_hint(onnx_model_id, onnx_variant)}"
+        )
+
+    config = read_json_file(genai_config)
+    decoder = config.get("model", {}).get("decoder", {})
+    onnx_filename = decoder.get("filename")
+    if not isinstance(onnx_filename, str) or not onnx_filename:
+        raise ValueError(f"Missing model.decoder.filename in {genai_config}")
+
+    onnx_path = model_dir / onnx_filename
+    external_data_path = model_dir / f"{onnx_filename}.data"
+    missing_paths = [
+        str(path)
+        for path in (onnx_path, external_data_path)
+        if not path.exists()
+    ]
+    if missing_paths:
+        raise FileNotFoundError(
+            "Incomplete ONNX model folder. Missing: "
+            + ", ".join(missing_paths)
+            + ". "
+            + download_hint(onnx_model_id, onnx_variant)
+        )
+
+    pointer_paths = [
+        str(path)
+        for path in (onnx_path, external_data_path)
+        if is_lfs_pointer(path)
+    ]
+    if pointer_paths:
+        raise RuntimeError(
+            "ONNX files are Git LFS pointer files, not real model weights: "
+            + ", ".join(pointer_paths)
+            + ". "
+            + download_hint(onnx_model_id, onnx_variant)
+        )
+
+    if external_data_path.stat().st_size < 100 * 1024 * 1024:
+        raise RuntimeError(
+            f"ONNX external data file looks incomplete: {external_data_path} "
+            f"({external_data_path.stat().st_size} bytes). "
+            f"{download_hint(onnx_model_id, onnx_variant)}"
+        )
+
+
 def load_phi3_onnx_model(
     onnx_model_id: str,
     onnx_variant: str,
     onnx_model_dir: str | None,
     cache_dir: str | None,
     local_files_only: bool,
+    execution_provider: str,
 ):
     import onnxruntime_genai as og
 
@@ -313,15 +397,13 @@ def load_phi3_onnx_model(
         cache_dir=cache_dir,
         local_files_only=local_files_only,
     )
-    genai_config = model_dir / "genai_config.json"
-    if not genai_config.exists():
-        raise FileNotFoundError(
-            f"ONNX GenAI config not found: {genai_config}. "
-            f"Download with: huggingface-cli download {onnx_model_id} "
-            f"--include {onnx_variant}/* --local-dir <dir>"
-        )
+    validate_onnx_model_dir(model_dir, onnx_model_id, onnx_variant)
 
     config = og.Config(str(model_dir))
+    if execution_provider != "follow_config":
+        config.clear_providers()
+        if execution_provider != "cpu":
+            config.append_provider(execution_provider)
     model = og.Model(config)
     tokenizer = og.Tokenizer(model)
     return tokenizer, model, str(model_dir)
@@ -469,8 +551,6 @@ def build_result_record(
     max_tokens: int,
     latency_s: float | None,
     output_tokens: int | None,
-    started_at: str,
-    ended_at: str,
     include_scores: bool,
 ) -> dict:
     record = {
@@ -489,10 +569,6 @@ def build_result_record(
         "generation_params": {
             "temperature": temperature,
             "max_tokens": max_tokens,
-        },
-        "metadata": {
-            "started_at": started_at,
-            "ended_at": ended_at,
         },
     }
 
@@ -516,6 +592,7 @@ def run_model_benchmark(
     backend: str,
     onnx_variant: str,
     onnx_model_dir: str | None,
+    onnx_execution_provider: str,
     include_scores: bool,
     sleep_seconds: float,
     show_traceback: bool,
@@ -536,9 +613,10 @@ def run_model_benchmark(
                 onnx_model_dir=onnx_model_dir,
                 cache_dir=cache_dir,
                 local_files_only=local_files_only,
+                execution_provider=onnx_execution_provider,
             )
             active_model_id = f"{onnx_model_id}/{onnx_variant}"
-            print(f"ONNX model dir: {resolved_model_dir}")
+            print(f"ONNX model dir: {resolved_model_dir}; execution_provider={onnx_execution_provider}")
         else:
             tokenizer, model = load_phi3_model(
                 model_id_or_path=model_id,
@@ -559,7 +637,6 @@ def run_model_benchmark(
             temperature, max_tokens = parse_generation_params(
                 sample.get("recommended_generation_params")
             )
-            timestamp = datetime.now(timezone.utc).isoformat()
             results.append(
                 build_result_record(
                     sample=sample,
@@ -571,8 +648,6 @@ def run_model_benchmark(
                     max_tokens=max_tokens,
                     latency_s=None,
                     output_tokens=None,
-                    started_at=timestamp,
-                    ended_at=timestamp,
                     include_scores=include_scores,
                 )
             )
@@ -588,8 +663,6 @@ def run_model_benchmark(
             temperature, max_tokens = parse_generation_params(
                 sample.get("recommended_generation_params")
             )
-            started_at = datetime.now(timezone.utc).isoformat()
-
             try:
                 if backend == "onnx":
                     output, latency_s, output_tokens = call_phi3_onnx_model(
@@ -614,7 +687,6 @@ def run_model_benchmark(
                 latency_s = None
                 output_tokens = None
 
-            ended_at = datetime.now(timezone.utc).isoformat()
             results.append(
                 build_result_record(
                     sample=sample,
@@ -626,8 +698,6 @@ def run_model_benchmark(
                     max_tokens=max_tokens,
                     latency_s=latency_s,
                     output_tokens=output_tokens,
-                    started_at=started_at,
-                    ended_at=ended_at,
                     include_scores=include_scores,
                 )
             )
@@ -686,7 +756,7 @@ def save_results(results: list[dict], output_path: Path) -> None:
     print(f"Results saved to: {output_path}")
 
 
-def save_all_outputs(results: list[dict], output_dir: Path) -> None:
+def save_all_outputs(results: list[dict], output_dir: Path, include_summary: bool = False) -> None:
     output_dir.mkdir(parents=True, exist_ok=True)
 
     save_results(results, output_dir / "phi3_benchmark_outputs.json")
@@ -694,6 +764,9 @@ def save_all_outputs(results: list[dict], output_dir: Path) -> None:
     for model_name in sorted({result["model_name"] for result in results}):
         rows = [result for result in results if result["model_name"] == model_name]
         save_results(rows, output_dir / f"{safe_filename(model_name)}_outputs.json")
+
+    if not include_summary:
+        return
 
     summary = summarize(results)
     summary_path = output_dir / "phi3_benchmark_summary.json"
@@ -780,14 +853,25 @@ def parse_args() -> argparse.Namespace:
         help="Optional local path to the ONNX model subfolder, or to a folder containing the variant subfolder.",
     )
     parser.add_argument(
+        "--small-onnx-execution-provider",
+        choices=["cuda", "cpu", "follow_config"],
+        default=os.getenv("PHI3_SMALL_ONNX_EXECUTION_PROVIDER", DEFAULT_SMALL_ONNX_EXECUTION_PROVIDER),
+        help="Execution provider for Phi-3 Small ONNX. Use cuda on Colab T4.",
+    )
+    parser.add_argument(
         "--trust-remote-code",
         action="store_true",
         help="Force remote code for every selected model. By default only Phi-3 Small uses it.",
     )
     parser.add_argument(
-        "--no-score",
+        "--score",
         action="store_true",
-        help="Skip automatic lexical scoring against ground_truth.",
+        help="Add automatic lexical scoring against ground_truth. By default Phi-3 matches llama4.py and only saves model outputs.",
+    )
+    parser.add_argument(
+        "--summary",
+        action="store_true",
+        help="Write phi3_benchmark_summary.json. By default only raw output JSON files are written.",
     )
     parser.add_argument(
         "--sleep",
@@ -842,13 +926,14 @@ def main() -> None:
             backend=backend,
             onnx_variant=args.small_onnx_variant,
             onnx_model_dir=args.small_onnx_dir,
-            include_scores=not args.no_score,
+            onnx_execution_provider=args.small_onnx_execution_provider,
+            include_scores=args.score,
             sleep_seconds=args.sleep,
             show_traceback=args.show_traceback,
         )
         all_results.extend(results)
 
-    save_all_outputs(all_results, Path(args.output_dir))
+    save_all_outputs(all_results, Path(args.output_dir), include_summary=args.summary)
 
 
 if __name__ == "__main__":
