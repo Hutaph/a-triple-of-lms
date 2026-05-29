@@ -21,7 +21,8 @@ DEFAULT_OUTPUT_DIR = PROJECT_ROOT / "outputs" / "llm_judge"
 DEFAULT_OPENAI_JUDGE_MODEL = "gpt-5.5"
 DEFAULT_OPENROUTER_JUDGE_MODEL = "deepseek/deepseek-chat-v3.1"
 DEFAULT_OPENROUTER_BASE_URL = "https://openrouter.ai/api/v1"
-DEFAULT_MAX_OUTPUT_TOKENS = 700
+DEFAULT_MAX_OUTPUT_TOKENS = 6000
+DEFAULT_TEMPERATURE = 0.2
 
 METRIC_WEIGHTS = {
     "correctness": 0.25,
@@ -558,6 +559,7 @@ def call_openrouter_chat_judge(
     client: Any,
     model: str,
     max_output_tokens: int,
+    temperature: float,
     sample: dict,
     prediction: dict,
     candidate_output: str,
@@ -585,7 +587,7 @@ def call_openrouter_chat_judge(
         response = client.chat.completions.create(
             model=model,
             messages=messages,
-            temperature=0,
+            temperature=temperature,
             max_tokens=max_output_tokens,
             response_format={
                 "type": "json_schema",
@@ -601,7 +603,7 @@ def call_openrouter_chat_judge(
         response = client.chat.completions.create(
             model=model,
             messages=messages,
-            temperature=0,
+            temperature=temperature,
             max_tokens=max_output_tokens,
             response_format={"type": "json_object"},
         )
@@ -613,6 +615,7 @@ def call_openrouter_chat_judge(
         "judge_latency_s": round(latency_s, 3),
         "judge_response_id": getattr(response, "id", None),
         "judge_created_at": datetime.now(timezone.utc).isoformat(),
+        "judge_temperature": temperature,
     }
     if schema_fallback_error:
         metadata["structured_output_fallback_error"] = sanitize_error_message(schema_fallback_error)
@@ -631,6 +634,7 @@ def call_judge(
     model: str,
     reasoning_effort: str,
     max_output_tokens: int,
+    temperature: float,
     sample: dict,
     prediction: dict,
     candidate_output: str,
@@ -640,6 +644,7 @@ def call_judge(
             client=client,
             model=model,
             max_output_tokens=max_output_tokens,
+            temperature=temperature,
             sample=sample,
             prediction=prediction,
             candidate_output=candidate_output,
@@ -855,6 +860,12 @@ def parse_args() -> argparse.Namespace:
         help="Reasoning effort for OpenAI Responses models.",
     )
     parser.add_argument("--max-output-tokens", type=int, default=DEFAULT_MAX_OUTPUT_TOKENS)
+    parser.add_argument(
+        "--temperature",
+        type=float,
+        default=DEFAULT_TEMPERATURE,
+        help="Sampling temperature for OpenRouter chat judge calls.",
+    )
     parser.add_argument("--limit", type=int, default=0, help="Use 0 to judge all matched rows.")
     parser.add_argument("--sleep", type=float, default=0.5, help="Seconds between API calls.")
     parser.add_argument("--resume", action="store_true", help="Reuse existing result rows when present.")
@@ -923,6 +934,7 @@ def main() -> None:
                 model=judge_model,
                 reasoning_effort=args.reasoning_effort,
                 max_output_tokens=args.max_output_tokens,
+                temperature=args.temperature,
                 sample=item["sample"],
                 prediction=item["prediction"],
                 candidate_output=item["candidate_output"],

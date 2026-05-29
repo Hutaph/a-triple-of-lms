@@ -16,12 +16,14 @@ DATA_FILE = PROJECT_ROOT / "data" / "bigdata_10_questions.json"
 OUTPUT_DIR = PROJECT_ROOT / "outputs" / "llama4"
 
 DEFAULT_TEMPERATURE = 0.2
-DEFAULT_MAX_TOKENS = 900
+DEFAULT_MAX_TOKENS = 6000
 
 SYSTEM_PROMPT = (
     "You are a senior Big Data engineer and Spark expert. "
     "Answer accurately, practically, and follow the user's instructions. "
     "For code tasks, provide correct and production-aware code."
+    "After reasoning, always provide the final answer."
+    "Never leave assistant content empty."
 )
 
 def load_environment() -> tuple[OpenAI, dict]:
@@ -68,7 +70,7 @@ def load_samples(path: Path) -> list[dict]:
 def parse_generation_params(param_text: str | None) -> tuple[float, int]:
     """
     Parse strings like:
-    'temperature=0.2; max_tokens=400'
+    'temperature=0.2; max_tokens=6000'
     """
     if not param_text:
         return DEFAULT_TEMPERATURE, DEFAULT_MAX_TOKENS
@@ -186,7 +188,8 @@ def run_model_benchmark(
     print(f"Running benchmark for model: {model_name} ({model_id})")
 
     for sample in tqdm(samples, desc=f"Running {model_name}"):
-        temperature, max_tokens = parse_generation_params(sample.get("recommended_generation_params"))
+        temperature = DEFAULT_TEMPERATURE
+        max_tokens = DEFAULT_MAX_TOKENS
 
         started_at = datetime.now(timezone.utc).isoformat()
         start_timer = time.perf_counter()
