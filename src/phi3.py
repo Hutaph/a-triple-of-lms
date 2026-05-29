@@ -21,7 +21,7 @@ DATA_FILE = PROJECT_ROOT / "data" / "bigdata_10_questions.json"
 OUTPUT_DIR = PROJECT_ROOT / "outputs" / "phi3"
 
 DEFAULT_TEMPERATURE = 0.2
-DEFAULT_MAX_TOKENS = 900
+DEFAULT_MAX_TOKENS = 6000
 DEFAULT_SMALL_ONNX_MODEL_ID = "microsoft/Phi-3-small-8k-instruct-onnx-cuda"
 DEFAULT_SMALL_ONNX_VARIANT = "cuda-int4-rtn-block-32"
 DEFAULT_SMALL_ONNX_EXECUTION_PROVIDER = "cuda"
@@ -29,7 +29,9 @@ DEFAULT_SMALL_ONNX_EXECUTION_PROVIDER = "cuda"
 SYSTEM_PROMPT = (
     "You are a senior Big Data engineer and Spark expert. "
     "Answer accurately, practically, and follow the user's instructions. "
-    "For code tasks, provide correct and production-aware code."
+    "For code tasks, provide correct and production-aware code. "
+    "After reasoning, always provide the final answer. "
+    "Never leave assistant content empty."
 )
 
 DEFAULT_MODELS = {
@@ -69,16 +71,22 @@ def load_samples(path: Path) -> list[dict]:
     return samples
 
 
-def parse_generation_params(param_text: str | None) -> tuple[float, int]:
+def parse_generation_params(
+    param_text: str | None,
+    max_tokens_override: int | None = DEFAULT_MAX_TOKENS,
+) -> tuple[float, int]:
     """
     Parse strings like:
     'temperature=0.2; max_tokens=400'
+
+    By default Phi-3 uses DEFAULT_MAX_TOKENS for every sample so benchmark
+    outputs are not truncated by the smaller per-sample recommendation.
     """
     if not param_text:
-        return DEFAULT_TEMPERATURE, DEFAULT_MAX_TOKENS
+        return DEFAULT_TEMPERATURE, max_tokens_override or DEFAULT_MAX_TOKENS
 
     temperature = DEFAULT_TEMPERATURE
-    max_tokens = DEFAULT_MAX_TOKENS
+    max_tokens = max_tokens_override or DEFAULT_MAX_TOKENS
 
     temp_match = re.search(r"temperature\s*=\s*([0-9.]+)", param_text)
     token_match = re.search(r"max_tokens\s*=\s*(\d+)", param_text)
@@ -86,7 +94,7 @@ def parse_generation_params(param_text: str | None) -> tuple[float, int]:
     if temp_match:
         temperature = float(temp_match.group(1))
 
-    if token_match:
+    if token_match and max_tokens_override is None:
         max_tokens = int(token_match.group(1))
 
     return temperature, max_tokens
@@ -603,6 +611,7 @@ def run_model_benchmark(
     model_name: str,
     model_id: str,
     onnx_model_id: str,
+    max_tokens_override: int | None,
     cache_dir: str | None,
     local_files_only: bool,
     device: str,
@@ -655,7 +664,8 @@ def run_model_benchmark(
         results = []
         for sample in samples:
             temperature, max_tokens = parse_generation_params(
-                sample.get("recommended_generation_params")
+                sample.get("recommended_generation_params"),
+                max_tokens_override=max_tokens_override,
             )
             timestamp = datetime.now(timezone.utc).isoformat()
             results.append(
@@ -685,7 +695,8 @@ def run_model_benchmark(
     try:
         for sample in tqdm(samples, desc=f"Evaluating {model_name}"):
             temperature, max_tokens = parse_generation_params(
-                sample.get("recommended_generation_params")
+                sample.get("recommended_generation_params"),
+                max_tokens_override=max_tokens_override,
             )
             started_at = datetime.now(timezone.utc).isoformat()
             try:
@@ -848,6 +859,15 @@ def parse_args() -> argparse.Namespace:
         help="Use 0 for the full dataset.",
     )
     parser.add_argument(
+        "--max-tokens",
+        type=int,
+        default=DEFAULT_MAX_TOKENS,
+        help=(
+            "Max new tokens for Phi-3 generation. Default is 6000. "
+            "Use 0 to follow each sample's recommended_generation_params."
+        ),
+    )
+    parser.add_argument(
         "--device",
         choices=["auto", "cuda", "cpu"],
         default="auto",
@@ -941,6 +961,7 @@ def main() -> None:
 
     registry = model_registry()
     selected = registry if args.model == "all" else {args.model: registry[args.model]}
+    max_tokens_override = args.max_tokens if args.max_tokens > 0 else None
 
     all_results = []
     for model_key, model_config in selected.items():
@@ -951,6 +972,7 @@ def main() -> None:
             model_name=model_config["name"],
             model_id=model_config["id"],
             onnx_model_id=onnx_model_id,
+            max_tokens_override=max_tokens_override,
             cache_dir=cache_dir,
             local_files_only=args.local_files_only,
             device=args.device,
