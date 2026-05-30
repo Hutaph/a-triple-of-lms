@@ -7,29 +7,29 @@
     "topic": "Managed vs External tables in Hive/Spark",
     "model_name": "Phi-3 Medium 4K",
     "model_id": "microsoft/Phi-3-medium-4k-instruct",
-    "system_prompt": "You are a senior Big Data engineer and Spark expert. Answer accurately, practically, and follow the user's instructions. For code tasks, provide correct and production-aware code.",
+    "system_prompt": "You are a senior Big Data engineer and Spark expert. Answer accurately, practically, and follow the user's instructions. For code tasks, provide correct and production-aware code. After reasoning, always provide the final answer. Never leave assistant content empty.",
     "prompt": "What is the difference between Managed and External tables in Hive/Spark?\nAnswer concisely, but include data ownership, DROP TABLE behavior, common use cases, and production best practices.",
-    "model_output": "Managed tables in Hive/Spark are tables where the system (Hive/Spark) manages the metadata and the data files. The system automatically handles the creation, deletion, and movement of data files. When you drop a managed table, both the metadata and data files are removed. Managed tables are suitable for scenarios where you want the system to handle data lifecycle management, ensuming you have control over data ownership and lifecycle.\n\nExternal tables, on the other hand, are tables where the system manages the metadata, but the data files are stored outside the system's managed directories. When you drop an external table, only the metadata is removed, and the data files remain. External tables are ideal when you want to retain data files outside the system's control, allowing for data ownership and flexibility in data lifecycle management.\n\nCommon use cases for managed tables include scenarios where data lifecycle management is critical, and you want to ensure data is automatically cleaned up when no longer needed. External tables are commonly used when data needs to be shared across different systems or when data retention and ownership are essential.\n\nBest practices in production environments involve using external tables when data needs to be shared or retained outside the Hive/Spark system, and managed tables when automatic data lifecycle management is desired. It is also recommended to use partitioning and bucketing for performance optimization, and to follow data governance and security best practices for data ownership and access control.",
+    "model_output": "Managed tables in Hive/Spark are tables where Hive/Spark manages the underlying data files. Data ownership is with Hive/Spark, and when a DROP TABLE command is issued, both the table metadata and managed data are deleted. Managed tables are typically used for temporary, staging, or internally generated datasets where Hive/Spark should control the full lifecycle.\n\nExternal tables are tables where Hive/Spark stores metadata, but the underlying data files remain at an external location managed by the user or data platform, such as HDFS, S3, ADLS, or GCS. When a DROP TABLE command is issued on an external table, only the table metadata is removed; the data files remain in place. External tables are commonly used for production datasets, shared data lake layers, and data accessed by multiple engines or jobs.\n\nIn production, external tables are usually safer for important or shared datasets because they avoid accidental deletion of underlying data. Managed tables are better suited for temporary, staging, or disposable outputs. For either table type, use clear storage locations, partitioning where appropriate, access controls, and documented ownership/lifecycle rules.\n\nFinal Answer: Managed tables are owned and lifecycle-managed by Hive/Spark, so DROP TABLE removes metadata and data. External tables keep data outside Hive/Spark ownership, so DROP TABLE removes only metadata. Use external tables for production/shared data and managed tables for temporary or staging data.",
     "error": null,
     "status": "success",
     "generation_params": {
       "temperature": 0.2,
-      "max_tokens": 400
+      "max_tokens": 6000
     },
     "usage": {
       "prompt_tokens": 45,
-      "completion_tokens": 309,
-      "total_tokens": 354
+      "completion_tokens": 276,
+      "total_tokens": 321
     },
     "metrics": {
-      "latency_s": 35.748,
-      "tokens_per_second": 8.644,
-      "output_char_count": 1572,
-      "output_word_count": 242
+      "latency_s": 758.542,
+      "tokens_per_second": 0.364,
+      "output_char_count": 1487,
+      "output_word_count": 221
     },
     "metadata": {
-      "started_at": "2026-05-27T17:29:09.002248+00:00",
-      "ended_at": "2026-05-27T17:29:44.750241+00:00"
+      "started_at": "2026-05-29T18:23:39.063465+00:00",
+      "ended_at": "2026-05-29T18:36:17.605193+00:00"
     }
   },
   {
@@ -40,29 +40,29 @@
     "topic": "Managed vs External tables in Databricks",
     "model_name": "Phi-3 Medium 4K",
     "model_id": "microsoft/Phi-3-medium-4k-instruct",
-    "system_prompt": "You are a senior Big Data engineer and Spark expert. Answer accurately, practically, and follow the user's instructions. For code tasks, provide correct and production-aware code.",
+    "system_prompt": "You are a senior Big Data engineer and Spark expert. Answer accurately, practically, and follow the user's instructions. For code tasks, provide correct and production-aware code. After reasoning, always provide the final answer. Never leave assistant content empty.",
     "prompt": "What is the difference between Managed and External Tables in Databricks?\nInclude storage location, metadata/catalog behavior, DROP TABLE behavior, and when each type should be used.",
-    "model_output": "Managed Tables and External Tables are two types of tables available in Databricks, each with its own characteristics and use cases. Here's a comparison of the two:\n\n1. Storage Location:\n   - Managed Tables: The data for managed tables is stored in the Databricks File System (DBFS). The metadata and data for these tables are stored in the same location.\n   - External Tables: The data for external tables is stored outside of DBFS, typically in cloud storage like Azure Blob Storage, Amazon S3, or Google Cloud Storage. The metadata is stored in DBFS, but the data is stored in an external location.\n\n2. Metadata/Catalog Behavior:\n   - Managed Tables: The metadata and data for managed tables are stored together in DBFS. When you create or modify a managed table, Databricks automatically manages the metadata and data, including creating and updating the table's metadata in the metadata catalog.\n  \n   - External Tables: The metadata for external tables is stored in DBFS, while the data is stored in an external location. When you create or modify an external table, you need to manually manage the metadata in the metadata catalog, and Databricks does not automatically manage the data.\n\n3. DROP TABLE Behavior:\n   - Managed Tables: When you drop a managed table, both the metadata and data are removed from DBFS.\n  \n   - External Tables: When you drop an external table, only the metadata is removed from DBFS. The data remains in the external storage location.\n\n4. When to Use Each Type:\n   - Managed Tables: Use managed tables when you want Databricks to manage the metadata and data for you. This is useful when you want to have a single location for both metadata and data, and when",
+    "model_output": "Managed Tables and External Tables are two types of tables used in Databricks for data storage and processing. They differ in terms of storage location, metadata/catalog behavior, DROP TABLE behavior, and their ideal use cases.\n\n1. Storage Location:\n- Managed Tables: Data is stored in Databricks File System (DBFS) or Azure Data Lake Storage (ADLS) and is managed by Databricks. Databricks handles the lifecycle of the data, including storage, backup, and recovery.\n- External Tables: Data is stored in an external storage location, such as DBFS, ADLS, or Amazon S3. Databricks does not manage the lifecycle of the data, and the user is responsible for manages the data storage and backup.\n\n2. Metadata/Catalog Behavior:\n- Managed Tables: Metadata is stored in the Databricks Metastore, and Databricks manages the catalog. When a managed table is dropped, the metadata is also removed from the Metastore.\n- External Tables: Metadata is stored in the Metastore, but the actual data remains in the external storage location. When an external table is dropped, the metadata is removed from the Metastore, but the data remains in the external storage.\n\n3. DROP TABLE Behavior:\n- Managed Tables: When a managed table is dropped, both the metadata and the data are removed from the storage location.\n- External Tables: When an external table is dropped, only the metadata is removed from the Metastore, while the data remains in the external storage location.\n\n4. When to Use Each Type:\n- Managed Tables: Use managed tables when you want Databricks to manage the lifecycle of your data, including storage, backup, and recovery. This is ideal for scenarios where you want a fully managed solution and don't need to worry about the underlying storage.\n- External Tables: Use external tables when you want to store your data in an external storage location, such as DBFS, ADLS, or S3. This is ideal for scenarios where you want to have more control over the data storage and backup, or when you need to integrate with other systems that use the same external storage.\n\nIn summary, the choice between managed and external tables depends on your specific use case and requirements. Managed tables offer a fully managed solution, while external tables provide more control over data storage and backup.",
     "error": null,
     "status": "success",
     "generation_params": {
       "temperature": 0.2,
-      "max_tokens": 400
+      "max_tokens": 6000
     },
     "usage": {
       "prompt_tokens": 43,
-      "completion_tokens": 400,
-      "total_tokens": 443
+      "completion_tokens": 537,
+      "total_tokens": 580
     },
     "metrics": {
-      "latency_s": 45.579,
-      "tokens_per_second": 8.776,
-      "output_char_count": 1694,
-      "output_word_count": 281
+      "latency_s": 60.241,
+      "tokens_per_second": 8.914,
+      "output_char_count": 2291,
+      "output_word_count": 375
     },
     "metadata": {
-      "started_at": "2026-05-27T17:29:44.755957+00:00",
-      "ended_at": "2026-05-27T17:30:30.335043+00:00"
+      "started_at": "2026-05-29T18:36:17.616052+00:00",
+      "ended_at": "2026-05-29T18:37:17.857100+00:00"
     }
   },
   {
@@ -73,29 +73,29 @@
     "topic": "repartition vs coalesce in Apache Spark",
     "model_name": "Phi-3 Medium 4K",
     "model_id": "microsoft/Phi-3-medium-4k-instruct",
-    "system_prompt": "You are a senior Big Data engineer and Spark expert. Answer accurately, practically, and follow the user's instructions. For code tasks, provide correct and production-aware code.",
+    "system_prompt": "You are a senior Big Data engineer and Spark expert. Answer accurately, practically, and follow the user's instructions. For code tasks, provide correct and production-aware code. After reasoning, always provide the final answer. Never leave assistant content empty.",
     "prompt": "What is the difference between repartition(n) and coalesce(n) in Apache Spark?\nExplain shuffle behavior, whether each can increase/decrease partitions, when to use each, and cost implications.",
-    "model_output": "In Apache Spark, both `repartition(n)` and `coalesce(n)` are used to change the number of partitions of an RDD (Resilient Distributed Dataset). However, they differ in their approach and use cases.\n\n### repartition(n)\n\n`repartition(n)` is used to increase or decrease the number of partitions of an RDD. It performs a full shuffle of the data, which means that all the data is redistributed across the new number of partitions. This operation is expensive in terms of network and disk I/O because it involves shuffling data across the cluster.\n\n**Shuffle Behavior:**\n- When increasing the number of partitions, `repartition(n)` shuffles the data to distribute it evenly across the new partitions.\n- When decreasing the number of partitions, it also shuffles the data, but this can lead to data skew if not done carefully.\n\n**Use Cases:**\n- Use `repartition(n)` when you need to increase the number of partitions to parallelize operations further.\n- Use it when you want to decrease the number of partitions to reduce the overhead of managing a large number of small partitions.\n\n**Cost Implications:**\n- `repartition(n)` is expensive because it involves a full shuffle of data.\n- It can increase the cost of operations that follow, as the data needs to be redistributed across the new partitions.\n\n### coalesce(n)\n\n`coalesce(n)` is used to decrease the number of partitions of an RDD. It tries to combine the partitions locally on each executor, without shuffling the data across the network. This makes it more efficient than `repartition(n)` when reducing the number of partitions.\n\n**Shuffle Behavior:**\n- `coalesce(n)` does not perform a full shuffle. It tries to combine the partitions locally on each executor.\n- When decreasing the number of partitions, it tries to merge the partitions without shuffling the",
+    "model_output": "`repartition(n)` and `coalesce(n)` are both methods in Apache Spark used to change the number of partitions in an RDD (Resilient Distributed Dataset). However, they differ in their approach and use cases.\n\n### repartition(n)\n\n`repartition(n)` is used to increase or decrease the number of partitions in an RDD. It shuffles the data across the network, which means that it redistributes the data across the partitions. This method is useful when you want to change the number of partitions to optimize the performance of your Spark application.\n\n**Shuffle Behavior:** When you use `repartition(n)`, Spark shuffles the data across the network, which can be an expensive operation in terms of time and resources. The shuffle operation involves reading data from one partition, writing it to another partition, and then writing it back to the storage system.\n\n**Increasing/Decreasing Partitions:EE:** `repartition(n)` can increase or decrease the number of partitions. If you want to increase the number of partitions, you can pass a number greater than the current number of partitions. If you want to decrease the number of partitions, you can pass a number smaller than the current number of partitions.\n\n**When to Use:** Use `repartition(n)` when you want to change the number of partitions to optimize the performance of your Spark application. This method is useful when you want to increase the number of partitions to parallelize the computation or decrease the number of partitions to reduce the overhead of managing many small partitions.\n\n**Cost Implications:** Since `repartition(n)` involves shuffling data across the network, it can be an expensive operation in terms of time and resources. The cost of this operation depends on the size of the data and the number of partitions.\n\n### coalesce(n)\n\n`coalesce(n)` is used to decrease the number of partitions in an RDD. It does not shuffle the data across the network, which means that it does not redistribute the data across the partitions. This method is useful when you want to reduce the number of partitions without shuffling the data.\n\n**Shuffle Behavior:** When you use `coalesce(n)`, Spark does not shuffle the data across the network. Instead, it combines the existing partitions to create new partitions with fewer partitions. This method is less expensive than `repartition(n)` because it does not involve shuffling data across the network.\n\n**Increasing/Decreasing Partitions:EE:** `coalesce(n)` can only decrease the number of partitions. If you want to increase the number of partitions, you cannot use `coalesce(n)`. Instead, you should use `repartition(n)`.\n\n**When to Use:** Use `coalesce(n)` when you want to reduce the number of partitions without shuffling the data. This method is useful when you want to reduce the overhead of managing many small partitions.\n\n**Cost Implications:** Since `coalesce(n)` does not involve shuffling data across the network, it is less expensive than `repartition(n)`. The cost of this operation depends on the size of the data and the number of partitions.\n\nIn summary, `repartition(n)` and `coalesce(n)` are both used to change the number of partitions in an RDD, but they differ in their approach and use cases. `repartition(n)` shuffles the data across the network and can increase or decrease the number of partitions, while `coalesce(n)` does not shuffle the data and can only decrease the number of partitions. The choice between these two methods depends on your specific use case and the trade-off between performance and cost.",
     "error": null,
     "status": "success",
     "generation_params": {
       "temperature": 0.2,
-      "max_tokens": 450
+      "max_tokens": 6000
     },
     "usage": {
       "prompt_tokens": 51,
-      "completion_tokens": 450,
-      "total_tokens": 501
+      "completion_tokens": 827,
+      "total_tokens": 878
     },
     "metrics": {
-      "latency_s": 51.775,
-      "tokens_per_second": 8.691,
-      "output_char_count": 1815,
-      "output_word_count": 288
+      "latency_s": 96.136,
+      "tokens_per_second": 8.602,
+      "output_char_count": 3547,
+      "output_word_count": 549
     },
     "metadata": {
-      "started_at": "2026-05-27T17:30:30.339736+00:00",
-      "ended_at": "2026-05-27T17:31:22.114460+00:00"
+      "started_at": "2026-05-29T18:37:17.864580+00:00",
+      "ended_at": "2026-05-29T18:38:54.001102+00:00"
     }
   },
   {
@@ -106,29 +106,29 @@
     "topic": "Broadcast Join in Spark",
     "model_name": "Phi-3 Medium 4K",
     "model_id": "microsoft/Phi-3-medium-4k-instruct",
-    "system_prompt": "You are a senior Big Data engineer and Spark expert. Answer accurately, practically, and follow the user's instructions. For code tasks, provide correct and production-aware code.",
+    "system_prompt": "You are a senior Big Data engineer and Spark expert. Answer accurately, practically, and follow the user's instructions. For code tasks, provide correct and production-aware code. After reasoning, always provide the final answer. Never leave assistant content empty.",
     "prompt": "Explain the concept of Broadcast Join in Spark. When should it be used?\nInclude mechanism, configuration or hint, memory trade-off, and a practical example.",
-    "model_output": "Broadcast Join in Apache Spark is an optimization technique used to improve the performance of join operations between two DataFrers. It is particularly useful when one of the DataFrers is significantly smaller than the other. The smaller DataFrers is broadcasted to all the nodes in the cluster, allowing each node to perform the join operation locally, reducing the amount of data shuffled across the network and improperly reducing the overall execution time.\n\nMechanism:\nWhen a broadcast join is performed, Spark's built-in broadcast mechanism is used to send a copy of the smaller DataFrers to all the worker nodes. This smaller DataFrers is then cached in memory on each node. During the join operation, each node performs the join locally using the broadcasted DataFrers and the corresponding partition of the larger DataFrers.\n\nConfiguration or hint:\nTo use a broadcast join in Spark, you can either rely on Spark's automatic broadcast join optimization or use the `broadcast` function from the `org.apache.spark.sql.functions` package.\n\n1. Automatic broadcast join optimization: Spark automatically broadcasts DataFrers that are smaller than a threshold (default is 10 MB). You can control this threshold using the `spark.sql.autoBroadcastJoinThreshold` configuration parameter.\n\n2. Explicit broadcast join using the `broadcast` function: You can explicitly mark a DataFrers to be broadcasted by using the `broadcast` function. This can be useful when you want to control the broadcast join behavior or when the automatic optimization doesn't work as expected.\n\nMemory trade-off:\nBroadcast joins can significantly reduce the amount of data shuffled across the network, but they come with a memory trade-off. The smaller DataFrers is loaded into memory on each node, which can lead to increased memory usage. If the smaller DataFrers is too large, it may not fit into memory, causing the join operation to fail. Therefore, it's essential to choose the right threshold for the automatic broadcast join optimization or carefully select the DataFrers to be broadcasted",
+    "model_output": "Broadcast Join in Apache Spark is an optimization technique used to improve the performance of join operations, particularly when joining a small DataFrame (let's call it `smallDF`) with a larger DataFrame (`largeDF`). The core idea behind broadcast join is to broadcast the smaller DataFrame to all the nodes in the Spark cluster, so that each node has a local copy of `smallDF`. This approach significantly reduces the amount of data shuffled across the network during the join operation, leading to faster execution times.\n\n### Mechanism and Configuration\n\nTo use broadcast join, you need to configure Spark to broadcast the smaller DataFrame. This is typically done by setting the `spark.sql.autoBroadcastJoinThreshold` configuration parameter. This parameter defines the maximum size in bytes for a DataFrame to be broadcasted. If the size of `smallDF` is below this threshold, Spark will automatically use broadcast join when performing the join operation.\n\nHere's how you can set this configuration in Spark:\n\n```scala\nval spark = SparkSession.builder()\n  .appName(\"Broadcast Join Example\")\n  .config(\"spark.sql.autoBroadcastJoinThreshold\", 10 * 1024 * 1024) // 10 MB threshold\n  .getOrCreate()\n```\n\n### Memory Trade-Off\n\nThe main trade-off with broadcast join is memory usage. Since the smaller DataFrame is broadcasted to all nodes, it consumes memory on each node. This is particularly important to consider if you are running Spark in a resource-constrained environment or if you are performing multiple broadcast joins simultaneously. However, the reduction in network I/O and the subsequent performance improvement often outweigh the memory usage increase.\n\n### Practical Example\n\nLet's consider a practical example where we have two DataFrames, `employees` and `departments`, and we want to join them on the department ID.\n\n```scala\nimport org.apachepta.spark.sql.SparkSession\n\nval spark = SparkSession.builder()\n  .appName(\"Broadcast Join Example\")\n  .config(\"spark.sql.autoBroadcastJoinThreshold\", 10 * 1024 * 1024)\n  .getOrCreate()\n\nval employees = spark.read.option(\"header\", \"true\").csv(\"employees.csv\")\nval departments = spark.read.option(\"header\", \"true\").csv(\"departments.csv\")\n\nemployees.join(departments, \"departmentId\")\n```\n\nIn this example, if the size of the `departments` DataFrame is smaller than the threshold set by `spark.sql.autoBroadcastJoinThreshold`, Spark will automatically broadcast it to all nodes in the cluster. This join operation will be much faster than a traditional shuffle join because it minimizes the amount of data shuffled across the network.\n\n### When to Use Broadcast Join\n\nBroadcast join is best used when:\n- The DataFrame to be broadcasted (`smallDF`) is significantly smaller than the DataFrame it is being joined with (`largeDF`).\n- The size of `smallDF` is below the threshold defined by `spark.sql.autoBroadcastJoinThreshold`.\n- You are experiencing performance issues with shuffle joins due to large amounts of data being shuffled across the network.\n\nIt's important to monitor the memory usage on your Spark nodes when using broadcast joins, especially in environments with limited resources. Adjusting the `spark.sql.autoBroadcastJoinThreshold` parameter can help balance the trade-off between memory usage and performance.",
     "error": null,
     "status": "success",
     "generation_params": {
       "temperature": 0.2,
-      "max_tokens": 450
+      "max_tokens": 6000
     },
     "usage": {
       "prompt_tokens": 38,
-      "completion_tokens": 450,
-      "total_tokens": 488
+      "completion_tokens": 814,
+      "total_tokens": 852
     },
     "metrics": {
-      "latency_s": 51.852,
-      "tokens_per_second": 8.679,
-      "output_char_count": 2073,
-      "output_word_count": 313
+      "latency_s": 96.61,
+      "tokens_per_second": 8.426,
+      "output_char_count": 3286,
+      "output_word_count": 448
     },
     "metadata": {
-      "started_at": "2026-05-27T17:31:22.120677+00:00",
-      "ended_at": "2026-05-27T17:32:13.972479+00:00"
+      "started_at": "2026-05-29T18:38:54.006866+00:00",
+      "ended_at": "2026-05-29T18:40:30.616635+00:00"
     }
   },
   {
@@ -139,29 +139,29 @@
     "topic": "Small-file problem in Spark",
     "model_name": "Phi-3 Medium 4K",
     "model_id": "microsoft/Phi-3-medium-4k-instruct",
-    "system_prompt": "You are a senior Big Data engineer and Spark expert. Answer accurately, practically, and follow the user's instructions. For code tasks, provide correct and production-aware code.",
+    "system_prompt": "You are a senior Big Data engineer and Spark expert. Answer accurately, practically, and follow the user's instructions. For code tasks, provide correct and production-aware code. After reasoning, always provide the final answer. Never leave assistant content empty.",
     "prompt": "What is the small-file problem in Spark, and how do you solve it?\nExplain root causes, why it hurts performance, and practical mitigation techniques.",
-    "model_output": "The small-file problem in Apache Spark refers to the inefficiency that occurs when Spark processes a large number of small files. Spark is designed to work optimally with large files because it reads and writes data in blocks. When dealing with small files, Spark's block size is not fully utilized, leading to increased overhead and reduced performance.\n\nRoot causes:\n1. Data source: Small files are often generated by data sources like log files, web server logs, or data streaming applications. These sources tend to produce small files, which are not optimized for Spark's processing model.\n2. Data ingestion: When ingesting data into Spark, it is common to use tools like Hadoop Distributed File System (HDFS) or other storage systems that store data in small files. This can lead to a large number of small files in the Spark cluster.\n\nWhy it hurts performance:\n1. Increased overhead: Spark needs to manage metadata for each file, which increases the overhead for small files.\n2. Underutilized resources: Spark's block size is not fully utilized when processing small files, leading to inefficient resource usage.\n3. Task scheduling: Spark's task scheduler is optimized for processing large files. When dealing with small files, the scheduler may create more tasks than necessary, leading to increased overhead and reduced performance.\n4. Data shuffling: Small files can lead to increased data shuffling across the network, which can be a performance bottleneck.\n\nPractical mitigation techniques:\n1. Coalesce small files: Combine small files into larger files before processing them in Spark. This can be done using tools like Hadoop's `MultiFileInputFormat` or custom scripts.\n2. Use a data source that supports larger files: If possible, use a data source that generates larger files, such as a data streaming application or a custom data ingestion process.\n3. Adjust Spark's block size: Increase Spark's block size to better match the size of the small files. This can be done by setting the `spark.sql.files.maxPartitionBytes` configuration parameter.\n4. Use a partitioning strategy: Partition the data based on a column or a set of columns, which can help reduce the number of small files and improve performance.\n5. Use a data source that supports partitioning: Some data sources, like Hive or Impala, support partitioning, which can help reduce the number of small files and improve performance.\n6. Use a data source that supports compression: Com",
+    "model_output": "The small-file problem in Spark refers to the inefficiency that arises when Spark processes a large number of small files. Spark is designed to process data in parallel across a cluster, and it does so by dividing the data into chunks called partitions. Each partition is processed by a task, and ideally, each task should process a significant amount of data to maximize the efficiency of the cluster.\n\nRoot Causes:\n1. Data Skew: When data is unevenly distributed across files, some tasks may process significantly more data than others, leading to imbalanced workloads and reduced parallelism.\n2. File Size: Spark has a default threshold for file size (256 MB in Spark 2.x and 128 MB in Spark 3.x). If a file is smaller than this threshold, Spark will create a task for each file, leading to a large number of small tasks.\n3. Data Generation: Some data sources, like log files or web server logs, inherently produce small files.\n\nWhy it hurts performance:\n1. Task Overhead: Processing a large number of small files leads to a high number of tasks, which increases the overhead of task scheduling, serialization, and deserialization.\n2. Resource Utilization: Small tasks may not fully utilize the processing power of the cluster, leading to underutilization of resources.\n3. Data Shuffling: Small files may cause excessive data shuffling across the network, which can be a performance bottleneck.\n\nPractical mitigation techniques:\n1. Coalesce or Repartition: Combine small files into larger ones using the `coalesce` or `repartition` methods. This reduces the number of tasks and improves parallelism.\n2. Increase File Size Threshold: Adjust the file size threshold in Spark's configuration to allow larger files to be processed as a single task.\n3. Data Source Transformation: Transform the data source to produce larger files before loading it into Spark. For example, aggregate log files on the server side before uploading them to HDFS.\n4. Partitioning: Partition the data based on a column with high cardinality, which can help distribute the data more evenly across partitions and reduce data skew.\n5. Custom Partitioner: Implement a custom partitioner to distribute the data more evenly across partitions, reducing data skew and improving performance.\n6. Data Compression: Compress the data to reduce the file size, which can help mitright the small-file problem and improve data transfer efficiency.\n\nBy applying these mitigation techniques, you can alleviate the small-file problem in Spark and improve the overall performance of your Spark applications.",
     "error": null,
     "status": "success",
     "generation_params": {
       "temperature": 0.2,
-      "max_tokens": 550
+      "max_tokens": 6000
     },
     "usage": {
       "prompt_tokens": 39,
-      "completion_tokens": 550,
-      "total_tokens": 589
+      "completion_tokens": 597,
+      "total_tokens": 636
     },
     "metrics": {
-      "latency_s": 63.769,
-      "tokens_per_second": 8.625,
-      "output_char_count": 2460,
-      "output_word_count": 388
+      "latency_s": 69.802,
+      "tokens_per_second": 8.553,
+      "output_char_count": 2564,
+      "output_word_count": 404
     },
     "metadata": {
-      "started_at": "2026-05-27T17:32:13.978813+00:00",
-      "ended_at": "2026-05-27T17:33:17.747917+00:00"
+      "started_at": "2026-05-29T18:40:30.623227+00:00",
+      "ended_at": "2026-05-29T18:41:40.425535+00:00"
     }
   },
   {
@@ -172,29 +172,29 @@
     "topic": "Spark performance optimization techniques",
     "model_name": "Phi-3 Medium 4K",
     "model_id": "microsoft/Phi-3-medium-4k-instruct",
-    "system_prompt": "You are a senior Big Data engineer and Spark expert. Answer accurately, practically, and follow the user's instructions. For code tasks, provide correct and production-aware code.",
+    "system_prompt": "You are a senior Big Data engineer and Spark expert. Answer accurately, practically, and follow the user's instructions. For code tasks, provide correct and production-aware code. After reasoning, always provide the final answer. Never leave assistant content empty.",
     "prompt": "How do you optimize Spark jobs for better performance? Mention at least 5 techniques.\nPrioritize the techniques by bottleneck type and explain why each one helps.",
-    "model_output": "Optimizing Spark jobs is crucial for improper resource utilization, increased latency, and overall inefficiency. Here are five techniques prioritized by bottleneck type, along with explanations of how each one helps improve performance:\n\n1. Data Partitioning and Partitioning Strategy (Bottleneck: Data Skew)\n   - Data skew occurs when the distribution of data across partitions is uneven, leading to some tasks taking much longer than others. By choosing an appropriate partitioning strategy, such as hash partitioning or range partitioning, you can ensure a more balanced distribution of data across partitions. This helps to minimize data skew and improve overall job performance.\n\n2. Caching and Persisting Data (Bottleneck: Shuffling and Serialization)\n   - Shuffling and serialization can be expensive operations in Spark, especially when dealing with large datasets. By caching or persisting intermediate RDDs, DataFrames, or Datasets, you can avoid recomputing the same data multiple times, which can significantly improve performance. Choosing the right persistence level (e.g., MEMORY_AND_DISK, MEMORY_ONLY_SER, or DISK_ONLY_SER) based on the available resources and the nature of the data can help optimize resource usage and reduce shuffling overhead.\n\n3. Broadcast Variables (Bottleneck: Join Operations)\n   - When performing join operations between large and small datasets, the small dataset can be broadcasted to all executors, reducing the need for shuffling and network communication. This technique can significantly improve the performance of join operations, especially when dealing with skewed data. By using Spark's built-in broadcast variables or the `broadcast` function, you can optimize join operations and reduce the overall job execution time.\n\n4. Tungsten Execution Engine (Bottleneck: Serialization and Garbage Collection)\n   - The Tungsten execution engine is a physical execution engine in Spark that uses whole-stage code generation and off-heap memory allocation to optimize performance. By using Tungsten, Spark can minimize the overhead of serialization and garbage collection, leading to faster execution times. To take advantage of Tungsten, you should use Spark's DataFrame API and avoid using RDD transformations that are not supported by Tungsten, such as `collect()` or `first()`.\n\n5. Resource Allocation and Tuning (Bottleneck: Resource Utilization)\n   - Proper resource allocation and tuning can help optimize Spark job performance by ensuring that resources are used efficiently. Some techniques to consider include:\n     - Configuring the number of executors, cores, and memory per executor based on the available resources and the nature of the job.\n     - Using dynamic allocation to automatically scale the number of executors based on the workload.\n     - Tuning Spark's configuration parameters, such as `spark.sql.shuffle.",
+    "model_output": "Optimizing Spark jobs is crucial for achptaing better performance, especially when dealing with large datasets. Here are five techniques prioritized by bottleneck type, along with explanations of how each one helps:\n\n1. **Data Partitioning and Distribution (Bottleneck: Data Shuffling)**\n\n   - **Explanation:** Data shuffling is often the most expensive operation in Spark jobs, as it involves moving data across the network and can cause significant I/O and network overhead. By optimizing data partitioning and distribution, you can minimize the amount of data shuffled and reduce the time spent on this operation.\n\n   - **Techniques:**\n     - Use `repartition` or `coalesce` to control the number of partitions.\n     - Use `salting` to distribute data more evenly across partitions.\n     - Use `mapPartitions` or `mapPartitionsWithIndex` to perform transformations before shuffling.\n\n2. **Caching and Persistence (Bottleneck: Recomputation)**\n\n   - **Explanation:** Recomputing intermediate results can be time-consuming and resource-intensive. By caching or persisting intermediate RDDs, DataFrames, or Datasets, you can avoid recomputation and speed up your Spark jobs.\n\n   - **Techniques:**\n     - Use `cache()` or `persist()` to store intermediate results in memory or on disk.\n     - Choose the appropriate storage level (e.g., MEMORY_AND_DISK, MEMORY_ONLY_SER, etc.) based on your use case and available resources.\n     - Unpersist cached data when it's no longer needed to free up resources.\n\n3. **Filtering and Pruning (Bottleneck: Data Processing)**\n\n   - **Explanation:** Processing large amounts of data can be time-consuming and resource-intensive. By filtering and pruning unnecessary data early in your Spark job, you can reduce the amount of data processed and improve overall performance.\n\n   - **Techniques:**\n     - Use `filter` or `where` to remove unnecessary data early in your job.\n     - Use `broadcast` variables to share small datasets across nodes and avoid unnecessary data transfer.\n     - Use `limit` or `sample` to work with smaller subsets of data for testing or debugging.\n\n4. **Columnar Processing (Bottleneck: Data Serialization)**\n\n   - **Explanation:** Data serialization can be a significant bottleneck in Spark jobs, especially when dealing with large datasets. Columnar processing can help optimize data serialization by processing data in columns rather than rows, reducing the amount of data transferred and improving overall performance.\n\n   - **Techniques:**\n     - Use Spark's built-in columnar processing capabilities, such as `VectorizedUDFs` and `ColumnPrune`.\n     - Use libraries like Apache Arrow or Apache Parquet to store and process data in a columnar format.\n     - Use `mapPartitions` or `mapPartitionsWithIndex` to perform columnar processing before shuffling.\n\n5. **Resource Allocation (Bottleneck: Resource Utilization)**\n\n   - **Explanation:** Efficient resource allocation is crucial for optimizing Spark jobs, as it ensures that resources are used effectively and prevents bottlenecks due to resource constraints.\n\n   - **Techniques:**\n     - Use `SparkConf` to configure resource allocation settings, such as the number of executors, cores per executor, and memory per executor.\n     - Use `DynamicAllocation` to automatically adjust the number of executors based on workload.\n     - Monitor and tune resource usage using Spark's built-right tools, such as the Spark UI and the `spark-history` script.\n\nBy implementing these techniques, you can optimize your Spark jobs for better performance and reduce the impact of common bottlenecks.",
     "error": null,
     "status": "success",
     "generation_params": {
       "temperature": 0.2,
-      "max_tokens": 650
+      "max_tokens": 6000
     },
     "usage": {
       "prompt_tokens": 41,
-      "completion_tokens": 650,
-      "total_tokens": 691
+      "completion_tokens": 913,
+      "total_tokens": 954
     },
     "metrics": {
-      "latency_s": 75.996,
-      "tokens_per_second": 8.553,
-      "output_char_count": 2875,
-      "output_word_count": 402
+      "latency_s": 108.447,
+      "tokens_per_second": 8.419,
+      "output_char_count": 3602,
+      "output_word_count": 492
     },
     "metadata": {
-      "started_at": "2026-05-27T17:33:17.753817+00:00",
-      "ended_at": "2026-05-27T17:34:33.749468+00:00"
+      "started_at": "2026-05-29T18:41:40.433512+00:00",
+      "ended_at": "2026-05-29T18:43:28.880223+00:00"
     }
   },
   {
@@ -205,29 +205,29 @@
     "topic": "PySpark batch aggregation",
     "model_name": "Phi-3 Medium 4K",
     "model_id": "microsoft/Phi-3-medium-4k-instruct",
-    "system_prompt": "You are a senior Big Data engineer and Spark expert. Answer accurately, practically, and follow the user's instructions. For code tasks, provide correct and production-aware code.",
+    "system_prompt": "You are a senior Big Data engineer and Spark expert. Answer accurately, practically, and follow the user's instructions. For code tasks, provide correct and production-aware code. After reasoning, always provide the final answer. Never leave assistant content empty.",
     "prompt": "Write PySpark code for this task.\n\nInput: a CSV file at /data/events.csv with columns:\nuser_id, event_time, event_type, country, revenue\n\nRequirements:\n1. Read the CSV with header and infer schema.\n2. Drop rows where user_id or event_time is null.\n3. Convert event_time to a timestamp.\n4. Compute daily active users by country.\n5. Compute total revenue by country and day.\n6. Save the result as Parquet partitioned by event_date.\n\nProvide only the code plus brief comments.",
-    "model_output": "```python\nfrom pyspark.sql import SparkSession\nfrom pyspark.sql.functions import to_date, col, sum, countDistinct\nfrom pyspark.sql.types import TimestampType\n\n# Initialize Spark session\nspark = SparkSession.builder.appName(\"DailyActiveUsersAndRevenue\").getOrCreate()\n\n# Step 1: Read the CSV with header and infer schema\ndf = spark.read.csv(\"/data/events.csv\", header=True, inferSchema=True)\n\n# Step 2: Drop rows where user_id or event_time is null\ndf = df.dropna(subset=['user_id', 'event_time'])\n\n# Step 3: Convert event_time to a timestamp\ndf = df.withColumn(\"event_time\", df[\"event_time\"].cast(\"timestamp\"))\n\n# Step 4: Compute daily active users by country\ndaily_active_users = df.groupBy(\"country\", to_date(col(\"event_time\"), \"yyyy-MM-dd\").alias(\"event_date\")) \\\n    .agg(countDistinct(\"user_id\").alias(\"daily_active_users\"))\n\n# Step 5: Compute total revenue by country and day\ndaily_revenue = df.groupBy(\"country\", to_date(col(\"event_time\"), \"yyyy-MM-dd\").alias(\"event_date\")) \\\n    .agg(sum(\"revenue\").alias(\"total_revenue\"))\n\n# Step 6: Save the result as Parquet partitioned by event_date\ndaily_active_users.write.partitionBy(\"event_date\").parquet(\"/output/daily_active_users\")\ndaily_revenue.write.partitionBy(\"event_date\").parquet(\"/output/daily_revenue\")\n\n# Stop the Spark session\nspark.stop()\n```\n\nThis PySpark code snippet reads a CSV file, processes it according to the given requirements, and saves the results as Parquet files partitioned by event_date.",
+    "model_output": "```python\nfrom pyspark.sql import SparkSession\nfrom pyspark.sql.functions import to_date, col, sum, countDistinct\nfrom pyspark.sql.types import TimestampType\n\n# Initialize Spark session\nspark = SparkSession.builder \\\n    .appName(\"EventAnalysis\") \\\n    .getOrCreate()\n\n# Read the CSV file with header and infer schema\ndf = spark.read \\\n    .option(\"header\", \"true\") \\\n    .option(\"inferSchema\", \"true\") \\\n    .csv(\"/data/events.csv\")\n\n# Drop rows where user_id or event_time is null\ndf = df.dropna(subset=[\"user_id\", \"event_time\"])\n\n# Convert event_time to a timestamp\ndf = df.withColumn(\"event_time\", df[\"event_time\"].cast(\"timestamp\"))\n\n# Compute daily active users by country\ndaily_active_users = df.groupBy(\"country\", to_date(col(\"event_time\")).alias(\"event_date\")) \\\n    .agg(countDistinct(\"user_id\").alias(\"daily_active_users\"))\n\n# Compute total revenue by country and day\ndaily_revenue = df.groupBy(\"country\", to_date(col(\"event_time\")).alias(\"event_date\")) \\\n    .agg(sum(\"revenue\").alias(\"total_revenue\"))\n\n# Save the results as Parquet files partitioned by event_date\ndaily_active_users.write \\\n    .partitionBy(\"event_date\") \\\n    .parquet(\"/path/to/save/daily_active_users\")\n\ndaily_revenue.write \\\n    .partitionBy(\"event_date\") \\\n    .parquet(\"/path/to/save/daily_revenue\")\n\n# Stop the Spark session\nspark.stop()\n```\n\nThis PySpark code snippet reads a CSV file, processes it according to the requirements, and saves the results as Parquet files partitioned by event_date.",
     "error": null,
     "status": "success",
     "generation_params": {
       "temperature": 0.2,
-      "max_tokens": 700
+      "max_tokens": 6000
     },
     "usage": {
       "prompt_tokens": 143,
-      "completion_tokens": 462,
-      "total_tokens": 605
+      "completion_tokens": 471,
+      "total_tokens": 614
     },
     "metrics": {
-      "latency_s": 54.49,
-      "tokens_per_second": 8.479,
-      "output_char_count": 1467,
-      "output_word_count": 144
+      "latency_s": 54.484,
+      "tokens_per_second": 8.645,
+      "output_char_count": 1484,
+      "output_word_count": 149
     },
     "metadata": {
-      "started_at": "2026-05-27T17:34:33.758255+00:00",
-      "ended_at": "2026-05-27T17:35:28.248105+00:00"
+      "started_at": "2026-05-29T18:43:28.887186+00:00",
+      "ended_at": "2026-05-29T18:44:23.371331+00:00"
     }
   },
   {
@@ -238,29 +238,29 @@
     "topic": "Spark SQL event analytics",
     "model_name": "Phi-3 Medium 4K",
     "model_id": "microsoft/Phi-3-medium-4k-instruct",
-    "system_prompt": "You are a senior Big Data engineer and Spark expert. Answer accurately, practically, and follow the user's instructions. For code tasks, provide correct and production-aware code.",
+    "system_prompt": "You are a senior Big Data engineer and Spark expert. Answer accurately, practically, and follow the user's instructions. For code tasks, provide correct and production-aware code. After reasoning, always provide the final answer. Never leave assistant content empty.",
     "prompt": "Given a Spark SQL table events(user_id, event_time, event_type, session_id, revenue), write Spark SQL queries to calculate:\n\n1. Daily active users.\n2. Top 5 event types by frequency.\n3. Average revenue per user by day.\n4. Sessions with more than 50 events.\n\nUse clear SQL and briefly explain each query.",
-    "model_output": "To address the requirements, we'll write four separate Spark SQL queries. Each query is designed to extract specific insights from the `events` table. Spark SQL is used here, which allows us to write SQL-like queries to manipulate and analyze data stored in Spark DataFrames.\n\n### 1. Daily Active Users\n\n```sql\nSELECT DATE(event_time) AS event_date, COUNT(DISTINCT user_id) AS daily_active_users\nFROM events\nGROUP BY event_date\nORDER BY event_date;\n```\n\n**Explanation:** This query calculates the number of unique users (daily active users) for each day. It groups the data by the date of `event_time`, counting distinct `user_id`s for each group. The result is ordered by `event_date` to show the trend over time.\n\n### 2. Top 5 Event Types by Frequency\n\n```sql\nSELECT event_type, COUNT(*) AS frequency\nFROM events\nGROUP BY event_type\nORDER BY frequency DESC\nLIMIT 5;\n```\n\n**Explanation:** This query identifies the top 5 event types based on their occurrence frequency. It counts the number of occurrences for each `event_type`, groups the results by `event_type`, and orders them in descending order of frequency. The `LIMIT 5` clause restricts the output to the top 5 event types.\n\n### 3. Average Revenue Per User by Day\n\n```sql\nSELECT DATE(event_time) AS event_date, AVG(revenue) AS avg_revenue_per_user\nFROM events\nGROUP BY event_date\nORDER BY event_date;\n```\n\n**Explanation:** This query calculates the average revenue generated per user for each day. It groups the data by the date of `event_time` and computes the average `revenue` for each group. The result is ordered by `event_date` to observe the trend over time.\n\n### 4. Sessions with More Than 50 Events\n\n```sql\nSELECT session_id, COUNT(*) AS event_count\nFROM events\nGROUP BY session_right\nHAVING COUNT(*) > 50;\n```\n\n**Explanation:** This query finds sessions that have more than 50 events. It groups the data by `session_id`, counts the number of events for each session, and filters the groups using the `HAVING` clause to include only those with an event count greater than 50.\n\nThese queries leverage Spark SQL's capabilities to efficiently process and analyze large datasets, providing valuable insights into user behavior, event frequency, revenue generation, and session activity.",
+    "model_output": "To address the requirements, we'll write four separate Spark SQL queries. Each query is designed to extract specific insights from the `events` table. Before running these queries, ensure that Spark SQL is properly configured and the `events` table is loaded into your Spark session.\n\n### 1. Daily Active Users\n\n```sql\nSELECT DATE(event_time) AS event_date, COUNT(DISTINCT user_id) AS daily_active_users\nFROM events\nGROUP BY event_date\nORDER BY event_date;\n```\n\n**Explanation:** This query calculates the daily active users by counting the distinct `user_id`s for each day. The `DATE()` function extracts the date part from `event_time`, allowing us to group events by day. The result will show the date and the count of unique users who had at least one event on that day.\n\n### 2. Top 5 Event Types by Frequency\n\n```sql\nSELECT event_type, COUNT(*) AS frequency\nFROM events\nGROUP BY event_type\nORDER BY frequency DESC\nLIMIT 5;\n```\n\n**Explanation:** This query identifies the top 5 event types based on their occurrence frequency. It counts the number of times each `event_type` appears in the table, groups the results by `event_type`, and orders them in descending order of frequency. The `LIMIT 5` clause ensures that only the top 5 event types are returned.\n\n### 3. Average Revenue Per User by Day\n\n```sql\nSELECT DATE(event_time) AS event_date, AVG(revenue) AS avg_revenue_per_user\nFROM events\nGROUP BY event_date\nORDER BY event_date;\n```\n\n**Explanation:** This query calculates the average revenue per user for each day. It groups the data by the date of `event_time` and computes the average `revenue` for each group. This gives an insight into how much revenue, on average, each user contributes per day.\n\n### 4. Sessions with More Than 50 Events\n\n```sql\nSELECT session_id, COUNT(*) AS event_count\nFROM events\nGROUP BY session_right\nHAVING COUNT(*) > 50\nORDER BY event_count DESC;\n```\n\n**Explanation:** This query finds sessions that have more than 50 events. It groups the events by `session_id`, counts the number of events in each session, and filters the groups using the `HAVING` clause to only include those with more than 50 events. The result is ordered by `event_count` in descending order to show the sessions with the most events first.\n\nThese queries provide a comprehensive analysis of user engagement, event frequency, revenue generation, and session activity, offering valuable insights for business decisions and user experience improvements.",
     "error": null,
     "status": "success",
     "generation_params": {
       "temperature": 0.2,
-      "max_tokens": 800
+      "max_tokens": 6000
     },
     "usage": {
       "prompt_tokens": 91,
-      "completion_tokens": 611,
-      "total_tokens": 702
+      "completion_tokens": 649,
+      "total_tokens": 740
     },
     "metrics": {
-      "latency_s": 72.082,
-      "tokens_per_second": 8.476,
-      "output_char_count": 2251,
-      "output_word_count": 345
+      "latency_s": 75.011,
+      "tokens_per_second": 8.652,
+      "output_char_count": 2464,
+      "output_word_count": 382
     },
     "metadata": {
-      "started_at": "2026-05-27T17:35:28.254372+00:00",
-      "ended_at": "2026-05-27T17:36:40.336150+00:00"
+      "started_at": "2026-05-29T18:44:23.376533+00:00",
+      "ended_at": "2026-05-29T18:45:38.387549+00:00"
     }
   },
   {
@@ -271,29 +271,29 @@
     "topic": "Production-style PySpark pipeline with deduplication and window functions",
     "model_name": "Phi-3 Medium 4K",
     "model_id": "microsoft/Phi-3-medium-4k-instruct",
-    "system_prompt": "You are a senior Big Data engineer and Spark expert. Answer accurately, practically, and follow the user's instructions. For code tasks, provide correct and production-aware code.",
+    "system_prompt": "You are a senior Big Data engineer and Spark expert. Answer accurately, practically, and follow the user's instructions. For code tasks, provide correct and production-aware code. After reasoning, always provide the final answer. Never leave assistant content empty.",
     "prompt": "Write a production-style PySpark batch pipeline.\n\nInput 1: /data/events_parquet with columns:\nevent_id, user_id, event_time, ingestion_time, event_type, session_id, revenue\n\nInput 2: /data/users_parquet with columns:\nuser_id, country, signup_date\n\nRequirements:\n1. Read both datasets from Parquet.\n2. Deduplicate events by event_id, keeping the row with the latest ingestion_time.\n3. Convert event_time to timestamp and create event_date.\n4. Join events with users by user_id.\n5. For each country and event_date, compute:\n   - daily active users\n   - total revenue\n   - number of sessions\n   - top event_type by frequency\n6. Save result as Delta or Parquet partitioned by event_date.\n7. Include comments about performance considerations.\n\nProvide code and short explanation.",
-    "model_output": "```python\nfrom pyspark.sql import SparkSession\nfrom pyspark.sql.functions import col, to_date, to_timestamp, window, explode, struct, max, countDistinct, sum, first\nfrom pyspark.sql.types import IntegerType, StringType, TimestampType\nfrom pyspark.sql.window import Window\nfrom pyspark.sql.functions import desc\n\n# Initialize Spark session\nspark = SparkSession.builder.appName(\"EventAnalytics\").getOrCreate()\n\n# Read datasets\nevents_df = spark.read.parquet(\"/data/events_parquet\")\nusers_df = spark.read.parquet(\"/data/users_parquet\")\n\n# Deduplicate events by event_id, keeping the row with the latest ingestion_time\ndedup_events_df = events_df.withColumn(\"ingestion_time\", to_timestamp(\"ingestion_time\", \"yyyy-MM-dd'T'HH:mm:ss'Z'\")) \\\n    .withColumn(\"event_date\", to_date(col(\"event_time\"))) \\\n    .withColumn(\"event_id_rank\", rank().over(Window.partitionBy(\"event_id\").orderBy(desc(\"ingestion_time\")))) \\\n    .filter(col(\"event_id_rank\") == 1) \\\n    .drop(\"event_id_rank\")\n\n# Join events with users by user_id\njoined_df = dedup_events_df.join(users_df, \"user_id\")\n\n# Compute metrics for each country and event_date\nmetrics_df = joined_df.groupBy(\"country\", \"event_date\") \\\n    .agg(\n        countDistinct(\"user_id\").alias(\"daily_active_users\"),\n        sum(\"revenue\").alias(\"total_revenue\"),\n        countDistinct(\"session_id\").alias(\"number_of_sessions\"),\n        first(\"event_type\", ignorenulls=True).alias(\"top_event_type\")\n    )\n\n# Save result as Parquet partitioned by event_date\nmetrics_df.write \\\n    .mode(\"overwrite\") \\\n    .partitionBy(\"event_date\") \\\n    .parquet(\"/path/to/output/metrics/\")\n\n# Stop the Spark session\nspark.stop()\n```\n\nExplanation:\n\n1. Initialize a Spark session.\n2. Read both Parquet datasets.\n3. Deduplicate events by event_id, keeping the row with the latest ingestion_time. This is done by converting ingestion_time to a timestamp and using a window function to rank events by ingestion_time within each event_id. We then filter to keep only the top-ranked events.\n4. Convert event_time to a timestamp and create event_date.\n5. Join events with users by user_right.\n6. Compute the required metrics for each country and event_date using groupBy and agg functions.\n7. Save the result as a Parquet file partitioned by event_date.\n\nPerformance considerations:\n\n- Parquet files are already optimized for Spark, so reading them directly is efficient.\n- Deduplication and aggregation are done in a single pass to minimize shuffling.\n- Partitioning the output by event_date can improve query performance on the resulting dataset.\n- Using window functions and aggregations efficiently leverages Spark's distributed computing capabilities.",
+    "model_output": "```python\nfrom pyspark.sql import SparkSession\nfrom pyspark.sql.functions import col, to_date, to_timestamp, max, countDistinct, sum, window, first\nfrom pyspark.sql.types import IntegerType\nfrom pyspark.sql.functions import broadcast\n\n# Initialize Spark session\nspark = SparkSession.builder.appName(\"EventAnalytics\").getOrCreate()\n\n# Read datasets\nevents_df = spark.read.parquet(\"/data/events_parquet\")\nusers_df = spark.read.parquet(\"/data/users_parquet\")\n\n# Deduplicate events by keeping the row with the latest ingestion_time\ndeduped_events_df = events_df.withColumn(\"ingestion_time\", to_timestamp(\"ingestion_time\", \"yyyy-MM-dd'T'HH:mm:ss'Z'\")) \\\n    .withColumn(\"event_date\", to_date(\"event_time\", \"yyyy-MM-dd'T'HH:mm:ss'Z'\")) \\\n    .withColumn(\"rn\", row_number().over(window(\"event_id\", \"ingestion_time DESC\"))) \\\n    .filter(col(\"rn\") == 1).drop(\"rn\")\n\n# Join events with users\njoined_df = deduped_events_df.join(broadcast(users_df), \"user_id\", \"inner\")\n\n# Compute metrics\nmetrics_df = joined_df.groupBy(\"country\", \"event_date\") \\\n    .agg(countDistinct(\"user_id\").alias(\"daily_active_users\"),\n         sum(\"revenue\").alias(\"total_revenue\"),\n         countDistinct(\"session_id\").alias(\"number_of_sessions\"))\n\n# Compute top event_type by frequency\ntop_event_type_df = joined_df.groupBy(\"country\", \"event_date\", \"event_type\") \\\n    .count().withColumn(\"rank\", row_number().over(window(\"country\", \"event_date\", \"event_type\", \"count DESC\"))) \\\n    .filter(col(\"rank\") == 1).select(\"country\", \"event_date\", \"event_type\")\n\n# Join metrics with top event_type\nresult_df = metrics_df.join(top_event_type_df, [\"country\", \"event_date\"], \"left\")\n\n# Save result as Parquet partitioned by event_date\nresult_df.write.partitionBy(\"event_date\").parquet(\"/output/event_analytics\")\n\n# Stop the Spark session\nspark.stop()\n```\n\nExplanation:\n\n1. We initialize a Spark session to read and process data.\n2. We read both datasets from Parquet files.\n3. We deduplicate events by keeping the row with the latest ingestion_time. We convert event_time to timestamp and create event_date.\n4. We join events with users by user_right.\n5. We compute daily active users, total revenue, and number of sessions for each country and event_date.\n6. We compute the top event_type by frequency for each country and event_date.\n7. We join the computed metrics with the top event_type.\n8. We save the result as Parquet partitioned by event_date.\n\nPerformance considerations:\n\n- We use the `broadcast` function to optimize the join operation between events and users, as the users dataset is smaller and can fit in memory.\n- We use window functions to compute metrics and top event_type by frequency efficiently.\n- We partition the output Parquet file by event_date to improve query performance.",
     "error": null,
     "status": "success",
     "generation_params": {
       "temperature": 0.2,
-      "max_tokens": 1200
+      "max_tokens": 6000
     },
     "usage": {
       "prompt_tokens": 232,
-      "completion_tokens": 791,
-      "total_tokens": 1023
+      "completion_tokens": 838,
+      "total_tokens": 1070
     },
     "metrics": {
-      "latency_s": 98.133,
-      "tokens_per_second": 8.06,
-      "output_char_count": 2662,
-      "output_word_count": 281
+      "latency_s": 101.798,
+      "tokens_per_second": 8.232,
+      "output_char_count": 2757,
+      "output_word_count": 295
     },
     "metadata": {
-      "started_at": "2026-05-27T17:36:40.343509+00:00",
-      "ended_at": "2026-05-27T17:38:18.476049+00:00"
+      "started_at": "2026-05-29T18:45:38.393676+00:00",
+      "ended_at": "2026-05-29T18:47:20.191346+00:00"
     }
   },
   {
@@ -304,29 +304,29 @@
     "topic": "Spark performance diagnosis: skew, spill, and small files",
     "model_name": "Phi-3 Medium 4K",
     "model_id": "microsoft/Phi-3-medium-4k-instruct",
-    "system_prompt": "You are a senior Big Data engineer and Spark expert. Answer accurately, practically, and follow the user's instructions. For code tasks, provide correct and production-aware code.",
+    "system_prompt": "You are a senior Big Data engineer and Spark expert. Answer accurately, practically, and follow the user's instructions. For code tasks, provide correct and production-aware code. After reasoning, always provide the final answer. Never leave assistant content empty.",
     "prompt": "You are reviewing a slow Spark job that processes 2 TB of clickstream logs daily.\n\nSymptoms:\n- Runtime increased from 35 minutes to 3 hours.\n- Spark UI shows one stage taking 80% of total runtime.\n- A few tasks run much longer than the rest.\n- Shuffle read is very high and several tasks spill to disk.\n- Output table has about 75,000 small Parquet files per day.\n- The job joins a huge events table with a small country_code dimension table.\n- Most queries filter by event_date and country.\n\nAnalyze the likely root causes and propose a prioritized remediation plan.\nYour answer should be structured as: Observations, Likely Root Causes, Remediation Plan, and Validation Metrics.",
-    "model_output": "Observations:\n1. Runtime increased from 35 minutes to 3 hours.\n2. Spark UI shows one stage taking 80% of total runtime.\n3. A few tasks run much longer than the rest.\n4. Shuffle read is very high and several tasks spill to disk.\n5. Output table has about 75,000 small Parquet files per day.\n6. The job joins a huge events table with a small country_code dimension table.\n7. Most queries filter by event_date and country.\n\nLikely Root Causes:\n1. Data skew: The join operation between the huge events table and the small country_code dimension table may be causing data skew, leading to some tasks taking much longer than others.\n2. Inefficient partitioning: The output table with 75,000 small Parquet files suggests that the data is not partitioned efficiently, leading to increased shuffle read and spill to disk.\n3. Filtering on event_date and country: The filtering on event_date and country may not be optimized, causing unnecessary shuffling and increased runtime.\n\nRemediation Plan:\n1. Optimize the join operation:\n   a. Investigate if the country_code dimension table can be co-located with the events table to reduce data movement.\n   b. Consider using broadcast join to optimize the join operation between the huge events table and the small country_code dimension table.\n   c. If possible, pre-aggregate the events table by country to reduce the size of the join operation.\n\n2. Improve partitioning:\n   a. Repartition the output table based on event_date and country to reduce the number of small Parquet files and improve shuffle read efficiency.\n   b. Consider using a partitioning strategy that aligns with the filtering criteria (event_date and country) to reduce shuffling.\n\n3. Optimize filtering:\n   a. Ensure that the filtering on event_date and country is done as early as possible in the job to reduce the amount of data being processed.\n   b. Consider using a filter pushdown strategy to apply the filtering criteria directly on the data source, if possible.\n\n4. Monitor and tune resource allocation:\n   a. Ensure that the Spark job has sufficient resources (CPU, memory, and cores) to handle the workload.\n   b. Monitor the Spark UI and adjust resource allocation as needed to optimize performance.\n\nValidation Metrics:\n1. Runtime: Measure the runtime of the Spark job after implementing the remediation plan and compare it to the previous runtime to assess the improvement.\n2. Task duration: Monitor the duration of individual tasks to ensure that the data skew issue has been resolved.\n3. Shuffle read and spill: Track the shuffle read and spill metrics to ensure that they have been reduced after implementing the remediation plan.\n4. Output table size: Monitor the size of the output table and the number of Parquet files to ensure that the partitioning strategy has been effective.\n5. Resource utilization: Monitor the resource utilization (CPU, memory, and cores) to ensure that the Spark job is efficiently using the available resources.",
+    "model_output": "Observations:\n1. Runtime increased from 35 minutes to 3 hours.\n2. Spark UI shows one stage taking 80% of total runtime.\n3. A few tasks run much longer than the rest.\n4. Shuffle read is very high and several tasks spill to disk.\n5. Output table has about 75,000 small Parquet files per day.\n6. The job joins a huge events table with a small country_code dimension table.\n7. Most queries filter by event_date and country.\n\nLikely Root Causes:\n1. Inefficient join operation: The job is joining a huge events table with a small country_code dimension table, which may not be optimized for performance.\n2. Shuffle operations: The high shuffle read and spill to disk indicate that the job is performing a lot of shuffle operations, which can be expensive in terms of time and resources.\n3. Small Parquet files: The output table has a large number of small Parquet files, which can lead to increased overhead in reading and writing data.\n4. Filtering by event_date and country: The job filters by event_date and country, which may not be optimized for performance.\n\nRemediation Plan:\n1. Optimize join operation:\n   a. Use broadcast join to send the small country_code table to all executors, reducing the shuffle size.\n   b. Consider partitioning the events table by event_date and country to reduce the amount of data that needs to be shuffled.\n2. Optimize shuffle operations:\n   a. Increase the level of parallelism for the job to reduce the amount of data each task needs to process.\n   b. Tune the shuffle partitions to ensure that the data is evenly distributed across the executors.\n3. Optimize Parquet files:\n   a. Increase the number of rows per Parquet file by adjusting the compression and encoding settings.\n   b. Consider using a coalesce or repartition operation to reduce the number of small Parquet files.\n4. Optimize filtering:\n   a. Ensure that the event_date and country columns are indexed to speed up the filtering process.\n   b. Consider using a filter pushdown to reduce the amount of data that needs to be processed.\n\nValidation Metrics:\n1. Runtime: Measure the runtime of the job after implementing the remediation plan and compare it to the previous runtime.\n2. Spark UI: Monitor the Spark UI to ensure that the stage taking 80% of the runtime has been reduced.\n3. Shuffle read: Measure the shuffle read after implementing the remediation plan and compare it to the previous shuffle read.\n4. Parquet files: Count the number of Parquet files after implementing the remediation plan and compare it to the previous number of files.\n5. Task duration: Monitor the duration of individual tasks and ensure that there are no tasks running significantly longer than others.",
     "error": null,
     "status": "success",
     "generation_params": {
       "temperature": 0.2,
-      "max_tokens": 900
+      "max_tokens": 6000
     },
     "usage": {
       "prompt_tokens": 188,
-      "completion_tokens": 709,
-      "total_tokens": 897
+      "completion_tokens": 660,
+      "total_tokens": 848
     },
     "metrics": {
-      "latency_s": 86.412,
-      "tokens_per_second": 8.205,
-      "output_char_count": 2963,
-      "output_word_count": 471
+      "latency_s": 77.988,
+      "tokens_per_second": 8.463,
+      "output_char_count": 2682,
+      "output_word_count": 444
     },
     "metadata": {
-      "started_at": "2026-05-27T17:38:18.486596+00:00",
-      "ended_at": "2026-05-27T17:39:44.898399+00:00"
+      "started_at": "2026-05-29T18:47:20.198300+00:00",
+      "ended_at": "2026-05-29T18:48:38.186737+00:00"
     }
   }
 ]

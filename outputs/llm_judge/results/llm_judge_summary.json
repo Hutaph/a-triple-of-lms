@@ -3,8 +3,8 @@
     "count": 80,
     "scored": 79,
     "judge_errors": 1,
-    "avg_weighted_score": 6.856,
-    "avg_judge_overall_score": 6.804
+    "avg_weighted_score": 7.001,
+    "avg_judge_overall_score": 6.905
   },
   "by_model": {
     "Llama 4 Maverick": {
@@ -19,13 +19,13 @@
     },
     "Phi-3 Medium 4K": {
       "count": 10,
-      "avg_weighted_score": 5.17,
-      "avg_judge_overall_score": 5.2
+      "avg_weighted_score": 5.908,
+      "avg_judge_overall_score": 5.85
     },
     "Phi-3 Mini 4K": {
       "count": 10,
-      "avg_weighted_score": 4.095,
-      "avg_judge_overall_score": 4.3
+      "avg_weighted_score": 4.496,
+      "avg_judge_overall_score": 4.45
     },
     "Qwen3-14B": {
       "count": 10,
@@ -51,46 +51,46 @@
   "by_difficulty": {
     "easy": {
       "count": 23,
-      "avg_weighted_score": 7.219,
-      "avg_judge_overall_score": 7.152
+      "avg_weighted_score": 7.537,
+      "avg_judge_overall_score": 7.37
     },
     "hard": {
       "count": 32,
-      "avg_weighted_score": 6.471,
-      "avg_judge_overall_score": 6.344
+      "avg_weighted_score": 6.443,
+      "avg_judge_overall_score": 6.297
     },
     "medium": {
       "count": 24,
-      "avg_weighted_score": 7.022,
-      "avg_judge_overall_score": 7.083
+      "avg_weighted_score": 7.23,
+      "avg_judge_overall_score": 7.271
     }
   },
   "by_category": {
     "Code Generation": {
       "count": 24,
-      "avg_weighted_score": 6.262,
-      "avg_judge_overall_score": 6.208
+      "avg_weighted_score": 6.385,
+      "avg_judge_overall_score": 6.333
     },
     "Incident Analysis": {
       "count": 8,
-      "avg_weighted_score": 7.136,
+      "avg_weighted_score": 7.075,
       "avg_judge_overall_score": 7.0
     },
     "Theory Q&A": {
       "count": 47,
-      "avg_weighted_score": 7.112,
-      "avg_judge_overall_score": 7.074
+      "avg_weighted_score": 7.302,
+      "avg_judge_overall_score": 7.181
     }
   },
   "metric_averages": {
-    "correctness": 6.823,
-    "completeness": 6.57,
-    "key_point_coverage": 6.823,
-    "instruction_following": 7.203,
-    "reasoning_depth": 6.684,
-    "production_readiness": 6.269,
-    "clarity_structure": 8.342,
-    "factual_grounding": 6.911,
-    "code_sql_quality": 6.515
+    "correctness": 6.949,
+    "completeness": 6.797,
+    "key_point_coverage": 6.975,
+    "instruction_following": 7.443,
+    "reasoning_depth": 6.759,
+    "production_readiness": 6.346,
+    "clarity_structure": 8.494,
+    "factual_grounding": 7.013,
+    "code_sql_quality": 6.545
   }
 }
