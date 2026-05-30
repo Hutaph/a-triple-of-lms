@@ -186,9 +186,9 @@
           "rationale": "Matches Databricks specifics."
         },
         "code_sql_quality": {
-          "applicable": true,
-          "score": 10.0,
-          "rationale": "Correct SQL examples provided."
+          "applicable": false,
+          "score": null,
+          "rationale": "Not applicable: task does not request code or SQL."
         }
       },
       "strengths": [
@@ -205,7 +205,7 @@
       ],
       "verdict": "Excellent answer covering all required differences with accurate Databricks specifics."
     },
-    "weighted_score": 9.53,
+    "weighted_score": 9.48,
     "metadata": {
       "judge_latency_s": 17.53,
       "judge_response_id": "gen-1779910355-EQHxxgy79EyMFTr7rHiC",
@@ -1682,9 +1682,9 @@
           "rationale": "Mostly accurate, minor detail on AQE."
         },
         "code_sql_quality": {
-          "applicable": true,
-          "score": 10.0,
-          "rationale": "Code examples are correct and illustrative."
+          "applicable": false,
+          "score": null,
+          "rationale": "Not applicable: task does not request code or SQL."
         }
       },
       "strengths": [
@@ -1704,7 +1704,7 @@
       ],
       "verdict": "Excellent answer covering all key points with deep practical insights, only a minor factual nuance on AQE."
     },
-    "weighted_score": 9.85,
+    "weighted_score": 9.84,
     "metadata": {
       "judge_latency_s": 19.449,
       "judge_response_id": "gen-1779908882-GLGP19z8RcWIIkIU6AGn",
@@ -1936,9 +1936,9 @@
           "rationale": "Factually accurate with minor overstatement on UDF speed."
         },
         "code_sql_quality": {
-          "applicable": true,
-          "score": 9.0,
-          "rationale": "Code examples are relevant and well-commented."
+          "applicable": false,
+          "score": null,
+          "rationale": "Not applicable: task does not request code or SQL."
         }
       },
       "strengths": [
@@ -1962,7 +1962,7 @@
       ],
       "verdict": "Excellent answer with deep production insights and clear bottleneck prioritization, though it misses some expected scan optimization points."
     },
-    "weighted_score": 8.95,
+    "weighted_score": 8.94,
     "metadata": {
       "judge_latency_s": 17.903,
       "judge_response_id": "gen-1779908967-3uXcCPNa02vPEYHrPrjn",
@@ -2451,9 +2451,9 @@
           "rationale": "Accurate Spark details."
         },
         "code_sql_quality": {
-          "applicable": true,
-          "score": 9.0,
-          "rationale": "Good code, minor over-specification."
+          "applicable": false,
+          "score": null,
+          "rationale": "Not applicable: task does not request code or SQL."
         }
       },
       "strengths": [
@@ -2474,7 +2474,7 @@
       ],
       "verdict": "Excellent, production-ready analysis covering all key points with actionable, prioritized fixes and strong validation."
     },
-    "weighted_score": 9.53,
+    "weighted_score": 9.58,
     "metadata": {
       "judge_latency_s": 19.977,
       "judge_response_id": "gen-1779909126-P1It8TwLbK7GXwOVOqkg",
@@ -3705,9 +3705,9 @@
           "rationale": "Mostly accurate Spark concepts."
         },
         "code_sql_quality": {
-          "applicable": true,
-          "score": 8.0,
-          "rationale": "Code snippets are relevant."
+          "applicable": false,
+          "score": null,
+          "rationale": "Not applicable: task does not request code or SQL."
         }
       },
       "strengths": [
@@ -3731,7 +3731,7 @@
       ],
       "verdict": "Good analysis covering main issues but missing AQE and nuanced prioritization."
     },
-    "weighted_score": 7.92,
+    "weighted_score": 7.91,
     "metadata": {
       "judge_latency_s": 15.531,
       "judge_response_id": "gen-1779909606-Q6DKyqHFIbMsZ11YucBB",
@@ -4969,9 +4969,9 @@
           "rationale": "Mostly accurate; minor Spark config errors."
         },
         "code_sql_quality": {
-          "applicable": true,
-          "score": 6.0,
-          "rationale": "Code has issues: salting logic flawed, config property incorrect."
+          "applicable": false,
+          "score": null,
+          "rationale": "Not applicable: task does not request code or SQL."
         }
       },
       "strengths": [
@@ -4994,7 +4994,7 @@
       ],
       "verdict": "Strong analysis linking symptoms to causes with a good plan, but has minor factual errors and misses AQE."
     },
-    "weighted_score": 7.97,
+    "weighted_score": 8.17,
     "metadata": {
       "judge_latency_s": 16.871,
       "judge_response_id": "gen-1779910039-Hab75mTuEQdemGsVdcia",
@@ -5201,9 +5201,9 @@
           "rationale": "Good use case explanations."
         },
         "production_readiness": {
-          "applicable": false,
-          "score": null,
-          "rationale": "Not a production code task."
+          "applicable": true,
+          "score": 9,
+          "rationale": "Provides practical guidance for table lifecycle and production usage."
         },
         "clarity_structure": {
           "applicable": true,
@@ -5239,7 +5239,7 @@
       ],
       "verdict": "Excellent answer with accurate details on all requested aspects, missing only minor explicit mention of shared data lake context."
     },
-    "weighted_score": 9.24,
+    "weighted_score": 9.22,
     "metadata": {
       "judge_latency_s": 23.105,
       "judge_response_id": "gen-1780040461-x5zOODScXI55dV4wkdmr",
@@ -5465,9 +5465,9 @@
           "rationale": "Accurate Spark behavior."
         },
         "code_sql_quality": {
-          "applicable": true,
-          "score": 8.0,
-          "rationale": "Example correct, uses hint."
+          "applicable": false,
+          "score": null,
+          "rationale": "Not applicable: task does not request code or SQL."
         }
       },
       "strengths": [
@@ -5490,7 +5490,7 @@
       ],
       "verdict": "A thorough and correct explanation of broadcast join, covering mechanism, configuration, trade-off, and example, but could be more specific about production use cases and risks."
     },
-    "weighted_score": 8.16,
+    "weighted_score": 8.18,
     "metadata": {
       "judge_latency_s": 16.509,
       "judge_response_id": "gen-1780040551-CZxfKQe66J0DxkT9Q2HY",
@@ -6740,9 +6740,9 @@
           "rationale": "Some factual errors in code"
         },
         "code_sql_quality": {
-          "applicable": true,
-          "score": 4.0,
-          "rationale": "Code has incorrect broadcast usage"
+          "applicable": false,
+          "score": null,
+          "rationale": "Not applicable: task does not request code or SQL."
         }
       },
       "strengths": [
@@ -6767,7 +6767,7 @@
       ],
       "verdict": "Partially correct but contains significant code errors and misses key configuration details."
     },
-    "weighted_score": 5.91,
+    "weighted_score": 6.1,
     "metadata": {
       "judge_latency_s": 25.48,
       "judge_response_id": "gen-1780040975-15IhwqiM7zUiuePvlePO",
@@ -9317,9 +9317,9 @@
           "rationale": "Contains factual error on memory fit."
         },
         "code_sql_quality": {
-          "applicable": true,
-          "score": 4.0,
-          "rationale": "Code uses deprecated broadcast variable method."
+          "applicable": false,
+          "score": null,
+          "rationale": "Not applicable: task does not request code or SQL."
         }
       },
       "strengths": [
@@ -9343,7 +9343,7 @@
       ],
       "verdict": "Answer explains basic concept but misses key configuration details and contains a factual error about memory fit."
     },
-    "weighted_score": 5.9,
+    "weighted_score": 6.09,
     "metadata": {
       "judge_latency_s": 22.967,
       "judge_response_id": "gen-1780101112-G9wLIlN4hYL5z3GZVSTI",

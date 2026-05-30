@@ -16,7 +16,7 @@ BD_THEORY_EASY_02,Qwen3-14B,Theory Q&A,easy,reasoning_depth,9.0,True,Explains li
 BD_THEORY_EASY_02,Qwen3-14B,Theory Q&A,easy,production_readiness,9.0,True,"Safe, practical advice."
 BD_THEORY_EASY_02,Qwen3-14B,Theory Q&A,easy,clarity_structure,10.0,True,"Clear sections, table, examples."
 BD_THEORY_EASY_02,Qwen3-14B,Theory Q&A,easy,factual_grounding,10.0,True,Matches Databricks specifics.
-BD_THEORY_EASY_02,Qwen3-14B,Theory Q&A,easy,code_sql_quality,10.0,True,Correct SQL examples provided.
+BD_THEORY_EASY_02,Qwen3-14B,Theory Q&A,easy,code_sql_quality,,False,Not applicable: task does not request code or SQL.
 BD_THEORY_MEDIUM_01,Qwen3-14B,Theory Q&A,medium,correctness,9.0,True,"Accurate on shuffle behavior, partition changes"
 BD_THEORY_MEDIUM_01,Qwen3-14B,Theory Q&A,medium,completeness,9.0,True,Covers all key points thoroughly
 BD_THEORY_MEDIUM_01,Qwen3-14B,Theory Q&A,medium,key_point_coverage,9.0,True,All expected points addressed clearly
@@ -124,7 +124,7 @@ BD_THEORY_MEDIUM_02,Qwen3-235B-A22B-Thinking,Theory Q&A,medium,reasoning_depth,1
 BD_THEORY_MEDIUM_02,Qwen3-235B-A22B-Thinking,Theory Q&A,medium,production_readiness,9.0,True,"Excellent practical advice, minor over-specification."
 BD_THEORY_MEDIUM_02,Qwen3-235B-A22B-Thinking,Theory Q&A,medium,clarity_structure,10.0,True,Well-organized with clear sections.
 BD_THEORY_MEDIUM_02,Qwen3-235B-A22B-Thinking,Theory Q&A,medium,factual_grounding,9.0,True,"Mostly accurate, minor detail on AQE."
-BD_THEORY_MEDIUM_02,Qwen3-235B-A22B-Thinking,Theory Q&A,medium,code_sql_quality,10.0,True,Code examples are correct and illustrative.
+BD_THEORY_MEDIUM_02,Qwen3-235B-A22B-Thinking,Theory Q&A,medium,code_sql_quality,,False,Not applicable: task does not request code or SQL.
 BD_THEORY_HARD_01,Qwen3-235B-A22B-Thinking,Theory Q&A,hard,correctness,9.0,True,Accurate root causes and solutions.
 BD_THEORY_HARD_01,Qwen3-235B-A22B-Thinking,Theory Q&A,hard,completeness,9.0,True,Covers all key points thoroughly.
 BD_THEORY_HARD_01,Qwen3-235B-A22B-Thinking,Theory Q&A,hard,key_point_coverage,10.0,True,Hits all expected key points.
@@ -142,7 +142,7 @@ BD_THEORY_HARD_02,Qwen3-235B-A22B-Thinking,Theory Q&A,hard,reasoning_depth,9.0,T
 BD_THEORY_HARD_02,Qwen3-235B-A22B-Thinking,Theory Q&A,hard,production_readiness,9.0,True,Includes critical production notes and configurations.
 BD_THEORY_HARD_02,Qwen3-235B-A22B-Thinking,Theory Q&A,hard,clarity_structure,9.0,True,Well-structured with clear sections and code.
 BD_THEORY_HARD_02,Qwen3-235B-A22B-Thinking,Theory Q&A,hard,factual_grounding,9.0,True,Factually accurate with minor overstatement on UDF speed.
-BD_THEORY_HARD_02,Qwen3-235B-A22B-Thinking,Theory Q&A,hard,code_sql_quality,9.0,True,Code examples are relevant and well-commented.
+BD_THEORY_HARD_02,Qwen3-235B-A22B-Thinking,Theory Q&A,hard,code_sql_quality,,False,Not applicable: task does not request code or SQL.
 BD_CODE_EASY_01,Qwen3-235B-A22B-Thinking,Code Generation,easy,correctness,7.0,True,Core logic correct but missing revenue null handling.
 BD_CODE_EASY_01,Qwen3-235B-A22B-Thinking,Code Generation,easy,completeness,7.0,True,Missing SparkSession creation and revenue null handling.
 BD_CODE_EASY_01,Qwen3-235B-A22B-Thinking,Code Generation,easy,key_point_coverage,8.0,True,Covers most key points but misses SparkSession.
@@ -178,7 +178,7 @@ BD_ANALYSIS_HARD_01,Qwen3-235B-A22B-Thinking,Incident Analysis,hard,reasoning_de
 BD_ANALYSIS_HARD_01,Qwen3-235B-A22B-Thinking,Incident Analysis,hard,production_readiness,9.0,True,"Actionable, phased, safe plan."
 BD_ANALYSIS_HARD_01,Qwen3-235B-A22B-Thinking,Incident Analysis,hard,clarity_structure,10.0,True,Clear sections and table.
 BD_ANALYSIS_HARD_01,Qwen3-235B-A22B-Thinking,Incident Analysis,hard,factual_grounding,9.0,True,Accurate Spark details.
-BD_ANALYSIS_HARD_01,Qwen3-235B-A22B-Thinking,Incident Analysis,hard,code_sql_quality,9.0,True,"Good code, minor over-specification."
+BD_ANALYSIS_HARD_01,Qwen3-235B-A22B-Thinking,Incident Analysis,hard,code_sql_quality,,False,Not applicable: task does not request code or SQL.
 BD_THEORY_EASY_01,Qwen3-32B,Theory Q&A,easy,correctness,9.0,True,"Accurate on ownership, DROP, use cases."
 BD_THEORY_EASY_01,Qwen3-32B,Theory Q&A,easy,completeness,9.0,True,Covers all key points concisely.
 BD_THEORY_EASY_01,Qwen3-32B,Theory Q&A,easy,key_point_coverage,9.0,True,"Includes ownership, DROP, lifecycle, risk."
@@ -268,7 +268,7 @@ BD_ANALYSIS_HARD_01,Qwen3-32B,Incident Analysis,hard,reasoning_depth,8.0,True,Li
 BD_ANALYSIS_HARD_01,Qwen3-32B,Incident Analysis,hard,production_readiness,7.0,True,Some advice is generic.
 BD_ANALYSIS_HARD_01,Qwen3-32B,Incident Analysis,hard,clarity_structure,9.0,True,Clear sections and formatting.
 BD_ANALYSIS_HARD_01,Qwen3-32B,Incident Analysis,hard,factual_grounding,8.0,True,Mostly accurate Spark concepts.
-BD_ANALYSIS_HARD_01,Qwen3-32B,Incident Analysis,hard,code_sql_quality,8.0,True,Code snippets are relevant.
+BD_ANALYSIS_HARD_01,Qwen3-32B,Incident Analysis,hard,code_sql_quality,,False,Not applicable: task does not request code or SQL.
 BD_THEORY_EASY_01,Qwen3-4B-Thinking-HF,Theory Q&A,easy,correctness,10.0,True,All key points correct.
 BD_THEORY_EASY_01,Qwen3-4B-Thinking-HF,Theory Q&A,easy,completeness,9.0,True,Covers all required aspects.
 BD_THEORY_EASY_01,Qwen3-4B-Thinking-HF,Theory Q&A,easy,key_point_coverage,10.0,True,Covers all expected points.
@@ -358,7 +358,7 @@ BD_ANALYSIS_HARD_01,Qwen3-4B-Thinking-HF,Incident Analysis,hard,reasoning_depth,
 BD_ANALYSIS_HARD_01,Qwen3-4B-Thinking-HF,Incident Analysis,hard,production_readiness,7.0,True,Actionable but some code suggestions are suboptimal.
 BD_ANALYSIS_HARD_01,Qwen3-4B-Thinking-HF,Incident Analysis,hard,clarity_structure,9.0,True,Well-structured with clear sections and a table.
 BD_ANALYSIS_HARD_01,Qwen3-4B-Thinking-HF,Incident Analysis,hard,factual_grounding,7.0,True,Mostly accurate; minor Spark config errors.
-BD_ANALYSIS_HARD_01,Qwen3-4B-Thinking-HF,Incident Analysis,hard,code_sql_quality,6.0,True,"Code has issues: salting logic flawed, config property incorrect."
+BD_ANALYSIS_HARD_01,Qwen3-4B-Thinking-HF,Incident Analysis,hard,code_sql_quality,,False,Not applicable: task does not request code or SQL.
 BD_THEORY_EASY_01,Llama 4 Maverick,Theory Q&A,easy,correctness,8.0,True,Correctly explains ownership and DROP behavior.
 BD_THEORY_EASY_01,Llama 4 Maverick,Theory Q&A,easy,completeness,8.0,True,Covers all required sections concisely.
 BD_THEORY_EASY_01,Llama 4 Maverick,Theory Q&A,easy,key_point_coverage,8.0,True,Hits all expected key points.
@@ -373,7 +373,7 @@ BD_THEORY_EASY_02,Llama 4 Maverick,Theory Q&A,easy,completeness,9.0,True,Covers 
 BD_THEORY_EASY_02,Llama 4 Maverick,Theory Q&A,easy,key_point_coverage,8.0,True,Hits all key points except shared lake explicitly.
 BD_THEORY_EASY_02,Llama 4 Maverick,Theory Q&A,easy,instruction_following,9.0,True,Follows prompt structure.
 BD_THEORY_EASY_02,Llama 4 Maverick,Theory Q&A,easy,reasoning_depth,9.0,True,Good use case explanations.
-BD_THEORY_EASY_02,Llama 4 Maverick,Theory Q&A,easy,production_readiness,,False,Not a production code task.
+BD_THEORY_EASY_02,Llama 4 Maverick,Theory Q&A,easy,production_readiness,9.0,True,Provides practical guidance for table lifecycle and production usage.
 BD_THEORY_EASY_02,Llama 4 Maverick,Theory Q&A,easy,clarity_structure,10.0,True,Well-organized with clear sections.
 BD_THEORY_EASY_02,Llama 4 Maverick,Theory Q&A,easy,factual_grounding,10.0,True,No factual errors.
 BD_THEORY_EASY_02,Llama 4 Maverick,Theory Q&A,easy,code_sql_quality,,False,Task did not require code.
@@ -394,7 +394,7 @@ BD_THEORY_MEDIUM_02,Llama 4 Maverick,Theory Q&A,medium,reasoning_depth,7.0,True,
 BD_THEORY_MEDIUM_02,Llama 4 Maverick,Theory Q&A,medium,production_readiness,7.0,True,"Mentions memory risk, lacks monitoring."
 BD_THEORY_MEDIUM_02,Llama 4 Maverick,Theory Q&A,medium,clarity_structure,9.0,True,"Well-structured, clear sections."
 BD_THEORY_MEDIUM_02,Llama 4 Maverick,Theory Q&A,medium,factual_grounding,9.0,True,Accurate Spark behavior.
-BD_THEORY_MEDIUM_02,Llama 4 Maverick,Theory Q&A,medium,code_sql_quality,8.0,True,"Example correct, uses hint."
+BD_THEORY_MEDIUM_02,Llama 4 Maverick,Theory Q&A,medium,code_sql_quality,,False,Not applicable: task does not request code or SQL.
 BD_THEORY_HARD_01,Llama 4 Maverick,Theory Q&A,hard,correctness,6.0,True,Core concept correct but misses key details.
 BD_THEORY_HARD_01,Llama 4 Maverick,Theory Q&A,hard,completeness,5.0,True,Missing object store costs and trade-offs.
 BD_THEORY_HARD_01,Llama 4 Maverick,Theory Q&A,hard,key_point_coverage,5.0,True,"Covers many tiny files, overhead, coalesce. Misses object store cost, target size, trade-off."
@@ -484,7 +484,7 @@ BD_THEORY_MEDIUM_02,Llama 4 Scout,Theory Q&A,medium,reasoning_depth,6.0,True,Mem
 BD_THEORY_MEDIUM_02,Llama 4 Scout,Theory Q&A,medium,production_readiness,5.0,True,"Incorrect hint syntax, unsafe broadcast example"
 BD_THEORY_MEDIUM_02,Llama 4 Scout,Theory Q&A,medium,clarity_structure,8.0,True,Well-structured and clear
 BD_THEORY_MEDIUM_02,Llama 4 Scout,Theory Q&A,medium,factual_grounding,6.0,True,Some factual errors in code
-BD_THEORY_MEDIUM_02,Llama 4 Scout,Theory Q&A,medium,code_sql_quality,4.0,True,Code has incorrect broadcast usage
+BD_THEORY_MEDIUM_02,Llama 4 Scout,Theory Q&A,medium,code_sql_quality,,False,Not applicable: task does not request code or SQL.
 BD_THEORY_HARD_01,Llama 4 Scout,Theory Q&A,hard,correctness,5.0,True,Partially correct but has factual errors
 BD_THEORY_HARD_01,Llama 4 Scout,Theory Q&A,hard,completeness,4.0,True,Misses key causes and solutions
 BD_THEORY_HARD_01,Llama 4 Scout,Theory Q&A,hard,key_point_coverage,4.0,True,Covers some points but omits critical ones
@@ -664,7 +664,7 @@ BD_THEORY_MEDIUM_02,Phi-3 Mini 4K,Theory Q&A,medium,reasoning_depth,5.0,True,Sha
 BD_THEORY_MEDIUM_02,Phi-3 Mini 4K,Theory Q&A,medium,production_readiness,5.0,True,Example uses broadcast variable incorrectly.
 BD_THEORY_MEDIUM_02,Phi-3 Mini 4K,Theory Q&A,medium,clarity_structure,8.0,True,Well-structured and clear explanation.
 BD_THEORY_MEDIUM_02,Phi-3 Mini 4K,Theory Q&A,medium,factual_grounding,6.0,True,Contains factual error on memory fit.
-BD_THEORY_MEDIUM_02,Phi-3 Mini 4K,Theory Q&A,medium,code_sql_quality,4.0,True,Code uses deprecated broadcast variable method.
+BD_THEORY_MEDIUM_02,Phi-3 Mini 4K,Theory Q&A,medium,code_sql_quality,,False,Not applicable: task does not request code or SQL.
 BD_THEORY_HARD_01,Phi-3 Mini 4K,Theory Q&A,hard,correctness,4.0,True,Partially correct but lacks specifics.
 BD_THEORY_HARD_01,Phi-3 Mini 4K,Theory Q&A,hard,completeness,2.0,True,Misses many key points.
 BD_THEORY_HARD_01,Phi-3 Mini 4K,Theory Q&A,hard,key_point_coverage,2.0,True,Covers only 'many tiny files'.

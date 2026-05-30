@@ -3,7 +3,7 @@
     "count": 80,
     "scored": 80,
     "judge_errors": 0,
-    "avg_weighted_score": 7.014,
+    "avg_weighted_score": 7.021,
     "avg_judge_overall_score": 6.919
   },
   "by_model": {
@@ -14,7 +14,7 @@
     },
     "Llama 4 Scout": {
       "count": 10,
-      "avg_weighted_score": 6.015,
+      "avg_weighted_score": 6.034,
       "avg_judge_overall_score": 6.05
     },
     "Phi-3 Medium 4K": {
@@ -24,44 +24,44 @@
     },
     "Phi-3 Mini 4K": {
       "count": 10,
-      "avg_weighted_score": 4.496,
+      "avg_weighted_score": 4.515,
       "avg_judge_overall_score": 4.45
     },
     "Qwen3-14B": {
       "count": 10,
-      "avg_weighted_score": 7.981,
+      "avg_weighted_score": 7.976,
       "avg_judge_overall_score": 7.85
     },
     "Qwen3-235B-A22B-Thinking": {
       "count": 10,
-      "avg_weighted_score": 8.852,
+      "avg_weighted_score": 8.855,
       "avg_judge_overall_score": 8.6
     },
     "Qwen3-32B": {
       "count": 10,
-      "avg_weighted_score": 8.015,
+      "avg_weighted_score": 8.014,
       "avg_judge_overall_score": 7.9
     },
     "Qwen3-4B-Thinking-HF": {
       "count": 10,
-      "avg_weighted_score": 7.805,
+      "avg_weighted_score": 7.825,
       "avg_judge_overall_score": 7.75
     }
   },
   "by_difficulty": {
     "easy": {
       "count": 24,
-      "avg_weighted_score": 7.559,
+      "avg_weighted_score": 7.556,
       "avg_judge_overall_score": 7.396
     },
     "hard": {
       "count": 32,
-      "avg_weighted_score": 6.443,
+      "avg_weighted_score": 6.45,
       "avg_judge_overall_score": 6.297
     },
     "medium": {
       "count": 24,
-      "avg_weighted_score": 7.23,
+      "avg_weighted_score": 7.246,
       "avg_judge_overall_score": 7.271
     }
   },
@@ -73,12 +73,12 @@
     },
     "Incident Analysis": {
       "count": 8,
-      "avg_weighted_score": 7.075,
+      "avg_weighted_score": 7.105,
       "avg_judge_overall_score": 7.0
     },
     "Theory Q&A": {
       "count": 48,
-      "avg_weighted_score": 7.318,
+      "avg_weighted_score": 7.325,
       "avg_judge_overall_score": 7.198
     }
   },
@@ -88,9 +88,9 @@
     "key_point_coverage": 6.987,
     "instruction_following": 7.463,
     "reasoning_depth": 6.763,
-    "production_readiness": 6.367,
+    "production_readiness": 6.4,
     "clarity_structure": 8.5,
     "factual_grounding": 7.025,
-    "code_sql_quality": 6.545
+    "code_sql_quality": 6.167
   }
 }
