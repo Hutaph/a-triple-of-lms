@@ -359,15 +359,15 @@ BD_ANALYSIS_HARD_01,Qwen3-4B-Thinking-HF,Incident Analysis,hard,production_readi
 BD_ANALYSIS_HARD_01,Qwen3-4B-Thinking-HF,Incident Analysis,hard,clarity_structure,9.0,True,Well-structured with clear sections and a table.
 BD_ANALYSIS_HARD_01,Qwen3-4B-Thinking-HF,Incident Analysis,hard,factual_grounding,7.0,True,Mostly accurate; minor Spark config errors.
 BD_ANALYSIS_HARD_01,Qwen3-4B-Thinking-HF,Incident Analysis,hard,code_sql_quality,6.0,True,"Code has issues: salting logic flawed, config property incorrect."
-BD_THEORY_EASY_01,Llama 4 Maverick,Theory Q&A,easy,correctness,,True,
-BD_THEORY_EASY_01,Llama 4 Maverick,Theory Q&A,easy,completeness,,True,
-BD_THEORY_EASY_01,Llama 4 Maverick,Theory Q&A,easy,key_point_coverage,,True,
-BD_THEORY_EASY_01,Llama 4 Maverick,Theory Q&A,easy,instruction_following,,True,
-BD_THEORY_EASY_01,Llama 4 Maverick,Theory Q&A,easy,reasoning_depth,,True,
-BD_THEORY_EASY_01,Llama 4 Maverick,Theory Q&A,easy,production_readiness,,True,
-BD_THEORY_EASY_01,Llama 4 Maverick,Theory Q&A,easy,clarity_structure,,True,
-BD_THEORY_EASY_01,Llama 4 Maverick,Theory Q&A,easy,factual_grounding,,True,
-BD_THEORY_EASY_01,Llama 4 Maverick,Theory Q&A,easy,code_sql_quality,,True,
+BD_THEORY_EASY_01,Llama 4 Maverick,Theory Q&A,easy,correctness,8.0,True,Correctly explains ownership and DROP behavior.
+BD_THEORY_EASY_01,Llama 4 Maverick,Theory Q&A,easy,completeness,8.0,True,Covers all required sections concisely.
+BD_THEORY_EASY_01,Llama 4 Maverick,Theory Q&A,easy,key_point_coverage,8.0,True,Hits all expected key points.
+BD_THEORY_EASY_01,Llama 4 Maverick,Theory Q&A,easy,instruction_following,9.0,True,Follows prompt structure and conciseness.
+BD_THEORY_EASY_01,Llama 4 Maverick,Theory Q&A,easy,reasoning_depth,7.0,True,Lacks deeper lifecycle and risk explanation.
+BD_THEORY_EASY_01,Llama 4 Maverick,Theory Q&A,easy,production_readiness,8.0,True,Advises external for production data safety.
+BD_THEORY_EASY_01,Llama 4 Maverick,Theory Q&A,easy,clarity_structure,9.0,True,"Clear, structured, and concise."
+BD_THEORY_EASY_01,Llama 4 Maverick,Theory Q&A,easy,factual_grounding,8.0,True,"Factually accurate, no hallucinations."
+BD_THEORY_EASY_01,Llama 4 Maverick,Theory Q&A,easy,code_sql_quality,,False,"Task is theory Q&A, not code."
 BD_THEORY_EASY_02,Llama 4 Maverick,Theory Q&A,easy,correctness,10.0,True,"Accurate on storage, metadata, DROP behavior."
 BD_THEORY_EASY_02,Llama 4 Maverick,Theory Q&A,easy,completeness,9.0,True,Covers all requested aspects.
 BD_THEORY_EASY_02,Llama 4 Maverick,Theory Q&A,easy,key_point_coverage,8.0,True,Hits all key points except shared lake explicitly.

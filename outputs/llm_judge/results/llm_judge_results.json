@@ -5048,11 +5048,105 @@
     "candidate_output": "**Managed vs External Tables in Hive/Spark**\n\n### Key Differences\n\n* **Data Ownership**:\n\t+ Managed Tables: Hive/Spark manages the data.\n\t+ External Tables: User manages the data.\n* **DROP TABLE Behavior**:\n\t+ Managed Tables: Drops both metadata and data.\n\t+ External Tables: Drops only metadata, data remains intact.\n* **Common Use Cases**:\n\t+ Managed Tables: Temporary or intermediate data, ETL processing.\n\t+ External Tables: Shared data across multiple applications, existing data in HDFS/S3.\n* **Production Best Practices**:\n\t+ Use External Tables for production data to avoid accidental data loss.\n\t+ Use Managed Tables for temporary or intermediate data.\n\nIn summary, Managed Tables are suitable for temporary or intermediate data, while External Tables are ideal for production data that needs to be shared or preserved. Always use External Tables for production data to ensure data safety.",
     "candidate_error": null,
     "judge_model": "deepseek/deepseek-chat-v3.1",
-    "judge_error": "Expecting property name enclosed in double quotes: line 2 column 5 (char 6)",
-    "judge": null,
-    "weighted_score": null,
+    "judge_error": null,
+    "judge": {
+      "overall_score": 8.0,
+      "scores": {
+        "correctness": {
+          "applicable": true,
+          "score": 8.0,
+          "rationale": "Correctly explains ownership and DROP behavior."
+        },
+        "completeness": {
+          "applicable": true,
+          "score": 8.0,
+          "rationale": "Covers all required sections concisely."
+        },
+        "key_point_coverage": {
+          "applicable": true,
+          "score": 8.0,
+          "rationale": "Hits all expected key points."
+        },
+        "instruction_following": {
+          "applicable": true,
+          "score": 9.0,
+          "rationale": "Follows prompt structure and conciseness."
+        },
+        "reasoning_depth": {
+          "applicable": true,
+          "score": 7.0,
+          "rationale": "Lacks deeper lifecycle and risk explanation."
+        },
+        "production_readiness": {
+          "applicable": true,
+          "score": 8.0,
+          "rationale": "Advises external for production data safety."
+        },
+        "clarity_structure": {
+          "applicable": true,
+          "score": 9.0,
+          "rationale": "Clear, structured, and concise."
+        },
+        "factual_grounding": {
+          "applicable": true,
+          "score": 8.0,
+          "rationale": "Factually accurate, no hallucinations."
+        },
+        "code_sql_quality": {
+          "applicable": false,
+          "score": null,
+          "rationale": "Task is theory Q&A, not code."
+        }
+      },
+      "strengths": [
+        "Clear structured answer.",
+        "Correct DROP behavior explanation.",
+        "Good production best practice."
+      ],
+      "missing_or_weak_points": [
+        "Missing explicit mention of accidental recursive deletion risk.",
+        "Could specify data location examples like S3, HDFS."
+      ],
+      "factual_or_logic_issues": [
+        "Ownership description slightly vague: 'User manages the data' for external."
+      ],
+      "improvement_suggestions": [
+        "Clarify ownership as metastore vs data location.",
+        "Add risk of managed table accidental deletion."
+      ],
+      "verdict": "Accurate and concise answer covering all required points, but lacks some depth on lifecycle risks."
+    },
+    "weighted_score": 8.07,
     "metadata": {
-      "judge_created_at": "2026-05-29T07:40:40.195135+00:00"
+      "judge_latency_s": 14.741,
+      "judge_response_id": "gen-1780135671-iOurU8W577nLkagNdc3k",
+      "judge_created_at": "2026-05-30T10:08:04.834790+00:00",
+      "judge_temperature": 0.2,
+      "judge_usage": {
+        "completion_tokens": 512,
+        "prompt_tokens": 1558,
+        "total_tokens": 2070,
+        "completion_tokens_details": {
+          "accepted_prediction_tokens": null,
+          "audio_tokens": 0,
+          "reasoning_tokens": 0,
+          "rejected_prediction_tokens": null,
+          "image_tokens": 0
+        },
+        "prompt_tokens_details": {
+          "audio_tokens": 0,
+          "cached_tokens": 0,
+          "cache_write_tokens": 0,
+          "video_tokens": 0
+        },
+        "cost": 0.0009538,
+        "is_byok": false,
+        "cost_details": {
+          "upstream_inference_cost": 0.0009538,
+          "upstream_inference_prompt_cost": 0.0004674,
+          "upstream_inference_completions_cost": 0.0004864
+        }
+      }
     }
   },
   {

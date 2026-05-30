@@ -1,16 +1,16 @@
 {
   "overall": {
     "count": 80,
-    "scored": 79,
-    "judge_errors": 1,
-    "avg_weighted_score": 7.001,
-    "avg_judge_overall_score": 6.905
+    "scored": 80,
+    "judge_errors": 0,
+    "avg_weighted_score": 7.014,
+    "avg_judge_overall_score": 6.919
   },
   "by_model": {
     "Llama 4 Maverick": {
-      "count": 9,
-      "avg_weighted_score": 6.924,
-      "avg_judge_overall_score": 6.778
+      "count": 10,
+      "avg_weighted_score": 7.039,
+      "avg_judge_overall_score": 6.9
     },
     "Llama 4 Scout": {
       "count": 10,
@@ -50,9 +50,9 @@
   },
   "by_difficulty": {
     "easy": {
-      "count": 23,
-      "avg_weighted_score": 7.537,
-      "avg_judge_overall_score": 7.37
+      "count": 24,
+      "avg_weighted_score": 7.559,
+      "avg_judge_overall_score": 7.396
     },
     "hard": {
       "count": 32,
@@ -77,20 +77,20 @@
       "avg_judge_overall_score": 7.0
     },
     "Theory Q&A": {
-      "count": 47,
-      "avg_weighted_score": 7.302,
-      "avg_judge_overall_score": 7.181
+      "count": 48,
+      "avg_weighted_score": 7.318,
+      "avg_judge_overall_score": 7.198
     }
   },
   "metric_averages": {
-    "correctness": 6.949,
-    "completeness": 6.797,
-    "key_point_coverage": 6.975,
-    "instruction_following": 7.443,
-    "reasoning_depth": 6.759,
-    "production_readiness": 6.346,
-    "clarity_structure": 8.494,
-    "factual_grounding": 7.013,
+    "correctness": 6.963,
+    "completeness": 6.812,
+    "key_point_coverage": 6.987,
+    "instruction_following": 7.463,
+    "reasoning_depth": 6.763,
+    "production_readiness": 6.367,
+    "clarity_structure": 8.5,
+    "factual_grounding": 7.025,
     "code_sql_quality": 6.545
   }
 }
