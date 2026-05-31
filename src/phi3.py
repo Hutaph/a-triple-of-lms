@@ -418,9 +418,9 @@ def load_phi3_onnx_model(
     return tokenizer, model, str(model_dir)
 
 
-def build_chat_prompt(tokenizer, prompt: str) -> str:
+def build_chat_prompt(tokenizer, prompt: str, system_prompt: str = SYSTEM_PROMPT) -> str:
     messages = [
-        {"role": "system", "content": SYSTEM_PROMPT},
+        {"role": "system", "content": system_prompt},
         {"role": "user", "content": prompt},
     ]
     try:
@@ -430,12 +430,12 @@ def build_chat_prompt(tokenizer, prompt: str) -> str:
             add_generation_prompt=True,
         )
     except Exception:
-        return f"{SYSTEM_PROMPT}\n\nUser: {prompt}\nAssistant:"
+        return f"{system_prompt}\n\nUser: {prompt}\nAssistant:"
 
 
-def build_onnx_chat_prompt(prompt: str) -> str:
+def build_onnx_chat_prompt(prompt: str, system_prompt: str = SYSTEM_PROMPT) -> str:
     return (
-        f"<|system|>\n{SYSTEM_PROMPT}<|end|>\n"
+        f"<|system|>\n{system_prompt}<|end|>\n"
         f"<|user|>\n{prompt}<|end|>\n"
         "<|assistant|>\n"
     )
@@ -454,17 +454,20 @@ def call_phi3_model(
     prompt: str,
     temperature: float,
     max_new_tokens: int,
+    system_prompt: str = SYSTEM_PROMPT,
 ) -> tuple[str, float, int, int]:
     import torch
 
-    text = build_chat_prompt(tokenizer, prompt)
+    text = build_chat_prompt(tokenizer, prompt, system_prompt=system_prompt)
     inputs = tokenizer(text, return_tensors="pt")
     device = infer_input_device(model)
     inputs = {key: value.to(device) for key, value in inputs.items()}
+    inputs.pop("token_type_ids", None)
 
+    pad_id = tokenizer.pad_token_id if tokenizer.pad_token_id is not None else tokenizer.eos_token_id
     generate_kwargs = {
         "max_new_tokens": max_new_tokens,
-        "pad_token_id": tokenizer.eos_token_id,
+        "pad_token_id": pad_id,
         "eos_token_id": tokenizer.eos_token_id,
     }
     if temperature > 0:
@@ -493,10 +496,11 @@ def call_phi3_onnx_model(
     prompt: str,
     temperature: float,
     max_new_tokens: int,
+    system_prompt: str = SYSTEM_PROMPT,
 ) -> tuple[str, float, int, int]:
     import onnxruntime_genai as og
 
-    text = build_onnx_chat_prompt(prompt)
+    text = build_onnx_chat_prompt(prompt, system_prompt=system_prompt)
     input_tokens = tokenizer.encode(text)
 
     params = og.GeneratorParams(model)
@@ -527,6 +531,60 @@ def call_phi3_onnx_model(
 
     latency = time.perf_counter() - start
     return "".join(output_chunks).strip(), latency, len(input_tokens), output_tokens
+
+
+def run_single_inference(
+    model_id_or_path: str,
+    prompt: str,
+    system_prompt: str = SYSTEM_PROMPT,
+    cache_dir: str | None = None,
+    local_files_only: bool = True,
+    device: str = "auto",
+    torch_dtype_name: str = "auto",
+    load_in_4bit: bool = True,
+    trust_remote_code: bool = False,
+    temperature: float = 0.2,
+    max_new_tokens: int = 4000,
+) -> str:
+    """
+    Load a model and tokenizer, generate a response for a single prompt,
+    and release memory afterwards.
+    """
+    try:
+        tokenizer, model = load_phi3_model(
+            model_id_or_path=model_id_or_path,
+            cache_dir=cache_dir,
+            local_files_only=local_files_only,
+            device=device,
+            torch_dtype_name=torch_dtype_name,
+            load_in_4bit=load_in_4bit,
+            trust_remote_code=trust_remote_code,
+        )
+    except Exception as exc:
+        print(f"Error loading model: {exc}")
+        if local_files_only:
+            print("Note: Since local_files_only=True is set, you must have the model cached on Google Drive.")
+            print("To download the model directly from Hugging Face instead, set LOCAL_FILES_ONLY = False in your configurations.")
+        raise exc
+
+    try:
+        output, latency_s, prompt_tokens, completion_tokens = call_phi3_model(
+            tokenizer=tokenizer,
+            model=model,
+            prompt=prompt,
+            temperature=temperature,
+            max_new_tokens=max_new_tokens,
+            system_prompt=system_prompt,
+        )
+        print(f"Generated response in {latency_s:.2f}s (Prompt tokens: {prompt_tokens}, Completion tokens: {completion_tokens})")
+        return output
+    finally:
+        del model
+        del tokenizer
+        gc.collect()
+        import torch
+        if torch.cuda.is_available():
+            torch.cuda.empty_cache()
 
 
 def expected_points_to_list(text: str | None) -> list[str]:
