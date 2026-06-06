@@ -34,6 +34,9 @@ METRIC_WEIGHTS = {
     "clarity_structure": 0.07,
     "factual_grounding": 0.06,
     "code_sql_quality": 0.10,
+    "conciseness": 0.05,
+    "hallucination_risk": 0.08,
+    "code_executability": 0.07,
 }
 
 
@@ -53,6 +56,9 @@ class JudgeScores(BaseModel):
     clarity_structure: MetricScore
     factual_grounding: MetricScore
     code_sql_quality: MetricScore
+    conciseness: MetricScore
+    hallucination_risk: MetricScore
+    code_executability: MetricScore
 
 
 class JudgeReport(BaseModel):
@@ -294,9 +300,13 @@ def build_system_prompt() -> str:
         "Penalize hallucinated Spark behavior, unsafe production advice, incorrect code, "
         "missing required sections, and answers that ignore explicit instructions. "
         "For code_sql_quality, mark applicable=false and score=null unless the task asks "
-        "for code, SQL, or code-like implementation. Return compact JSON: each rationale "
-        "must be under 18 words, each list should contain at most 3 short items, and the "
-        "verdict must be one concise sentence."
+        "for code, SQL, or code-like implementation. For code_executability, mark "
+        "applicable=false and score=null unless runnable code or SQL is requested. "
+        "For hallucination_risk, score high when hallucination risk is low and claims "
+        "are well grounded. For conciseness, score high when the answer is compact "
+        "without omitting required points. Return compact JSON: each rationale must be "
+        "under 18 words, each list should contain at most 3 short items, and the verdict "
+        "must be one concise sentence."
     )
 
 
@@ -372,6 +382,9 @@ def metric_aliases(metric: str) -> set[str]:
         "clarity_structure": ["clarity", "structure", "presentation"],
         "factual_grounding": ["factuality", "grounding", "accuracy"],
         "code_sql_quality": ["code quality", "sql quality", "code"],
+        "conciseness": ["concise", "brevity", "verbosity"],
+        "hallucination_risk": ["hallucination", "hallucination risk", "low hallucination risk"],
+        "code_executability": ["executability", "runnable code", "code runs", "sql executability"],
     }
     aliases.update(aliases_by_metric.get(metric, []))
     return {metric_key(alias) for alias in aliases}
@@ -683,6 +696,83 @@ def bounded_score(value: Any) -> float:
     return min(max(score, 0.0), 10.0)
 
 
+def as_float(value: Any) -> float | None:
+    if value is None:
+        return None
+    try:
+        parsed = float(value)
+    except (TypeError, ValueError):
+        return None
+    if math.isnan(parsed):
+        return None
+    return parsed
+
+
+def safe_divide(numerator: Any, denominator: Any, digits: int = 6) -> float | None:
+    num = as_float(numerator)
+    den = as_float(denominator)
+    if num is None or den is None or den == 0:
+        return None
+    return round(num / den, digits)
+
+
+def prediction_operational_metrics(prediction: dict) -> dict:
+    usage = prediction.get("usage") or {}
+    timing = prediction.get("timing") or {}
+    metrics = prediction.get("metrics") or {}
+    generation_stats = prediction.get("generation_stats") or {}
+    metadata = prediction.get("metadata") or {}
+
+    finish_reason = (
+        metadata.get("finish_reason")
+        or generation_stats.get("finish_reason")
+        or metadata.get("native_finish_reason")
+        or generation_stats.get("native_finish_reason")
+    )
+    cost = usage.get("cost", generation_stats.get("total_cost", generation_stats.get("usage")))
+    total_tokens = usage.get("total_tokens", generation_stats.get("tokens_total"))
+    completion_tokens = usage.get("completion_tokens", generation_stats.get("native_tokens_completion"))
+    prompt_tokens = usage.get("prompt_tokens", generation_stats.get("native_tokens_prompt"))
+
+    client_total_s = timing.get("client_total_s", metrics.get("latency_s"))
+    generation_time_s = timing.get("generation_time_s", generation_stats.get("generation_time_s"))
+
+    return {
+        "status": prediction.get("status"),
+        "success": prediction.get("error") is None and bool(prediction.get("model_output")),
+        "empty_output": not bool(prediction.get("model_output")),
+        "finish_reason": finish_reason,
+        "finish_reason_length": str(finish_reason or "").lower() == "length",
+        "generation_stats_missing": not bool(prediction.get("generation_stats")),
+        "cost": as_float(cost),
+        "prompt_tokens": as_float(prompt_tokens),
+        "completion_tokens": as_float(completion_tokens),
+        "total_tokens": as_float(total_tokens),
+        "client_total_s": as_float(client_total_s),
+        "generation_time_s": as_float(generation_time_s),
+        "tokens_per_second_client": as_float(metrics.get("tokens_per_second_client")),
+        "tokens_per_second_generation": as_float(metrics.get("tokens_per_second_generation")),
+        "native_tokens_per_second_generation": as_float(
+            metrics.get("native_tokens_per_second_generation")
+        ),
+        "provider_name": generation_stats.get("provider_name"),
+        "returned_model": metadata.get("returned_model") or generation_stats.get("model"),
+    }
+
+
+def efficiency_metrics(weighted: float | None, operational: dict) -> dict:
+    return {
+        "score_per_dollar": safe_divide(weighted, operational.get("cost")),
+        "score_per_1k_tokens": safe_divide(
+            weighted,
+            safe_divide(operational.get("total_tokens"), 1000),
+        ),
+        "score_per_second": safe_divide(weighted, operational.get("client_total_s")),
+        "cost_per_score_point": safe_divide(operational.get("cost"), weighted),
+        "tokens_per_score_point": safe_divide(operational.get("total_tokens"), weighted),
+    }
+
+
 def build_result(
     item: dict,
     report: JudgeReport | None,
@@ -694,6 +784,8 @@ def build_result(
     prediction = item["prediction"]
     judge = report.model_dump(mode="json") if report else None
     metric_scores = judge["scores"] if judge else {}
+    weighted = weighted_score(metric_scores) if judge else None
+    operational = prediction_operational_metrics(prediction)
 
     result = {
         "prediction_file": item["prediction_file"],
@@ -712,7 +804,9 @@ def build_result(
         "judge_model": judge_model,
         "judge_error": error,
         "judge": judge,
-        "weighted_score": weighted_score(metric_scores) if judge else None,
+        "weighted_score": weighted,
+        "candidate_operational_metrics": operational,
+        "efficiency": efficiency_metrics(weighted, operational),
         "metadata": metadata or {},
     }
     return result
@@ -725,8 +819,80 @@ def average(values: list[float | int | None]) -> float | None:
     return round(sum(clean) / len(clean), 3)
 
 
+def rate(rows: list[dict], predicate) -> float | None:
+    if not rows:
+        return None
+    return round(sum(1 for row in rows if predicate(row)) / len(rows), 3)
+
+
+def summarize_operational(rows: list[dict]) -> dict:
+    operational_rows = [row.get("candidate_operational_metrics") or {} for row in rows]
+    efficiency_rows = [row.get("efficiency") or {} for row in rows]
+
+    return {
+        "reliability": {
+            "success_rate": rate(operational_rows, lambda row: bool(row.get("success"))),
+            "empty_output_rate": rate(operational_rows, lambda row: bool(row.get("empty_output"))),
+            "finish_reason_length_rate": rate(
+                operational_rows,
+                lambda row: bool(row.get("finish_reason_length")),
+            ),
+            "generation_stats_missing_rate": rate(
+                operational_rows,
+                lambda row: bool(row.get("generation_stats_missing")),
+            ),
+            "judge_error_rate": rate(rows, lambda row: bool(row.get("judge_error"))),
+        },
+        "cost": {
+            "total_cost": round(
+                sum(
+                    value
+                    for value in [row.get("cost") for row in operational_rows]
+                    if value is not None
+                ),
+                6,
+            ),
+            "avg_cost": average([row.get("cost") for row in operational_rows]),
+            "avg_total_tokens": average([row.get("total_tokens") for row in operational_rows]),
+            "avg_completion_tokens": average(
+                [row.get("completion_tokens") for row in operational_rows]
+            ),
+        },
+        "latency": {
+            "avg_client_total_s": average([row.get("client_total_s") for row in operational_rows]),
+            "avg_generation_time_s": average(
+                [row.get("generation_time_s") for row in operational_rows]
+            ),
+            "avg_tokens_per_second_generation": average(
+                [row.get("tokens_per_second_generation") for row in operational_rows]
+            ),
+            "avg_native_tokens_per_second_generation": average(
+                [row.get("native_tokens_per_second_generation") for row in operational_rows]
+            ),
+        },
+        "efficiency": {
+            "avg_score_per_dollar": average(
+                [row.get("score_per_dollar") for row in efficiency_rows]
+            ),
+            "avg_score_per_1k_tokens": average(
+                [row.get("score_per_1k_tokens") for row in efficiency_rows]
+            ),
+            "avg_score_per_second": average(
+                [row.get("score_per_second") for row in efficiency_rows]
+            ),
+            "avg_cost_per_score_point": average(
+                [row.get("cost_per_score_point") for row in efficiency_rows]
+            ),
+            "avg_tokens_per_score_point": average(
+                [row.get("tokens_per_score_point") for row in efficiency_rows]
+            ),
+        },
+    }
+
+
 def summarize(results: list[dict]) -> dict:
     scored = [row for row in results if row.get("weighted_score") is not None]
+    operational_summary = summarize_operational(results)
 
     summary: dict[str, Any] = {
         "overall": {
@@ -737,6 +903,7 @@ def summarize(results: list[dict]) -> dict:
             "avg_judge_overall_score": average(
                 [row.get("judge", {}).get("overall_score") for row in scored]
             ),
+            **operational_summary,
         },
         "by_model": {},
         "by_difficulty": {},
@@ -765,7 +932,7 @@ def summarize(results: list[dict]) -> dict:
         ("category", "by_category"),
     ]:
         buckets: dict[str, list[dict]] = defaultdict(list)
-        for row in scored:
+        for row in results:
             buckets[str(row.get(field) or "unknown")].append(row)
 
         summary[summary_key] = {
@@ -773,8 +940,9 @@ def summarize(results: list[dict]) -> dict:
                 "count": len(items),
                 "avg_weighted_score": average([row.get("weighted_score") for row in items]),
                 "avg_judge_overall_score": average(
-                    [row.get("judge", {}).get("overall_score") for row in items]
+                    [(row.get("judge") or {}).get("overall_score") for row in items]
                 ),
+                **summarize_operational(items),
             }
             for key, items in sorted(buckets.items())
         }
@@ -785,6 +953,8 @@ def summarize(results: list[dict]) -> dict:
 def csv_row(result: dict) -> dict:
     judge = result.get("judge") or {}
     scores = judge.get("scores") or {}
+    operational = result.get("candidate_operational_metrics") or {}
+    efficiency = result.get("efficiency") or {}
     row = {
         "sample_id": result.get("sample_id"),
         "model_name": result.get("model_name"),
@@ -797,6 +967,26 @@ def csv_row(result: dict) -> dict:
         "verdict": judge.get("verdict"),
         "judge_error": result.get("judge_error"),
         "prediction_file": result.get("prediction_file"),
+        "candidate_success": operational.get("success"),
+        "candidate_empty_output": operational.get("empty_output"),
+        "candidate_finish_reason": operational.get("finish_reason"),
+        "candidate_finish_reason_length": operational.get("finish_reason_length"),
+        "candidate_generation_stats_missing": operational.get("generation_stats_missing"),
+        "candidate_provider_name": operational.get("provider_name"),
+        "candidate_cost": operational.get("cost"),
+        "candidate_prompt_tokens": operational.get("prompt_tokens"),
+        "candidate_completion_tokens": operational.get("completion_tokens"),
+        "candidate_total_tokens": operational.get("total_tokens"),
+        "candidate_client_total_s": operational.get("client_total_s"),
+        "candidate_generation_time_s": operational.get("generation_time_s"),
+        "candidate_tokens_per_second_generation": operational.get(
+            "tokens_per_second_generation"
+        ),
+        "score_per_dollar": efficiency.get("score_per_dollar"),
+        "score_per_1k_tokens": efficiency.get("score_per_1k_tokens"),
+        "score_per_second": efficiency.get("score_per_second"),
+        "cost_per_score_point": efficiency.get("cost_per_score_point"),
+        "tokens_per_score_point": efficiency.get("tokens_per_score_point"),
     }
     for metric in METRIC_WEIGHTS:
         metric_value = scores.get(metric) or {}

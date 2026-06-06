@@ -9,7 +9,7 @@
     "model_id": "meta-llama/llama-4-scout",
     "system_prompt": "You are a senior Big Data engineer and Spark expert. Answer accurately, practically, and follow the user's instructions. For code tasks, provide correct and production-aware code.After reasoning, always provide the final answer.Never leave assistant content empty.",
     "prompt": "What is the difference between Managed and External tables in Hive/Spark?\nAnswer concisely, but include data ownership, DROP TABLE behavior, common use cases, and production best practices.",
-    "model_output": "**Managed vs External Tables in Hive/Spark**\n\n### Key Differences\n\n*   **Data Ownership**:\n    *   **Managed Tables**: Hive/Spark manages the data. When a managed table is dropped, the data is deleted.\n    *   **External Tables**: The user manages the data. When an external table is dropped, only the metadata is deleted.\n\n*   **DROP TABLE Behavior**:\n    *   **Managed Tables**: Dropping the table deletes the data and the table metadata.\n    *   **External Tables**: Dropping the table only deletes the table metadata, not the data.\n\n*   **Common Use Cases**:\n    *   **Managed Tables**: Suitable for temporary data, ETL processes, or when data is generated within Hive/Spark.\n    *   **External Tables**: Suitable for existing data, data shared across multiple systems, or when data is managed outside Hive/Spark.\n\n*   **Production Best Practices**:\n    *   Use external tables for production data to avoid accidental data deletion.\n    *   Use managed tables for temporary or intermediate data.\n\n**Example Code (Hive/Spark SQL)**\n\n```sql\n-- Create a managed table\nCREATE TABLE managed_table (\n    id INT,\n    name STRING\n);\n\n-- Create an external table\nCREATE EXTERNAL TABLE external_table (\n    id INT,\n    name STRING\n)\nLOCATION '/path/to/data';\n```\n\n**Conclusion**\n\nIn summary, managed tables are suitable for temporary or internally generated data, while external tables are suitable for existing data or data managed outside Hive/Spark. Understanding the differences between managed and external tables helps ensure data safety and efficient data management in Hive/Spark. \n\n**Final Answer**\n\nUse managed tables for temporary data and external tables for production data to ensure data safety and efficient management.",
+    "model_output": "**Managed vs External Tables in Hive/Spark**\n\n### Key Differences\n\n*   **Data Ownership**:\n    *   **Managed Tables**: Hive/Spark owns the data. When a managed table is dropped, the data is deleted.\n    *   **External Tables**: The user owns the data. When an external table is dropped, only the metadata is deleted.\n*   **DROP TABLE Behavior**:\n    *   **Managed Tables**: Drops the table and deletes the data.\n    *   **External Tables**: Drops the table but preserves the data.\n\n### Common Use Cases\n\n*   **Managed Tables**:\n    *   Temporary or intermediate data.\n    *   Data that can be recreated easily.\n*   **External Tables**:\n    *   Data shared across multiple teams or applications.\n    *   Data that cannot be recreated easily (e.g., raw data).\n\n### Production Best Practices\n\n*   Prefer **External Tables** for production environments to avoid accidental data loss.\n*   Use **Managed Tables** for development and testing purposes.\n\n**Example Code (Spark SQL)**\n\n```scala\n// Create a managed table\nspark.sql(\"CREATE TABLE managed_table (id INT, name STRING) USING PARQUET\")\n\n// Create an external table\nspark.sql(\"CREATE EXTERNAL TABLE external_table (id INT, name STRING) USING PARQUET LOCATION '/path/to/data'\")\n\n// Drop the tables\nspark.sql(\"DROP TABLE managed_table\")  // Deletes data\nspark.sql(\"DROP TABLE external_table\")  // Preserves data\n```\n\n**Final Answer:** \nThe primary difference between managed and external tables in Hive/Spark lies in data ownership and DROP TABLE behavior. Managed tables are suitable for temporary data, while external tables are ideal for shared or critical data. For production environments, it is recommended to use external tables to prevent data loss.",
     "error": null,
     "status": "success",
     "generation_params": {
@@ -18,18 +18,68 @@
     },
     "usage": {
       "prompt_tokens": 98,
-      "completion_tokens": 355,
-      "total_tokens": 453
+      "completion_tokens": 368,
+      "total_tokens": 466,
+      "cost": 0.0001359
+    },
+    "generation_stats": {
+      "id": "gen-1780755449-bWXtUgNyKwqss0qOHSNJ",
+      "api_type": "completions",
+      "model": "meta-llama/llama-4-scout-17b-16e-instruct",
+      "provider_name": "Groq",
+      "router": null,
+      "service_tier": null,
+      "finish_reason": "stop",
+      "native_finish_reason": "stop",
+      "created_at": "2026-06-06T14:17:29.059Z",
+      "latency_ms": 206,
+      "generation_time_ms": 569,
+      "moderation_latency_ms": null,
+      "latency_s": 0.206,
+      "generation_time_s": 0.569,
+      "moderation_latency_s": null,
+      "tokens_prompt": 116,
+      "tokens_completion": 457,
+      "tokens_total": 573,
+      "native_tokens_prompt": 98,
+      "native_tokens_completion": 368,
+      "native_tokens_reasoning": 0,
+      "native_tokens_cached": 0,
+      "total_cost": 0.0001359,
+      "usage": 0.0001359,
+      "upstream_inference_cost": 0,
+      "is_byok": false,
+      "streamed": true,
+      "num_fetches": null,
+      "request_id": "req-1780755449-UclWUPo4jp9kpg8jy1qF",
+      "upstream_id": "chatcmpl-7e883075-8d60-4645-a05b-b453cf13f1a7"
     },
     "metrics": {
-      "latency_s": 5.54,
-      "tokens_per_second": 64.079,
-      "output_char_count": 1728,
-      "output_word_count": 245
+      "latency_s": 3.687,
+      "tokens_per_second": 99.81,
+      "tokens_per_second_client": 99.81,
+      "tokens_per_second_generation": 803.163,
+      "tokens_per_second_openrouter_latency": 2218.447,
+      "native_tokens_per_second_generation": 646.749,
+      "native_tokens_per_second_openrouter_latency": 1786.408,
+      "output_char_count": 1705,
+      "output_word_count": 241
+    },
+    "timing": {
+      "client_total_s": 3.687,
+      "openrouter_latency_s": 0.206,
+      "generation_time_s": 0.569,
+      "moderation_latency_s": null,
+      "generation_stats_lookup_s": 38.259
     },
     "metadata": {
-      "started_at": "2026-05-29T07:19:31.254380+00:00",
-      "ended_at": "2026-05-29T07:19:36.794123+00:00"
+      "started_at": "2026-06-06T14:17:27.308586+00:00",
+      "ended_at": "2026-06-06T14:18:09.255005+00:00",
+      "response_id": "gen-1780755449-bWXtUgNyKwqss0qOHSNJ",
+      "returned_model": "meta-llama/llama-4-scout-17b-16e-instruct",
+      "finish_reason": "stop",
+      "native_finish_reason": "stop",
+      "generation_stats_error": null
     }
   },
   {
@@ -42,7 +92,7 @@
     "model_id": "meta-llama/llama-4-scout",
     "system_prompt": "You are a senior Big Data engineer and Spark expert. Answer accurately, practically, and follow the user's instructions. For code tasks, provide correct and production-aware code.After reasoning, always provide the final answer.Never leave assistant content empty.",
     "prompt": "What is the difference between Managed and External Tables in Databricks?\nInclude storage location, metadata/catalog behavior, DROP TABLE behavior, and when each type should be used.",
-    "model_output": "**Managed vs External Tables in Databricks**\n=====================================================\n\n### Overview\n\nIn Databricks, tables can be created as either managed or external tables. The main difference between the two lies in how the table's data and metadata are managed.\n\n### Key Differences\n\n#### 1. Storage Location\n\n*   **Managed Tables**: The data is stored in the Databricks managed storage, which is a proprietary storage system. The data is stored in a directory within the Databricks File System (DBFS).\n*   **External Tables**: The data is stored in an external location, such as Amazon S3, Azure Blob Storage, or Google Cloud Storage.\n\n#### 2. Metadata/Catalog Behavior\n\n*   **Managed Tables**: The metadata (schema, table name, etc.) is stored in the Databricks catalog (also known as the Hive metastore). When you create a managed table, Databricks automatically registers the table in the catalog.\n*   **External Tables**: The metadata is also stored in the Databricks catalog, but the data itself is stored externally. When you create an external table, you need to specify the location of the data.\n\n#### 3. DROP TABLE Behavior\n\n*   **Managed Tables**: When you drop a managed table, the data and the metadata are deleted.\n*   **External Tables**: When you drop an external table, only the metadata is deleted, and the data remains in the external storage location.\n\n### When to Use Each Type\n\n*   **Use Managed Tables**:\n    *   When you want Databricks to manage the storage and lifecycle of your data.\n    *   When you're working with data that doesn't have an external source or sink.\n    *   When you want to take advantage of Databricks' optimized storage and performance features.\n*   **Use External Tables**:\n    *   When you're working with data that's already stored externally (e.g., in S3, Azure Blob Storage, etc.).\n    *   When you want to integrate Databricks with external data sources or sinks.\n    *   When you need more control over data retention and lifecycle.\n\n### Example Code\n\nHere's an example of creating a managed table and an external table in Databricks:\n\n```scala\n// Create a managed table\nspark.sql(\"CREATE TABLE managed_table (id INT, name STRING) USING PARQUET\")\n\n// Create an external table\nspark.sql(\"CREATE EXTERNAL TABLE external_table (id INT, name STRING) USING PARQUET LOCATION '/mnt/external-storage/data'\")\n```\n\nIn this example, `managed_table` is a managed table that stores its data in the Databricks managed storage, while `external_table` is an external table that stores its data in an external location (`/mnt/external-storage/data`).\n\n### Final Answer\n\nIn summary, managed tables are suitable for data that's managed by Databricks, while external tables are suitable for data that's stored externally. The choice between managed and external tables depends on your specific use case and requirements.\n\n**Managed Tables**:\n\n*   Store data in Databricks managed storage\n*   Metadata stored in Databricks catalog\n*   DROP TABLE deletes data and metadata\n*   Use when Databricks manages data storage and lifecycle\n\n**External Tables**:\n\n*   Store data in external storage locations\n*   Metadata stored in Databricks catalog\n*   DROP TABLE deletes only metadata\n*   Use when integrating with external data sources or sinks, or when you need more control over data retention.",
+    "model_output": "**Managed vs External Tables in Databricks**\n=====================================================\n\nDatabricks provides two types of tables: Managed Tables and External Tables. Understanding the differences between them is crucial for effective data management and optimization.\n\n### **Storage Location**\n\n*   **Managed Tables**: The data is stored in the Databricks managed storage location, which is a proprietary storage system. The data is stored in a directory within the `/dbfs/mnt/` path.\n*   **External Tables**: The data is stored in an external location, such as Azure Blob Storage, AWS S3, or on-premises storage. The data is not managed by Databricks.\n\n### **Metadata/Catalog Behavior**\n\n*   **Managed Tables**: The metadata (schema, table name, etc.) is stored in the Databricks catalog (also known as the Hive metastore). When you create a managed table, Databricks automatically creates a corresponding entry in the catalog.\n*   **External Tables**: The metadata is also stored in the Databricks catalog, but the data itself is stored externally. When you create an external table, you need to specify the location of the data.\n\n### **DROP TABLE Behavior**\n\n*   **Managed Tables**: When you drop a managed table, Databricks automatically deletes the data and the metadata from the catalog.\n*   **External Tables**: When you drop an external table, Databricks only deletes the metadata from the catalog, but not the data itself. The data remains in the external storage location.\n\n### **When to Use Each Type**\n\n*   **Use Managed Tables**:\n    *   When you want Databricks to manage the data storage and lifecycle.\n    *   When you want to take advantage of Databricks' optimized storage and performance features.\n    *   When you're working with data that doesn't have a long-term storage requirement.\n*   **Use External Tables**:\n    *   When you want to integrate with external data sources or systems.\n    *   When you need to share data across multiple Databricks workspaces or with external users.\n    *   When you have existing data stored in an external location and want to query it from Databricks.\n\n**Example Code**\n---------------\n\nHere's an example of creating a managed table and an external table in Databricks:\n\n```scala\n// Create a managed table\nspark.sql(\"CREATE TABLE managed_table (id INT, name STRING) USING PARQUET\")\n\n// Create an external table\nspark.sql(\"CREATE EXTERNAL TABLE external_table (id INT, name STRING) USING PARQUET LOCATION '/mnt/external-storage/data.parquet'\")\n```\n\n**Final Answer**\n----------------\n\nIn summary:\n\n*   Managed Tables are suitable for data that is owned and managed by Databricks, and you want to leverage Databricks' optimized storage and performance features.\n*   External Tables are suitable for data that is stored externally, and you want to integrate with external data sources or systems.\n\nChoose the right table type based on your specific use case and data management requirements.",
     "error": null,
     "status": "success",
     "generation_params": {
@@ -51,18 +101,68 @@
     },
     "usage": {
       "prompt_tokens": 95,
-      "completion_tokens": 693,
-      "total_tokens": 788
+      "completion_tokens": 595,
+      "total_tokens": 690,
+      "cost": 0.0001861
+    },
+    "generation_stats": {
+      "id": "gen-1780755490-xALabfwc7FOaJlmoa5pv",
+      "api_type": "completions",
+      "model": "meta-llama/llama-4-scout-17b-16e-instruct",
+      "provider_name": "DeepInfra",
+      "router": null,
+      "service_tier": null,
+      "finish_reason": "stop",
+      "native_finish_reason": "stop",
+      "created_at": "2026-06-06T14:18:10.203Z",
+      "latency_ms": 381,
+      "generation_time_ms": 31271,
+      "moderation_latency_ms": null,
+      "latency_s": 0.381,
+      "generation_time_s": 31.271,
+      "moderation_latency_s": null,
+      "tokens_prompt": 115,
+      "tokens_completion": 779,
+      "tokens_total": 894,
+      "native_tokens_prompt": 95,
+      "native_tokens_completion": 595,
+      "native_tokens_reasoning": 0,
+      "native_tokens_cached": 0,
+      "total_cost": 0.0001861,
+      "usage": 0.0001861,
+      "upstream_inference_cost": 0,
+      "is_byok": false,
+      "streamed": true,
+      "num_fetches": null,
+      "request_id": "req-1780755490-wBK5evXM2mS9OEPH1cZ7",
+      "upstream_id": "chatcmpl-RwlB9lQmbSyvCkngRcVdmINv"
     },
     "metrics": {
-      "latency_s": 9.044,
-      "tokens_per_second": 76.625,
-      "output_char_count": 3342,
-      "output_word_count": 504
+      "latency_s": 31.579,
+      "tokens_per_second": 18.842,
+      "tokens_per_second_client": 18.842,
+      "tokens_per_second_generation": 24.911,
+      "tokens_per_second_openrouter_latency": 2044.619,
+      "native_tokens_per_second_generation": 19.027,
+      "native_tokens_per_second_openrouter_latency": 1561.68,
+      "output_char_count": 2958,
+      "output_word_count": 434
+    },
+    "timing": {
+      "client_total_s": 31.579,
+      "openrouter_latency_s": 0.381,
+      "generation_time_s": 31.271,
+      "moderation_latency_s": null,
+      "generation_stats_lookup_s": 15.992
     },
     "metadata": {
-      "started_at": "2026-05-29T07:19:37.795046+00:00",
-      "ended_at": "2026-05-29T07:19:46.839062+00:00"
+      "started_at": "2026-06-06T14:18:10.255968+00:00",
+      "ended_at": "2026-06-06T14:18:57.826463+00:00",
+      "response_id": "gen-1780755490-xALabfwc7FOaJlmoa5pv",
+      "returned_model": "meta-llama/llama-4-scout-17b-16e-instruct",
+      "finish_reason": "stop",
+      "native_finish_reason": "stop",
+      "generation_stats_error": null
     }
   },
   {
@@ -75,7 +175,7 @@
     "model_id": "meta-llama/llama-4-scout",
     "system_prompt": "You are a senior Big Data engineer and Spark expert. Answer accurately, practically, and follow the user's instructions. For code tasks, provide correct and production-aware code.After reasoning, always provide the final answer.Never leave assistant content empty.",
     "prompt": "What is the difference between repartition(n) and coalesce(n) in Apache Spark?\nExplain shuffle behavior, whether each can increase/decrease partitions, when to use each, and cost implications.",
-    "model_output": " Coalesce in Apache Spark**\n=============================================\n\n### Overview\n\nIn Apache Spark, `repartition(n `coalesce(n)` are two methods used to change the number of partitions in a DataFrame or RDD. While they seem similar have distinct behaviors and use cases.\n\n### Repartition(n)\n\n*   **Shuffle behavior:** Yes, a full shuffle is performed.\n*   **Increase/decrease partitions:** Both increase and number of partitions.\n*   **Cost implications:** High cost due to.\n\n```scala\n// Scala example\nval df = spark.createDataFrame(Seq((1, \"a\"), (2, \"b\"), (3, \"c\"))).toDF(\" \"value\")\nval repartitionedDf = df.repartition(2)\npython\n# Python example\ndf = spark.createDataFrame([(1, \"a\"), (2, \" (3, \"c\")], [\"id\", \"value\"])\nrepartition = df.repartition(2)\n```\n\n### Coalesce(n)\n\n **Shuffle behavior:** Only shuffle if decreasing partitions (from `n` to `n-1` or less). No shuffle if increasing partitions (from `n` to `n+1` or more), but it simply adds more empty partitions.\n*   **Increase/decrease partitions:** Decrease the number of partitions. Increasing partitions is not recommended as it may lead to skew and poor performance.\n*   **Cost implications:** Lower cost compared to `repartition(n)` when decreasing partitions, as it avoids a full shuffle.\n\n```scala\n// Scala example\nval df = spark.createDataFrame(Seq((1, \"a\"), (2, \"b\"), (3, \"c\"))).toDF(\"id\", \"value\")\nval coalescedDf = df.coalesce(1)\n```\n\n```python\n# Python example\ndf = spark.createDataFrame([(1, \"a\"), (2, \"b\"), (3, \"c\")], [\"id\", \"value\"])\ncoalesced df.coalesce(1)\n```\n\n### Comparison Summary\n\n| Method      | Shuffle Behavior | Increase/Decrease Partitions | Cost Implications |\n|-------------|-----------------|------------------------------|--------------------|\n| `repartition(n)` | Yes             | Both increase and decrease    | High               |\n| `coalesce(n)`   | Conditional     | Decrease only                | Lower              |\n\n### When to Use Each\n\n*   Use `repartition(n)` when:\n    *   You need to increase the number of partitions.\n    *   You want a full shuffle occurs to redistribute data evenly.\n*   Use `coalesce(n)` when:\n    *   You need to decrease the number of partitions.\n    *   You want to minimize the cost of shuffling data.\n\n### Best Practices\n\n*   Avoid using `coalesce(n)` to increase the number of partitions, as it may lead to data skew and poor performance.\n*   Use `repartition(n)` with caution, as it can be expensive due to the full shuffle.\n*   Monitor the performance and adjust the number of partitions based on your specific use case and data distribution.\n\n### Final Answer\n\nIn summary, `repartition(n)` and `coalesce(n)` have different use cases and cost implications. `Repartition(n)` is suitable for both increasing and decreasing partitions with a full shuffle, while `coalesce(n)` is better for decreasing partitions with a lower Choose the method that best fits your specific requirements and data",
+    "model_output": "**Repartition vs Coalesce in Apache Spark**\n\n### Overview\n\nIn Apache Spark, `repartition(n)` and `coalesce(n)` are two methods used to change the number of partitions in an RDD or DataFrame. While they seem similar, they have distinct behaviors and use cases.\n\n### Repartition(n)\n\n*   **Shuffle behavior:** Yes, `repartition(n)` involves a shuffle, which means that the data is redistributed across the cluster, and the data is rehashed to create new partitions.\n*   **Increase/decrease partitions:** Yes, `repartition(n)` can both increase and decrease the number of partitions.\n*   **Cost implications:** `repartition(n)` is more expensive than `coalesce(n)` because it involves a full shuffle of the data.\n\n### Coalesce(n)\n\n*   **Shuffle behavior:** No, `coalesce(n)` does not involve a shuffle by default (although it can be forced to shuffle with `shuffle=true`). Instead, it removes partitions to achieve the target number.\n*   **Increase/decrease partitions:** No, `coalesce(n)` can only decrease the number of partitions. If `n` is greater than the current number of partitions, it will not increase the number of partitions.\n*   **Cost implications:** `coalesce(n)` is less expensive than `repartition(n)` because it does not involve a full shuffle of the data.\n\n### When to Use Each\n\n*   Use `repartition(n)` when:\n    *   You need to increase the number of partitions.\n    *   You need to decrease the number of partitions and want to ensure a uniform distribution of data.\n*   Use `coalesce(n)` when:\n    *   You need to decrease the number of partitions and want to minimize the cost.\n    *   You want to avoid shuffling data if possible.\n\n### Example Code (Scala)\n\n```scala\nimport org.apache.spark.sql.SparkSession\n\nobject RepartitionCoalesceExample {\n  def main(args: Array[String]): Unit = {\n    val spark = SparkSession.builder.appName(\"RepartitionCoalesceExample\").getOrCreate()\n\n    // Create an RDD with 10 partitions\n    val rdd = spark.sparkContext.parallelize(1 to 100, 10)\n\n    // Print initial number of partitions\n    println(s\"Initial number of partitions: ${rdd.getNumPartitions}\")\n\n    // Repartition to 5 partitions (involves shuffle)\n    val repartitionedRdd = rdd.repartition(5)\n    println(s\"Number of partitions after repartition: ${repartitionedRdd.getNumPartitions}\")\n\n    // Coalesce to 3 partitions (does not involve shuffle by default)\n    val coalescedRdd = repartitionedRdd.coalesce(3)\n    println(s\"Number of partitions after coalesce: ${coalescedRdd.getNumPartitions}\")\n\n    // Try to coalesce to 10 partitions (will not increase partitions)\n    val coalescedRdd2 = repartitionedRdd.coalesce(10)\n    println(s\"Number of partitions after coalesce: ${coalescedRdd2.getNumPartitions}\")\n\n    spark.stop()\n  }\n}\n```\n\n### Final Answer\n\nIn summary:\n\n*   `repartition(n)` involves a shuffle, can increase or decrease partitions, and is more expensive.\n*   `coalesce(n)` does not involve a shuffle by default, can only decrease partitions, and is less expensive.\n\nChoose `repartition(n)` when you need to increase partitions or ensure a uniform distribution of data when decreasing partitions. Choose `coalesce(n)` when you need to decrease partitions and minimize cost.",
     "error": null,
     "status": "success",
     "generation_params": {
@@ -83,19 +183,69 @@
       "max_tokens": 6000
     },
     "usage": {
-      "prompt_tokens": 117,
-      "completion_tokens": 782,
-      "total_tokens": 899
+      "prompt_tokens": 100,
+      "completion_tokens": 762,
+      "total_tokens": 862,
+      "cost": 0.0002366
+    },
+    "generation_stats": {
+      "id": "gen-1780755538-G5ApMxKAfLgBpwIKfhMd",
+      "api_type": "completions",
+      "model": "meta-llama/llama-4-scout-17b-16e-instruct",
+      "provider_name": "DeepInfra",
+      "router": null,
+      "service_tier": null,
+      "finish_reason": "stop",
+      "native_finish_reason": "stop",
+      "created_at": "2026-06-06T14:18:58.818Z",
+      "latency_ms": 317,
+      "generation_time_ms": 14866,
+      "moderation_latency_ms": null,
+      "latency_s": 0.317,
+      "generation_time_s": 14.866,
+      "moderation_latency_s": null,
+      "tokens_prompt": 117,
+      "tokens_completion": 851,
+      "tokens_total": 968,
+      "native_tokens_prompt": 100,
+      "native_tokens_completion": 762,
+      "native_tokens_reasoning": 0,
+      "native_tokens_cached": 0,
+      "total_cost": 0.0002366,
+      "usage": 0.0002366,
+      "upstream_inference_cost": 0,
+      "is_byok": false,
+      "streamed": true,
+      "num_fetches": null,
+      "request_id": "req-1780755538-xTePmUX7GZT6t0DPiNwi",
+      "upstream_id": "chatcmpl-Rj1KC4HYXoOpPUWxEuszY80L"
     },
     "metrics": {
-      "latency_s": 6.527,
-      "tokens_per_second": 119.81,
-      "output_char_count": 2931,
-      "output_word_count": 404
+      "latency_s": 15.208,
+      "tokens_per_second": 50.105,
+      "tokens_per_second_client": 50.105,
+      "tokens_per_second_generation": 57.245,
+      "tokens_per_second_openrouter_latency": 2684.543,
+      "native_tokens_per_second_generation": 51.258,
+      "native_tokens_per_second_openrouter_latency": 2403.785,
+      "output_char_count": 3204,
+      "output_word_count": 420
+    },
+    "timing": {
+      "client_total_s": 15.208,
+      "openrouter_latency_s": 0.317,
+      "generation_time_s": 14.866,
+      "moderation_latency_s": null,
+      "generation_stats_lookup_s": 6.271
     },
     "metadata": {
-      "started_at": "2026-05-29T07:19:47.840334+00:00",
-      "ended_at": "2026-05-29T07:19:54.367095+00:00"
+      "started_at": "2026-06-06T14:18:58.827579+00:00",
+      "ended_at": "2026-06-06T14:19:20.306091+00:00",
+      "response_id": "gen-1780755538-G5ApMxKAfLgBpwIKfhMd",
+      "returned_model": "meta-llama/llama-4-scout-17b-16e-instruct",
+      "finish_reason": "stop",
+      "native_finish_reason": "stop",
+      "generation_stats_error": null
     }
   },
   {
@@ -108,7 +258,7 @@
     "model_id": "meta-llama/llama-4-scout",
     "system_prompt": "You are a senior Big Data engineer and Spark expert. Answer accurately, practically, and follow the user's instructions. For code tasks, provide correct and production-aware code.After reasoning, always provide the final answer.Never leave assistant content empty.",
     "prompt": "Explain the concept of Broadcast Join in Spark. When should it be used?\nInclude mechanism, configuration or hint, memory trade-off, and a practical example.",
-    "model_output": "**Broadcast Join in Spark**\n==========================\n\n### Overview\n\nBroadcast Join is a type of join operation in Apache Spark that allows joining a small table with a large table by broadcasting the small table to all executors, reducing the need for shuffling data. This technique is particularly useful when one of the tables is significantly smaller than the other.\n\n### Mechanism\n\nThe Broadcast Join mechanism works as follows:\n\n1. **Identify the small table**: Determine which table is smaller and can be broadcasted to all executors.\n2. **Serialize and broadcast the small table**: Serialize the small table and broadcast it to all executors.\n3. **Join with the large table**: Each executor joins the broadcasted small table with the partition of the large table it has.\n\n### Configuration or Hint\n\nTo use Broadcast Join in Spark, you can:\n\n* **Use the `broadcast` function**: Wrap the small table with the `broadcast` function, like this: `spark.sparkContext.broadcast(smallTable)`\n* **Use the `hint` method**: Call the `hint` method on the DataFrame, like this: `smallTable.join(largeTable).hint(\"broadcast\", smallTable)`\n\n### Memory Trade-off\n\nBroadcast Join trades memory for computation. The small table is broadcasted to all executors, which requires additional memory. However, this approach reduces the need for shuffling data, which can be computationally expensive.\n\n### Practical Example\n\nHere's an example of using Broadcast Join in Spark:\n```scala\n// create a small table\nval smallTable = Seq((1, \"a\"), (2, \"b\")).toDF(\"id\", \"name\")\n\n// create a large table\nval largeTable = Seq((1, 10), (2, 20), (3, 30)).toDF(\"id\", \"value\")\n\n// broadcast the small table\nval broadcastedSmallTable = spark.sparkContext.broadcast(smallTable)\n\n// join the tables using broadcast join\nval joinedTable = largeTable.join(broadcastedSmallTable, \"id\")\n\n// or use hint method\nval joinedTable = largeTable.join(smallTable).hint(\"broadcast\", smallTable)\n\njoinedTable.show()\n```\n\n### When to Use\n\nUse Broadcast Join when:\n\n* One of the tables is significantly smaller than the other (typically, the small table should be smaller than 1-2 MB).\n* The join key is not highly selective (i.e., there are many rows with the same join key).\n* The cluster has sufficient memory to hold the broadcasted small table.\n\nAvoid using Broadcast Join when:\n\n* The small table is too large to fit in memory.\n* The join operation is not selective (i.e., most rows do not match the join condition).\n\n**Final Answer**\n\nBroadcast Join is a useful technique in Spark for joining small tables with large tables, reducing the need for shuffling data. Use it when the small table is significantly smaller than the large table, and the cluster has sufficient memory. Configure it using the `broadcast` function or `hint` method, and consider the memory trade-off.",
+    "model_output": "**Broadcast Join in Spark**\n==========================\n\n### Overview\n\nBroadcast Join is a type of join operation in Apache Spark that allows for efficient joining of two datasets by broadcasting the smaller dataset to all nodes in the cluster. This approach reduces the amount of data that needs to be shuffled and processed, resulting in improved performance.\n\n### Mechanism\n\nThe Broadcast Join mechanism works as follows:\n\n1. **Identify the smaller dataset**: Spark identifies the smaller dataset, which will be broadcasted to all nodes in the cluster.\n2. **Broadcast the smaller dataset**: The smaller dataset is broadcasted to all nodes in the cluster, where it is stored in memory.\n3. **Join with the larger dataset**: Each node joins the larger dataset with the broadcasted smaller dataset.\n\n### Configuration or Hint\n\nTo use Broadcast Join in Spark, you can:\n\n* **Use the `broadcast` hint**: You can use the `broadcast` hint to suggest to Spark that a Broadcast Join should be used. This can be done using the `hint` method:\n```scala\nval smallerDf = // smaller dataframe\nval largerDf = // larger dataframe\n\nval joinedDf = largerDf.join(smallerDf, \"join_key\").hint(\"broadcast\", smallerDf)\n```\n* **Configure the `spark.sql.join.broadcastThreshold` property**: You can configure the `spark.sql.join.broadcastThreshold` property to specify the maximum size of the dataset that can be broadcasted. If the size of the smaller dataset exceeds this threshold, Spark will not use Broadcast Join.\n\n### Memory Trade-off\n\nBroadcast Join requires sufficient memory to store the broadcasted dataset on each node. If the broadcasted dataset is too large to fit in memory, Spark will throw an `OutOfMemoryError`. Therefore, it's essential to monitor memory usage and adjust the `spark.sql.join.broadcastThreshold` property accordingly.\n\n### Practical Example\n\nHere's an example of using Broadcast Join in Spark:\n```scala\n// create smaller dataframe\nval smallerDf = Seq(\n  (1, \"John\"),\n  (2, \"Jane\"),\n  (3, \"Bob\")\n).toDF(\"id\", \"name\")\n\n// create larger dataframe\nval largerDf = Seq(\n  (1, \"Order 1\"),\n  (1, \"Order 2\"),\n  (2, \"Order 3\"),\n  (3, \"Order 4\")\n).toDF(\"id\", \"order\")\n\n// use broadcast hint\nval joinedDf = largerDf.join(smallerDf, \"id\").hint(\"broadcast\", smallerDf)\n\n// show the results\njoinedDf.show()\n```\nOutput:\n```\n+---+-------+----+-----+\n| id|   order|   id| name|\n+---+-------+----+-----+\n|  1| Order 1|   1| John|\n|  1| Order 2|   1| John|\n|  2| Order 3|   2| Jane|\n|  3| Order 4|   3|  Bob|\n+---+-------+----+-----+\n```\n**When to Use Broadcast Join**\n-----------------------------\n\nBroadcast Join is suitable for the following scenarios:\n\n* **Small-to-large joins**: When joining a small dataset with a large dataset, Broadcast Join can significantly reduce the amount of data that needs to be shuffled and processed.\n* **Skewed data**: When the data is skewed, and one side of the join has a significantly smaller number of rows, Broadcast Join can help to reduce the skew and improve performance.\n\nHowever, Broadcast Join may not be suitable for:\n\n* **Large-to-large joins**: When both datasets are large, Broadcast Join may not be efficient, as it requires broadcasting one of the datasets to all nodes.\n* **Limited memory**: When memory is limited, Broadcast Join may not be feasible, as it requires sufficient memory to store the broadcasted dataset on each node.",
     "error": null,
     "status": "success",
     "generation_params": {
@@ -117,18 +267,68 @@
     },
     "usage": {
       "prompt_tokens": 93,
-      "completion_tokens": 621,
-      "total_tokens": 714
+      "completion_tokens": 777,
+      "total_tokens": 870,
+      "cost": 0.00027441
+    },
+    "generation_stats": {
+      "id": "gen-1780755561-Zjok1OwXIJn1c3pY5kXS",
+      "api_type": "completions",
+      "model": "meta-llama/llama-4-scout-17b-16e-instruct",
+      "provider_name": "Groq",
+      "router": null,
+      "service_tier": null,
+      "finish_reason": "stop",
+      "native_finish_reason": "stop",
+      "created_at": "2026-06-06T14:19:21.259Z",
+      "latency_ms": 181,
+      "generation_time_ms": 1402,
+      "moderation_latency_ms": null,
+      "latency_s": 0.181,
+      "generation_time_s": 1.402,
+      "moderation_latency_s": null,
+      "tokens_prompt": 108,
+      "tokens_completion": 903,
+      "tokens_total": 1011,
+      "native_tokens_prompt": 93,
+      "native_tokens_completion": 777,
+      "native_tokens_reasoning": 0,
+      "native_tokens_cached": 0,
+      "total_cost": 0.00027441,
+      "usage": 0.00027441,
+      "upstream_inference_cost": 0,
+      "is_byok": false,
+      "streamed": true,
+      "num_fetches": null,
+      "request_id": "req-1780755561-XoOX9svqOLVBZqtnD38c",
+      "upstream_id": "chatcmpl-6724dea0-b4ca-40db-9e7b-75eaa8036d2e"
     },
     "metrics": {
-      "latency_s": 10.588,
-      "tokens_per_second": 58.651,
-      "output_char_count": 2831,
-      "output_word_count": 423
+      "latency_s": 3.167,
+      "tokens_per_second": 245.343,
+      "tokens_per_second_client": 245.343,
+      "tokens_per_second_generation": 644.08,
+      "tokens_per_second_openrouter_latency": 4988.95,
+      "native_tokens_per_second_generation": 554.208,
+      "native_tokens_per_second_openrouter_latency": 4292.818,
+      "output_char_count": 3375,
+      "output_word_count": 504
+    },
+    "timing": {
+      "client_total_s": 3.167,
+      "openrouter_latency_s": 0.181,
+      "generation_time_s": 1.402,
+      "moderation_latency_s": null,
+      "generation_stats_lookup_s": 17.933
     },
     "metadata": {
-      "started_at": "2026-05-29T07:19:55.368423+00:00",
-      "ended_at": "2026-05-29T07:20:05.956784+00:00"
+      "started_at": "2026-06-06T14:19:21.307042+00:00",
+      "ended_at": "2026-06-06T14:19:42.406945+00:00",
+      "response_id": "gen-1780755561-Zjok1OwXIJn1c3pY5kXS",
+      "returned_model": "meta-llama/llama-4-scout-17b-16e-instruct",
+      "finish_reason": "stop",
+      "native_finish_reason": "stop",
+      "generation_stats_error": null
     }
   },
   {
@@ -141,7 +341,7 @@
     "model_id": "meta-llama/llama-4-scout",
     "system_prompt": "You are a senior Big Data engineer and Spark expert. Answer accurately, practically, and follow the user's instructions. For code tasks, provide correct and production-aware code.After reasoning, always provide the final answer.Never leave assistant content empty.",
     "prompt": "What is the small-file problem in Spark, and how do you solve it?\nExplain root causes, why it hurts performance, and practical mitigation techniques.",
-    "model_output": "**The Small-File Problem in Spark**\n=====================================\n\nThe small-file problem in Spark refers to the performance degradation that occurs when dealing with a large number of small files in a distributed file system, such as HDFS. This issue arises when a Spark job needs to process a massive number of small files, leading to significant overhead and decreased performance.\n\n**Root Causes**\n---------------\n\nThe small-file problem has several root causes:\n\n1. **Metadata overhead**: When Spark reads a file, it needs to fetch metadata, such as file location, block size, and block locations, from the NameNode (in HDFS). With a large number of small files, the metadata overhead increases significantly, leading to slower performance.\n2. **File splitting**: Spark splits files into smaller chunks (blocks) for parallel processing. With small files, the number of blocks increases, resulting in more tasks and increased overhead for task scheduling, data transfer, and processing.\n3. **Task scheduling**: Spark's task scheduler needs to allocate tasks to executors, which leads to increased overhead when dealing with a large number of small files.\n\n**Performance Impact**\n----------------------\n\nThe small-file problem hurts performance in several ways:\n\n1. **Increased processing time**: The overhead of metadata fetching, file splitting, and task scheduling leads to increased processing time.\n2. **Reduced parallelism**: With a large number of small files, the number of tasks increases, but the size of each task decreases. This can lead to reduced parallelism and underutilization of resources.\n3. **Increased memory usage**: The Spark driver and executors need to store metadata and file information, leading to increased memory usage.\n\n**Practical Mitigation Techniques**\n----------------------------------\n\nTo mitigate the small-file problem in Spark:\n\n### 1. **File Consolidation**\n\nConsolidate small files into larger files using techniques like:\n\n* **File merging**: Merge small files into larger files using tools like `hadoop fs -getmerge` or `spark.hadoop.fs.FileUtil`.\n* **Data reprocessing**: Reprocess the data to create larger files.\n\n### 2. **File Format Optimization**\n\nUse file formats optimized for Spark, such as:\n\n* **Parquet**: A columnar storage format that supports efficient compression and encoding.\n* **ORC**: A columnar storage format that supports efficient compression and encoding.\n\n### 3. **Spark Configuration Tuning**\n\nTune Spark configurations to optimize performance:\n\n* **Increase `spark.files.maxPartitionBytes`**: Increase the maximum partition byte size to reduce the number of tasks.\n* **Adjust `spark.default.parallelism`**: Adjust the default parallelism to balance task scheduling and resource utilization.\n\n### 4. **Data Ingestion and Processing**\n\nOptimize data ingestion and processing:\n\n* **Use efficient data ingestion tools**: Use tools like Apache NiFi, Apache Flume, or Apache Kafka to ingest data efficiently.\n* **Preprocess data**: Preprocess data to create larger files or optimize file formats.\n\n### 5. **Using Spark's Built-in Features**\n\nLeverage Spark's built-in features:\n\n* **Spark's `wholeTextFile` method**: Use `wholeTextFile` to read small files in a single task.\n* **Spark's ` FileSystem` API**: Use the `FileSystem` API to optimize file reading and writing.\n\n**Example Code: File Consolidation using Spark**\n```scala\nimport org.apache.spark.sql.SparkSession\n\nobject FileConsolidation {\n  def main(args: Array[String]) {\n    val spark = SparkSession.builder.appName(\"File Consolidation\").getOrCreate()\n\n    // Read small files\n    val smallFilesDF = spark.read.text(\"path/to/small/files\")\n\n    // Consolidate small files into larger files\n    val consolidatedDF = smallFilesDF.repartition(10) // adjust the number of partitions\n\n    // Write consolidated files\n    consolidatedDF.write.parquet(\"path/to/consolidated/files\")\n\n    spark.stop()\n  }\n}\n```\n**Final Answer**\nThe small-file problem in Spark can be mitigated by file consolidation, file format optimization, Spark configuration tuning, data ingestion and processing optimization, and leveraging Spark's built-in features. By applying these techniques, you can significantly improve performance and reduce the impact of small files on your Spark jobs.",
+    "model_output": "**The Small-File Problem in Spark**\n=====================================\n\nThe small-file problem in Spark refers to the performance degradation that occurs when dealing with a large number of small files in a distributed computing environment. This issue arises when the number of files is extremely high, and each file is relatively small in size.\n\n**Root Causes**\n---------------\n\nThe small-file problem in Spark is caused by the following factors:\n\n1. **Metadata overhead**: When Spark reads a file, it needs to fetch metadata about the file, such as its block locations, from the file system. With a large number of small files, the metadata overhead becomes significant, leading to increased processing time.\n2. **File splitting and scheduling**: Spark splits files into smaller blocks for parallel processing. With many small files, the number of blocks increases, resulting in a higher scheduling overhead due to the need to manage and track each block.\n3. **Shuffle and storage**: When processing small files, Spark may need to shuffle data between executors, leading to increased storage and network overhead.\n\n**Performance Impact**\n---------------------\n\nThe small-file problem hurts performance in several ways:\n\n1. **Increased processing time**: The metadata overhead, file splitting, and scheduling lead to increased processing time, making Spark jobs slower.\n2. **Higher memory usage**: The need to store metadata and shuffle data between executors increases memory usage, potentially leading to out-of-memory errors.\n3. **Reduced scalability**: As the number of small files grows, Spark's scalability is reduced, making it challenging to process large datasets.\n\n**Practical Mitigation Techniques**\n-----------------------------------\n\nTo mitigate the small-file problem in Spark, consider the following techniques:\n\n### 1. **File consolidation**\n\nConsolidate small files into larger files to reduce the number of files and metadata overhead.\n\n**Example (Scala):**\n```scala\nimport org.apache.spark.sql.SparkSession\n\nval spark = SparkSession.builder.appName(\"File Consolidation\").getOrCreate()\n\n// Assume 'smallFiles' is an RDD of small files\nval consolidatedFiles = smallFiles.groupBy(_.getPath.getParent).flatMap {\n  case (dir, files) =>\n    val consolidatedFile = s\"$dir/consolidated_file\"\n    spark.sparkContext.parallelize(files).map(_.getPath).saveAsTextFile(consolidatedFile)\n    Seq(consolidatedFile)\n}\n\n// Process consolidated files\nval consolidatedData = spark.read.textFile(consolidatedFiles)\n```\n\n### 2. **Use a custom InputFormat**\n\nImplement a custom InputFormat that can handle small files more efficiently.\n\n**Example (Java):**\n```java\nimport org.apache.hadoop.io.BytesWritable;\nimport org.apache.hadoop.io.NullWritable;\nimport org.apache.hadoop.mapreduce.InputSplit;\nimport org.apache.hadoop.mapreduce.RecordReader;\nimport org.apache.hadoop.mapreduce.TaskAttemptContext;\nimport org.apache.hadoop.mapreduce.lib.input.FileSplit;\n\npublic class SmallFileInputFormat extends FileInputFormat<NullWritable, BytesWritable> {\n\n    @Override\n    public RecordReader<NullWritable, BytesWritable> createRecordReader(InputSplit split, TaskAttemptContext context) {\n        // Implement a custom RecordReader to handle small files\n        return new SmallFileRecordReader();\n    }\n\n    // ...\n}\n```\n\n### 3. **Use Spark's built-in file merging**\n\nSpark provides a built-in file merging feature that can be enabled using the `spark.files.maxPartitionBytes` configuration property.\n\n**Example (Scala):**\n```scala\nspark.conf.set(\"spark.files.maxPartitionBytes\", \"1000000\") // Set the maximum partition size to 1MB\nval data = spark.read.textFile(\"path/to/small/files\")\n```\n\n### 4. **Use a distributed file system**\n\nStore small files in a distributed file system like HDFS, which is optimized for handling large numbers of small files.\n\n**Example (HDFS):**\n```bash\nhdfs dfs -put small_files /path/to/hdfs\n```\n\n**Final Answer**\n-----------------\n\nThe small-file problem in Spark can be mitigated by consolidating small files, using a custom InputFormat, leveraging Spark's built-in file merging feature, or storing small files in a distributed file system. By applying these techniques, you can improve the performance and scalability of your Spark jobs when dealing with large numbers of small files.",
     "error": null,
     "status": "success",
     "generation_params": {
@@ -150,18 +350,68 @@
     },
     "usage": {
       "prompt_tokens": 92,
-      "completion_tokens": 860,
-      "total_tokens": 952
+      "completion_tokens": 873,
+      "total_tokens": 965,
+      "cost": 0.00053163
+    },
+    "generation_stats": {
+      "id": "gen-1780755583-HelVcLGRP4l0OfDUncZi",
+      "api_type": "completions",
+      "model": "meta-llama/llama-4-scout-17b-16e-instruct",
+      "provider_name": "Novita",
+      "router": null,
+      "service_tier": null,
+      "finish_reason": "stop",
+      "native_finish_reason": "stop",
+      "created_at": "2026-06-06T14:19:43.441Z",
+      "latency_ms": 2825,
+      "generation_time_ms": 26049,
+      "moderation_latency_ms": null,
+      "latency_s": 2.825,
+      "generation_time_s": 26.049,
+      "moderation_latency_s": null,
+      "tokens_prompt": 106,
+      "tokens_completion": 1152,
+      "tokens_total": 1258,
+      "native_tokens_prompt": 92,
+      "native_tokens_completion": 873,
+      "native_tokens_reasoning": 0,
+      "native_tokens_cached": 0,
+      "total_cost": 0.00053163,
+      "usage": 0.00053163,
+      "upstream_inference_cost": 0,
+      "is_byok": false,
+      "streamed": true,
+      "num_fetches": null,
+      "request_id": "req-1780755583-lvcdvMVmJYgVIS74aPxS",
+      "upstream_id": "2a4714e190552b29bdc55a95025d9b7f"
     },
     "metrics": {
-      "latency_s": 2.787,
-      "tokens_per_second": 308.576,
-      "output_char_count": 4297,
-      "output_word_count": 570
+      "latency_s": 26.841,
+      "tokens_per_second": 32.525,
+      "tokens_per_second_client": 32.525,
+      "tokens_per_second_generation": 44.224,
+      "tokens_per_second_openrouter_latency": 407.788,
+      "native_tokens_per_second_generation": 33.514,
+      "native_tokens_per_second_openrouter_latency": 309.027,
+      "output_char_count": 4314,
+      "output_word_count": 520
+    },
+    "timing": {
+      "client_total_s": 26.841,
+      "openrouter_latency_s": 2.825,
+      "generation_time_s": 26.049,
+      "moderation_latency_s": null,
+      "generation_stats_lookup_s": 17.934
     },
     "metadata": {
-      "started_at": "2026-05-29T07:20:06.958481+00:00",
-      "ended_at": "2026-05-29T07:20:09.745593+00:00"
+      "started_at": "2026-06-06T14:19:43.408022+00:00",
+      "ended_at": "2026-06-06T14:20:28.183236+00:00",
+      "response_id": "gen-1780755583-HelVcLGRP4l0OfDUncZi",
+      "returned_model": "meta-llama/llama-4-scout-17b-16e-instruct",
+      "finish_reason": "stop",
+      "native_finish_reason": "stop",
+      "generation_stats_error": null
     }
   },
   {
@@ -174,7 +424,7 @@
     "model_id": "meta-llama/llama-4-scout",
     "system_prompt": "You are a senior Big Data engineer and Spark expert. Answer accurately, practically, and follow the user's instructions. For code tasks, provide correct and production-aware code.After reasoning, always provide the final answer.Never leave assistant content empty.",
     "prompt": "How do you optimize Spark jobs for better performance? Mention at least 5 techniques.\nPrioritize the techniques by bottleneck type and explain why each one helps.",
-    "model_output": "Optimizing Spark Jobs for Better Performance\n=============================================\n\nSpark job optimization is crucial for achieving better performance, especially when dealing with large-scale data processing. Here are 5 techniques to optimize Spark jobs, prioritized by bottleneck type:\n\n### 1. **Data Serialization and Deserialization** (CPU-bound bottleneck)\n\n*   **Technique:** Use efficient serialization libraries like Kryo or Apache Arrow.\n*   **Why it helps:** Serialization and deserialization are expensive operations in Spark. Using efficient libraries reduces the CPU overhead, resulting in faster data processing.\n\nExample (Scala):\n```scala\nimport org.apache.spark.serializer.KryoSerializer\n\nval spark = SparkSession.builder()\n  .appName(\"Optimization Example\")\n  .config(\"spark.serializer\", classOf[KryoSerializer].getName)\n  .getOrCreate()\n```\n\n### 2. **Data Skew and Imbalanced Partitions** (Data-bound bottleneck)\n\n*   **Technique:** Use techniques like:\n    *   **Salting**: Add a random salt to the key to distribute data evenly across partitions.\n    *   **Repartitioning**: Adjust the number of partitions to balance data distribution.\n*   **Why it helps:** Data skew and imbalanced partitions can lead to significant performance degradation. Salting and repartitioning help distribute data evenly, reducing the load on individual executors.\n\nExample (Scala):\n```scala\nimport org.apache.spark.sql.SparkSession\n\nval spark = SparkSession.builder().appName(\"Optimization Example\").getOrCreate()\n\nval data = spark.sparkContext.parallelize(Seq(\"a\", \"b\", \"c\"), 10)\n// Repartition to balance data distribution\nval repartitionedData = data.repartition(20)\n```\n\n### 3. **Memory Optimization** (Memory-bound bottleneck)\n\n*   **Technique:** Use:\n    *   **Cache**: Cache frequently accessed data in memory to reduce computation time.\n    *   **Unpersist**: Remove cached data to free up memory when no longer needed.\n*   **Why it helps:** Memory optimization helps prevent out-of-memory errors and reduces computation time by minimizing disk spills.\n\nExample (Scala):\n```scala\nimport org.apache.spark.sql.SparkSession\n\nval spark = SparkSession.builder().appName(\"Optimization Example\").getOrCreate()\n\nval data = spark.sparkContext.parallelize(Seq(\"a\", \"b\", \"c\"))\n// Cache data in memory\ndata.cache()\n// Use data...\ndata.count()\n// Unpersist data to free up memory\ndata.unpersist()\n```\n\n### 4. **Shuffle Optimization** (Network-bound bottleneck)\n\n*   **Technique:** Use:\n    *   **Combiner**: Use a combiner to reduce the amount of data shuffled between executors.\n    *   **Sort-based shuffle**: Use sort-based shuffle to reduce the number of shuffle writes.\n*   **Why it helps:** Shuffle optimization reduces the network overhead, resulting in faster data processing.\n\nExample (Scala):\n```scala\nimport org.apache.spark.sql.SparkSession\n\nval spark = SparkSession.builder().appName(\"Optimization Example\").getOrCreate()\n\nval data = spark.sparkContext.parallelize(Seq((\"a\", 1), (\"b\", 2), (\"c\", 3)))\n// Use a combiner to reduce shuffle data\ndata.reduceByKey((a, b) => a + b)\n```\n\n### 5. **Executor Configuration and Resource Allocation** (Resource-bound bottleneck)\n\n*   **Technique:** Use:\n    *   **Proper executor configuration**: Configure executors with sufficient resources (CPU, memory) to handle the workload.\n    *   **Dynamic resource allocation**: Enable dynamic resource allocation to adjust resources based on workload demands.\n*   **Why it helps:** Proper executor configuration and resource allocation ensure that Spark jobs have sufficient resources to process data efficiently.\n\nExample (Scala):\n```scala\nimport org.apache.spark.sql.SparkSession\n\nval spark = SparkSession.builder()\n  .appName(\"Optimization Example\")\n  .config(\"spark.executor.cores\", \"4\")\n  .config(\"spark.executor.memory\", \"4g\")\n  .config(\"spark.dynamicAllocation.enabled\", \"true\")\n  .getOrCreate()\n```\n\nBy applying these techniques, you can significantly improve the performance of your Spark jobs.\n\n**Final Answer:** To optimize Spark jobs, focus on the bottleneck type and apply the corresponding techniques:\n\n*   CPU-bound: Efficient serialization (Kryo, Apache Arrow)\n*   Data-bound: Data skew mitigation (salting, repartitioning)\n*   Memory-bound: Memory optimization (cache, unpersist)\n*   Network-bound: Shuffle optimization (combiner, sort-based shuffle)\n*   Resource-bound: Executor configuration and resource allocation (proper configuration, dynamic resource allocation)",
+    "model_output": "Optimizing Spark Jobs for Better Performance\n=============================================\n\nSpark job optimization is crucial for achieving better performance, especially when dealing with large-scale data processing. Here are 5 techniques to optimize Spark jobs, prioritized by bottleneck type:\n\n### 1. **Data Serialization and Deserialization** (CPU-bound bottleneck)\n\n*   Use Kryo serialization: Spark's default serialization mechanism is Java serialization, which can be slow and inefficient. Kryo serialization is faster and more compact.\n*   Use `org.apache.spark.serializer.KryoSerializer` and register custom classes to improve performance.\n\nExample:\n```scala\n// Register custom classes for Kryo serialization\nval kryo = new KryoSerializer(new SparkConf())\nkryo.register(classOf[CustomClass])\n\n// Set Kryo serializer for SparkConf\nval conf = new SparkConf().set(\"spark.serializer\", \"org.apache.spark.serializer.KryoSerializer\")\n```\n\n### 2. **Data Shuffle and Spill** (I/O-bound bottleneck)\n\n*   Optimize data partitioning: Use `repartition()` or `coalesce()` to reduce the number of partitions and minimize data shuffle.\n*   Use `cache()` or `persist()` to store frequently accessed data in memory, reducing I/O operations.\n\nExample:\n```scala\n// Optimize data partitioning\nval data = sc.textFile(\"data.txt\").repartition(10)\n\n// Cache data in memory\nval cachedData = data.cache()\n```\n\n### 3. **Memory Management** (Memory-bound bottleneck)\n\n*   Optimize memory allocation: Increase `spark.executor.memory` and `spark.driver.memory` to allocate more memory for Spark jobs.\n*   Use `spark.memory.fraction` to control the proportion of memory used for execution and storage.\n\nExample:\n```scala\n// Increase executor memory\nval conf = new SparkConf().set(\"spark.executor.memory\", \"8g\")\n\n// Set memory fraction\nval conf = new SparkConf().set(\"spark.memory.fraction\", \"0.7\")\n```\n\n### 4. **Data Skew** (Data-bound bottleneck)\n\n*   Use `sampleBy()` or ` stratified sampling` to handle data skew: Split data into smaller chunks and process them separately.\n*   Use `salting` technique: Add a random salt to the key to distribute data evenly across partitions.\n\nExample:\n```scala\n// Handle data skew using sampleBy\nval data = sc.textFile(\"data.txt\").sampleBy(x => x)\n\n// Use salting technique\nval saltedData = data.map(x => (x._1 + Random.nextInt, x._2))\n```\n\n### 5. **Broadcast Optimization** (Network-bound bottleneck)\n\n*   Use `broadcast()` to optimize data transfer: Broadcast small data to all executors to reduce network overhead.\n*   Use `spark.broadcast.blockSize` to control the block size for broadcasting.\n\nExample:\n```scala\n// Broadcast data to all executors\nval broadcastData = sc.broadcast(data)\n\n// Set broadcast block size\nval conf = new SparkConf().set(\"spark.broadcast.blockSize\", \"1024k\")\n```\n\nBy applying these techniques, you can optimize Spark jobs for better performance and handle various types of bottlenecks.\n\n**Final Answer:** To optimize Spark jobs, prioritize techniques based on bottleneck types:\n\n1.  **CPU-bound**: Use Kryo serialization.\n2.  **I/O-bound**: Optimize data partitioning and use caching.\n3.  **Memory-bound**: Optimize memory allocation and use memory fraction.\n4.  **Data-bound**: Handle data skew using sampling or salting.\n5.  **Network-bound**: Use broadcasting to optimize data transfer.\n\nThese techniques will help improve Spark job performance and efficiency.",
     "error": null,
     "status": "success",
     "generation_params": {
@@ -183,18 +433,68 @@
     },
     "usage": {
       "prompt_tokens": 93,
-      "completion_tokens": 958,
-      "total_tokens": 1051
+      "completion_tokens": 744,
+      "total_tokens": 837,
+      "cost": 0.00023064
+    },
+    "generation_stats": {
+      "id": "gen-1780755629-1mVMZHfpljIDsquyN7QI",
+      "api_type": "completions",
+      "model": "meta-llama/llama-4-scout-17b-16e-instruct",
+      "provider_name": "DeepInfra",
+      "router": null,
+      "service_tier": null,
+      "finish_reason": "stop",
+      "native_finish_reason": "stop",
+      "created_at": "2026-06-06T14:20:29.136Z",
+      "latency_ms": 404,
+      "generation_time_ms": 15084,
+      "moderation_latency_ms": null,
+      "latency_s": 0.404,
+      "generation_time_s": 15.084,
+      "moderation_latency_s": null,
+      "tokens_prompt": 110,
+      "tokens_completion": 917,
+      "tokens_total": 1027,
+      "native_tokens_prompt": 93,
+      "native_tokens_completion": 744,
+      "native_tokens_reasoning": 0,
+      "native_tokens_cached": 0,
+      "total_cost": 0.00023064,
+      "usage": 0.00023064,
+      "upstream_inference_cost": 0,
+      "is_byok": false,
+      "streamed": true,
+      "num_fetches": null,
+      "request_id": "req-1780755629-rJWVmHBPcRCmqAdpISaE",
+      "upstream_id": "chatcmpl-RM5qObLFzgZf67LpRWv4TMIo"
     },
     "metrics": {
-      "latency_s": 4.559,
-      "tokens_per_second": 210.134,
-      "output_char_count": 4482,
-      "output_word_count": 512
+      "latency_s": 15.442,
+      "tokens_per_second": 48.18,
+      "tokens_per_second_client": 48.18,
+      "tokens_per_second_generation": 60.793,
+      "tokens_per_second_openrouter_latency": 2269.802,
+      "native_tokens_per_second_generation": 49.324,
+      "native_tokens_per_second_openrouter_latency": 1841.584,
+      "output_char_count": 3408,
+      "output_word_count": 432
+    },
+    "timing": {
+      "client_total_s": 15.442,
+      "openrouter_latency_s": 0.404,
+      "generation_time_s": 15.084,
+      "moderation_latency_s": null,
+      "generation_stats_lookup_s": 19.858
     },
     "metadata": {
-      "started_at": "2026-05-29T07:20:10.749454+00:00",
-      "ended_at": "2026-05-29T07:20:15.307975+00:00"
+      "started_at": "2026-06-06T14:20:29.185270+00:00",
+      "ended_at": "2026-06-06T14:21:04.484835+00:00",
+      "response_id": "gen-1780755629-1mVMZHfpljIDsquyN7QI",
+      "returned_model": "meta-llama/llama-4-scout-17b-16e-instruct",
+      "finish_reason": "stop",
+      "native_finish_reason": "stop",
+      "generation_stats_error": null
     }
   },
   {
@@ -207,7 +507,7 @@
     "model_id": "meta-llama/llama-4-scout",
     "system_prompt": "You are a senior Big Data engineer and Spark expert. Answer accurately, practically, and follow the user's instructions. For code tasks, provide correct and production-aware code.After reasoning, always provide the final answer.Never leave assistant content empty.",
     "prompt": "Write PySpark code for this task.\n\nInput: a CSV file at /data/events.csv with columns:\nuser_id, event_time, event_type, country, revenue\n\nRequirements:\n1. Read the CSV with header and infer schema.\n2. Drop rows where user_id or event_time is null.\n3. Convert event_time to a timestamp.\n4. Compute daily active users by country.\n5. Compute total revenue by country and day.\n6. Save the result as Parquet partitioned by event_date.\n\nProvide only the code plus brief comments.",
-    "model_output": "```python\nfrom pyspark.sql import SparkSession\nfrom pyspark.sql.functions import col, to_timestamp, date_format\n\n# Create SparkSession\nspark = SparkSession.builder.appName(\"Event Analysis\").getOrCreate()\n\n# Read CSV with header and infer schema\ndf = spark.read.csv(\"/data/events.csv\", header=True, inferSchema=True)\n\n# Drop rows where user_id or event_time is null\ndf = df.dropna(subset=[\"user_id\", \"event_time\"])\n\n# Convert event_time to a timestamp\ndf = df.withColumn(\"event_time\", to_timestamp(\"event_time\"))\n\n# Compute event date\ndf = df.withColumn(\"event_date\", date_format(\"event_time\", \"yyyy-MM-dd\"))\n\n# Compute daily active users by country\nactive_users = df.groupBy(\"country\", \"event_date\").count().withColumnRenamed(\"count\", \"active_users\")\n\n# Compute total revenue by country and day\nrevenue_by_country_day = df.groupBy(\"country\", \"event_date\").agg({\"revenue\": \"sum\"}).withColumnRenamed(\"sum(revenue)\", \"total_revenue\")\n\n# Combine the two aggregations\nresult = df.groupBy(\"country\", \"event_date\").agg({\"user_id\": \"count\", \"revenue\": \"sum\"}).withColumnRenamed(\"count(user_id)\", \"active_users\").withColumnRenamed(\"sum(revenue)\", \"total_revenue\")\n\n# Save the result as Parquet partitioned by event_date\nresult.write.partitionBy(\"event_date\").parquet(\"/data/event_analysis\")\n\n# Stop SparkSession\nspark.stop()\n``` \n\nHowever, here is a cleaner code \n\n```python\nfrom pyspark.sql import SparkSession\nfrom pyspark.sql.functions import col, to_timestamp, date_format, count, sum as _sum\n\nspark = SparkSession.builder.appName(\"Event Analysis\").getOrCreate()\n\n# Read CSV with header and infer schema\ndf = spark.read.csv(\"/data/events.csv\", header=True, inferSchema=True)\n\n# Drop rows where user_id or event_time is null\ndf = df.dropna(subset=[\"user_id\", \"event_time\"])\n\n# Convert event_time to a timestamp and compute event date\ndf = df.withColumn(\"event_time\", to_timestamp(\"event_time\")) \\\n       .withColumn(\"event_date\", date_format(\"event_time\", \"yyyy-MM-dd\"))\n\n# Compute daily active users by country and total revenue by country and day\nresult = df.groupBy(\"country\", \"event_date\").agg(\n    count(\"user_id\").alias(\"active_users\"),\n    _sum(\"revenue\").alias(\"total_revenue\")\n)\n\n# Save the result as Parquet partitioned by event_date\nresult.write.partitionBy(\"event_date\").parquet(\"/data/event_analysis\")\n\n# Stop SparkSession\nspark.stop()\n``` \n\nFinal Answer \nThe PySpark code has been provided that reads a CSV file, cleans and processes the data, computes daily active users and total revenue by country, and saves the result as Parquet.",
+    "model_output": "```python\nfrom pyspark.sql import SparkSession\nfrom pyspark.sql.functions import col, to_timestamp, date_format\n\n# Create SparkSession\nspark = SparkSession.builder.appName(\"Event Analysis\").getOrCreate()\n\n# Read CSV with header and infer schema\ndf = spark.read.option(\"header\", \"true\").option(\"inferSchema\", \"true\").csv(\"/data/events.csv\")\n\n# Drop rows where user_id or event_time is null\ndf = df.dropna(subset=[\"user_id\", \"event_time\"])\n\n# Convert event_time to a timestamp\ndf = df.withColumn(\"event_time\", to_timestamp(\"event_time\"))\n\n# Extract event date\ndf = df.withColumn(\"event_date\", date_format(col(\"event_time\"), \"yyyy-MM-dd\"))\n\n# Compute daily active users by country\nactive_users = df.groupBy(\"country\", \"event_date\").count().withColumnRenamed(\"count\", \"active_users\")\n\n# Compute total revenue by country and day\nrevenue_by_country_day = df.groupBy(\"country\", \"event_date\").sum(\"revenue\").withColumnRenamed(\"sum(revenue)\", \"total_revenue\")\n\n# Combine results\nresult = df.groupBy(\"country\", \"event_date\").agg(\n    {\"user_id\": \"count\", \"revenue\": \"sum\"}\n).withColumnRenamed(\"count(user_id)\", \"active_users\").withColumnRenamed(\"sum(revenue)\", \"total_revenue\")\n\n# Save result as Parquet partitioned by event_date\nresult.write.partitionBy(\"event_date\").parquet(\"/output/events\")\n```\n\n**Final Answer**\n\nThe code provided above performs the required tasks:\n\n1. Reads the CSV file with header and infers the schema.\n2. Drops rows where `user_id` or `event_time` is null.\n3. Converts `event_time` to a timestamp and extracts the event date.\n4. Computes daily active users by country.\n5. Computes total revenue by country and day.\n6. Saves the result as Parquet partitioned by `event_date`. \n\nHowever, a cleaner and optimized version would be \n\n```python\nfrom pyspark.sql import SparkSession\nfrom pyspark.sql.functions import col, to_timestamp, date_format, count_distinct, sum as _sum\n\nspark = SparkSession.builder.appName(\"Event Analysis\").getOrCreate()\n\ndf = spark.read.option(\"header\", \"true\").option(\"inferSchema\", \"true\").csv(\"/data/events.csv\") \\\n    .dropna(subset=[\"user_id\", \"event_time\"]) \\\n    .withColumn(\"event_time\", to_timestamp(\"event_time\")) \\\n    .withColumn(\"event_date\", date_format(col(\"event_time\"), \"yyyy-MM-dd\"))\n\nactive_users = df.groupBy(\"country\", \"event_date\").agg(count_distinct(\"user_id\").alias(\"active_users\"))\nrevenue_by_country_day = df.groupBy(\"country\", \"event_date\").agg(_sum(\"revenue\").alias(\"total_revenue\"))\n\nresult = active_users.join(revenue_by_country_day, [\"country\", \"event_date\"])\n\nresult.write.partitionBy(\"event_date\").parquet(\"/output/events\")\n```",
     "error": null,
     "status": "success",
     "generation_params": {
@@ -216,18 +516,68 @@
     },
     "usage": {
       "prompt_tokens": 171,
-      "completion_tokens": 614,
-      "total_tokens": 785
+      "completion_tokens": 638,
+      "total_tokens": 809,
+      "cost": 0.00020508
+    },
+    "generation_stats": {
+      "id": "gen-1780755665-wVJV9THGFKS5cjFGVSnM",
+      "api_type": "completions",
+      "model": "meta-llama/llama-4-scout-17b-16e-instruct",
+      "provider_name": "DeepInfra",
+      "router": null,
+      "service_tier": null,
+      "finish_reason": "stop",
+      "native_finish_reason": "stop",
+      "created_at": "2026-06-06T14:21:05.454Z",
+      "latency_ms": 534,
+      "generation_time_ms": 19338,
+      "moderation_latency_ms": null,
+      "latency_s": 0.534,
+      "generation_time_s": 19.338,
+      "moderation_latency_s": null,
+      "tokens_prompt": 196,
+      "tokens_completion": 698,
+      "tokens_total": 894,
+      "native_tokens_prompt": 171,
+      "native_tokens_completion": 638,
+      "native_tokens_reasoning": 0,
+      "native_tokens_cached": 0,
+      "total_cost": 0.00020508,
+      "usage": 0.00020508,
+      "upstream_inference_cost": 0,
+      "is_byok": false,
+      "streamed": true,
+      "num_fetches": null,
+      "request_id": "req-1780755665-0LAtibAJSIqcOWzCo0mn",
+      "upstream_id": "chatcmpl-Ruhc5Nimflnw3uLtMy6ZLGez"
     },
     "metrics": {
-      "latency_s": 10.112,
-      "tokens_per_second": 60.72,
-      "output_char_count": 2542,
-      "output_word_count": 256
+      "latency_s": 19.655,
+      "tokens_per_second": 32.46,
+      "tokens_per_second_client": 32.46,
+      "tokens_per_second_generation": 36.095,
+      "tokens_per_second_openrouter_latency": 1307.116,
+      "native_tokens_per_second_generation": 32.992,
+      "native_tokens_per_second_openrouter_latency": 1194.757,
+      "output_char_count": 2597,
+      "output_word_count": 234
+    },
+    "timing": {
+      "client_total_s": 19.655,
+      "openrouter_latency_s": 0.534,
+      "generation_time_s": 19.338,
+      "moderation_latency_s": null,
+      "generation_stats_lookup_s": 10.387
     },
     "metadata": {
-      "started_at": "2026-05-29T07:20:16.314033+00:00",
-      "ended_at": "2026-05-29T07:20:26.426240+00:00"
+      "started_at": "2026-06-06T14:21:05.486264+00:00",
+      "ended_at": "2026-06-06T14:21:35.528758+00:00",
+      "response_id": "gen-1780755665-wVJV9THGFKS5cjFGVSnM",
+      "returned_model": "meta-llama/llama-4-scout-17b-16e-instruct",
+      "finish_reason": "stop",
+      "native_finish_reason": "stop",
+      "generation_stats_error": null
     }
   },
   {
@@ -240,7 +590,7 @@
     "model_id": "meta-llama/llama-4-scout",
     "system_prompt": "You are a senior Big Data engineer and Spark expert. Answer accurately, practically, and follow the user's instructions. For code tasks, provide correct and production-aware code.After reasoning, always provide the final answer.Never leave assistant content empty.",
     "prompt": "Given a Spark SQL table events(user_id, event_time, event_type, session_id, revenue), write Spark SQL queries to calculate:\n\n1. Daily active users.\n2. Top 5 event types by frequency.\n3. Average revenue per user by day.\n4. Sessions with more than 50 events.\n\nUse clear SQL and briefly explain each query.",
-    "model_output": "Here are the Spark SQL queries to solve the given problems:\n\n### 1. Daily Active Users\n\nTo calculate daily active users, we can use the `COUNT(DISTINCT user_id)` function in combination with the `GROUP BY` clause to group by date.\n\n```sql\nSELECT \n    DATE(event_time) AS date,\n    COUNT(DISTINCT user_id) AS active_users\nFROM \n    events\nGROUP BY \n    DATE(event_time)\nORDER BY \n    date;\n```\n\nThis query works by selecting the distinct `user_id`s for each day and counting them.\n\n### 2. Top 5 Event Types by Frequency\n\nTo find the top 5 event types by frequency, we can use the `COUNT` function in combination with the `GROUP BY` and `ORDER BY` clauses, along with `LIMIT` to restrict the output to the top 5.\n\n```sql\nSELECT \n    event_type,\n    COUNT(*) AS frequency\nFROM \n    events\nGROUP BY \n    event_type\nORDER BY \n    frequency DESC\nLIMIT 5;\n```\n\nThis query counts the occurrences of each `event_type`, sorts them in descending order by frequency, and returns the top 5.\n\n### 3. Average Revenue per User by Day\n\nTo calculate the average revenue per user by day, we can use the `AVG` function in combination with `GROUP BY` to group by date.\n\n```sql\nSELECT \n    DATE(event_time) AS date,\n    AVG(revenue) AS avg_revenue\nFROM \n    events\nGROUP BY \n    DATE(event_time)\nORDER BY \n    date;\n```\n\nHowever, if you want the average revenue per user (not per event), you should first calculate the daily revenue for each user and then average it.\n\n```sql\nSELECT \n    DATE(event_time) AS date,\n    AVG(daily_user_revenue) AS avg_revenue_per_user\nFROM (\n    SELECT \n        user_id,\n        DATE(event_time) AS date,\n        SUM(revenue) AS daily_user_revenue\n    FROM \n        events\n    GROUP BY \n        user_id, DATE(event_time)\n) daily_revenues\nGROUP BY \n    date\nORDER BY \n    date;\n```\n\n### 4. Sessions with More Than 50 Events\n\nTo find sessions with more than 50 events, we can use the `COUNT` function in combination with the `GROUP BY` and `HAVING` clauses.\n\n```sql\nSELECT \n    session_id,\n    COUNT(*) AS event_count\nFROM \n    events\nGROUP BY \n    session_id\nHAVING \n    COUNT(*) > 50;\n```\n\nThis query counts the events for each `session_id` and returns only those sessions with more than 50 events.\n\n### Final Answer \n\nThe above Spark SQL queries solve the given problems:\n\n1. Daily active users: uses `COUNT(DISTINCT user_id)` and `GROUP BY date`.\n2. Top 5 event types by frequency: uses `COUNT`, `GROUP BY`, `ORDER BY`, and `LIMIT`.\n3. Average revenue per user by day: uses a subquery to calculate daily user revenue and then averages it.\n4. Sessions with more than 50 events: uses `COUNT`, `GROUP BY`, and `HAVING`.",
+    "model_output": "Here are the Spark SQL queries to solve the given problems:\n\n### 1. Daily Active Users\n\nTo calculate daily active users, we can use the `COUNT(DISTINCT)` function in combination with `GROUP BY` to group by date.\n\n```sql\nSELECT \n    DATE(event_time) AS date,\n    COUNT(DISTINCT user_id) AS active_users\nFROM \n    events\nGROUP BY \n    DATE(event_time)\nORDER BY \n    date;\n```\n\nThis query works by grouping the events by date (extracted from `event_time` using `DATE()` function), and then counting the distinct `user_id`s for each group.\n\n### 2. Top 5 Event Types by Frequency\n\nTo find the top 5 event types by frequency, we can use `COUNT()` and `ORDER BY` with `LIMIT`.\n\n```sql\nSELECT \n    event_type,\n    COUNT(*) AS frequency\nFROM \n    events\nGROUP BY \n    event_type\nORDER BY \n    frequency DESC\nLIMIT 5;\n```\n\nThis query counts the occurrences of each `event_type`, orders them in descending order by frequency, and returns the top 5.\n\n### 3. Average Revenue per User by Day\n\nTo calculate the average revenue per user by day, we use `AVG()` and `GROUP BY`.\n\n```sql\nSELECT \n    DATE(event_time) AS date,\n    AVG(revenue) AS avg_revenue_per_user\nFROM \n    events\nGROUP BY \n    DATE(event_time)\nORDER BY \n    date;\n```\n\nHowever, this query calculates the average revenue per event by day. If you want the average revenue per user, you should first aggregate revenue per user per day:\n\n```sql\nSELECT \n    DATE(event_time) AS date,\n    AVG(daily_revenue) AS avg_revenue_per_user\nFROM \n    (\n    SELECT \n        user_id,\n        DATE(event_time) AS date,\n        SUM(revenue) AS daily_revenue\n    FROM \n        events\n    GROUP BY \n        user_id, DATE(event_time)\n    ) daily_revenues\nGROUP BY \n    date\nORDER BY \n    date;\n```\n\n### 4. Sessions with More Than 50 Events\n\nTo find sessions with more than 50 events, we can use `COUNT()` and `HAVING`.\n\n```sql\nSELECT \n    session_id\nFROM \n    events\nGROUP BY \n    session_id\nHAVING \n    COUNT(*) > 50;\n```\n\nThis query groups the events by `session_id`, counts the events in each group, and returns the `session_id`s with more than 50 events.\n\n**Final Answer:** \nThe above Spark SQL queries solve the given problems:\n1. Daily active users.\n2. Top 5 event types by frequency.\n3. Average revenue per user by day.\n4. Sessions with more than 50 events.",
     "error": null,
     "status": "success",
     "generation_params": {
@@ -249,18 +599,68 @@
     },
     "usage": {
       "prompt_tokens": 133,
-      "completion_tokens": 663,
-      "total_tokens": 796
+      "completion_tokens": 581,
+      "total_tokens": 714,
+      "cost": 0.00018494
+    },
+    "generation_stats": {
+      "id": "gen-1780755696-BKM6nf4OpRPZoUTK8PuE",
+      "api_type": "completions",
+      "model": "meta-llama/llama-4-scout-17b-16e-instruct",
+      "provider_name": "DeepInfra",
+      "router": null,
+      "service_tier": null,
+      "finish_reason": "stop",
+      "native_finish_reason": "stop",
+      "created_at": "2026-06-06T14:21:36.517Z",
+      "latency_ms": 387,
+      "generation_time_ms": 8973,
+      "moderation_latency_ms": null,
+      "latency_s": 0.387,
+      "generation_time_s": 8.973,
+      "moderation_latency_s": null,
+      "tokens_prompt": 149,
+      "tokens_completion": 649,
+      "tokens_total": 798,
+      "native_tokens_prompt": 133,
+      "native_tokens_completion": 581,
+      "native_tokens_reasoning": 0,
+      "native_tokens_cached": 0,
+      "total_cost": 0.00018494,
+      "usage": 0.00018494,
+      "upstream_inference_cost": 0,
+      "is_byok": false,
+      "streamed": true,
+      "num_fetches": null,
+      "request_id": "req-1780755696-uhfTGpGqswCFylytpxLP",
+      "upstream_id": "chatcmpl-RaUaZy1krVUs3W048Ro1lcJr"
     },
     "metrics": {
-      "latency_s": 10.896,
-      "tokens_per_second": 60.848,
-      "output_char_count": 2627,
-      "output_word_count": 396
+      "latency_s": 9.607,
+      "tokens_per_second": 60.477,
+      "tokens_per_second_client": 60.477,
+      "tokens_per_second_generation": 72.328,
+      "tokens_per_second_openrouter_latency": 1677.003,
+      "native_tokens_per_second_generation": 64.75,
+      "native_tokens_per_second_openrouter_latency": 1501.292,
+      "output_char_count": 2293,
+      "output_word_count": 336
+    },
+    "timing": {
+      "client_total_s": 9.607,
+      "openrouter_latency_s": 0.387,
+      "generation_time_s": 8.973,
+      "moderation_latency_s": null,
+      "generation_stats_lookup_s": 12.811
     },
     "metadata": {
-      "started_at": "2026-05-29T07:20:27.427959+00:00",
-      "ended_at": "2026-05-29T07:20:38.324433+00:00"
+      "started_at": "2026-06-06T14:21:36.530743+00:00",
+      "ended_at": "2026-06-06T14:21:58.948795+00:00",
+      "response_id": "gen-1780755696-BKM6nf4OpRPZoUTK8PuE",
+      "returned_model": "meta-llama/llama-4-scout-17b-16e-instruct",
+      "finish_reason": "stop",
+      "native_finish_reason": "stop",
+      "generation_stats_error": null
     }
   },
   {
@@ -273,7 +673,7 @@
     "model_id": "meta-llama/llama-4-scout",
     "system_prompt": "You are a senior Big Data engineer and Spark expert. Answer accurately, practically, and follow the user's instructions. For code tasks, provide correct and production-aware code.After reasoning, always provide the final answer.Never leave assistant content empty.",
     "prompt": "Write a production-style PySpark batch pipeline.\n\nInput 1: /data/events_parquet with columns:\nevent_id, user_id, event_time, ingestion_time, event_type, session_id, revenue\n\nInput 2: /data/users_parquet with columns:\nuser_id, country, signup_date\n\nRequirements:\n1. Read both datasets from Parquet.\n2. Deduplicate events by event_id, keeping the row with the latest ingestion_time.\n3. Convert event_time to timestamp and create event_date.\n4. Join events with users by user_id.\n5. For each country and event_date, compute:\n   - daily active users\n   - total revenue\n   - number of sessions\n   - top event_type by frequency\n6. Save result as Delta or Parquet partitioned by event_date.\n7. Include comments about performance considerations.\n\nProvide code and short explanation.",
-    "model_output": "**Production-Style PySpark Batch Pipeline**\n=============================================\n\n### Code\n```python\nfrom pyspark.sql import SparkSession\nfrom pyspark.sql.functions import col, to_timestamp, max, sum, count, row_number, udf, from_unixtime\nfrom pyspark.sql import Window\n\n# Create SparkSession\nspark = SparkSession.builder.appName(\"Event Analysis Pipeline\").getOrCreate()\n\n# Read input datasets from Parquet\nevents_df = spark.read.parquet(\"/data/events_parquet\")\nusers_df = spark.read.parquet(\"/data/users_parquet\")\n\n# Deduplicate events by event_id, keeping the row with the latest ingestion_time\ndeduplicated_events_df = events_df.withColumn(\"ingestion_time\", to_timestamp(col(\"ingestion_time\"))) \\\n                                   .withColumn(\"event_time\", to_timestamp(col(\"event_time\"))) \\\n                                   .withColumn(\"event_date\", from_unixtime(col(\"event_time\"), \"yyyy-MM-dd\")) \\\n                                   .withColumn(\"rn\", row_number().over(Window.partitionBy(col(\"event_id\")).orderBy(col(\"ingestion_time\").desc()))) \\\n                                   .filter(col(\"rn\") == 1) \\\n                                   .drop(col(\"rn\"))\n\n# Join events with users by user_id\njoined_df = deduplicated_events_df.join(users_df, on=\"user_id\", how=\"left\")\n\n# Aggregate metrics for each country and event_date\nmetrics_df = joined_df.groupBy(col(\"country\"), col(\"event_date\")) \\\n                       .agg(\n                           count(\"user_id\").alias(\"daily_active_users\"),\n                           sum(\"revenue\").alias(\"total_revenue\"),\n                           count(\"session_id\").alias(\"num_sessions\"),\n                           count(\"*\").alias(\"total_events\")\n                       )\n\n# Get top event_type by frequency for each country and event_date\ntop_event_types_df = joined_df.groupBy(col(\"country\"), col(\"event_date\"), col(\"event_type\")) \\\n                               .agg(count(\"*\").alias(\"event_count\")) \\\n                               .withColumn(\"rank\", row_number().over(Window.partitionBy(col(\"country\"), col(\"event_date\")).orderBy(col(\"event_count\").desc()))) \\\n                               .filter(col(\"rank\") == 1) \\\n                               .drop(col(\"rank\")) \\\n                               .withColumnRenamed(\"event_type\", \"top_event_type\") \\\n                               .withColumnRenamed(\"event_count\", \"top_event_type_count\")\n\n# Join metrics with top event types\nresult_df = metrics_df.join(top_event_types_df, on=[\"country\", \"event_date\"], how=\"left\")\n\n# Save result as Parquet partitioned by event_date\nresult_df.write.partitionBy(\"event_date\").parquet(\"/data/event_analysis\", mode=\"overwrite\")\n\n# Stop SparkSession\nspark.stop()\n```\n\n### Explanation\n\nThis PySpark batch pipeline performs the following tasks:\n\n1. Reads input datasets from Parquet.\n2. Deduplicates events by `event_id`, keeping the row with the latest `ingestion_time`.\n3. Converts `event_time` to timestamp and creates `event_date`.\n4. Joins events with users by `user_id`.\n5. Computes daily active users, total revenue, number of sessions, and top `event_type` by frequency for each country and `event_date`.\n6. Saves the result as Parquet partitioned by `event_date`.\n\n**Performance Considerations:**\n\n* Using `row_number()` with a Window function for deduplication and ranking event types by frequency.\n* Using `groupBy()` and `agg()` for efficient aggregation.\n* Using `join()` with `how=\"left\"` to handle missing user data.\n* Partitioning the result by `event_date` for efficient querying.\n* Using `mode=\"overwrite\"` to ensure data consistency.\n\n**Note:** Consider using Delta Lake instead of Parquet for better data management and ACID compliance. Additionally, optimize the pipeline by adjusting Spark configurations, such as increasing the number of executors and executor cores, to improve performance.",
+    "model_output": "**Production-Style PySpark Batch Pipeline**\n=============================================\n\n### Pipeline Overview\n\nThis pipeline processes event and user data to compute daily active users, total revenue, number of sessions, and top event type by frequency for each country and event date.\n\n### Code\n```python\nfrom pyspark.sql import SparkSession\nfrom pyspark.sql.functions import col, to_timestamp, row_number, desc, sum as _sum, count, when\nfrom pyspark.sql import Window\n\n# Create SparkSession\nspark = SparkSession.builder.appName(\"Event Processing Pipeline\").getOrCreate()\n\n# Read input datasets\nevents = spark.read.parquet(\"/data/events_parquet\")\nusers = spark.read.parquet(\"/data/users_parquet\")\n\n# Deduplicate events by event_id, keeping the row with the latest ingestion_time\nevents_deduplicated = events.withColumn(\"ingestion_time\", to_timestamp(\"ingestion_time\")) \\\n                             .withColumn(\"event_time\", to_timestamp(\"event_time\")) \\\n                             .withColumn(\"event_date\", col(\"event_time\").cast(\"date\")) \\\n                             .row_number().over(Window.partitionBy(\"event_id\").orderBy(desc(\"ingestion_time\"))) == 1\n\nevents_deduplicated = events_deduplicated.select(\"*\").filter(col(\"row_number\") == 1).drop(\"row_number\")\n\n# Join events with users by user_id\njoined_data = events_deduplicated.join(users, on=\"user_id\", how=\"inner\")\n\n# Compute aggregations\naggregated_data = joined_data.groupBy(\"country\", \"event_date\") \\\n                              .agg(\n                                  count(\"user_id\").alias(\"daily_active_users\"),\n                                  _sum(\"revenue\").alias(\"total_revenue\"),\n                                  count(\"session_id\").alias(\"num_sessions\"),\n                                  count(\"*\").alias(\"total_events\")\n                              )\n\n# Get top event_type by frequency\ntop_event_types = joined_data.groupBy(\"country\", \"event_date\", \"event_type\") \\\n                              .agg(count(\"*\").alias(\"event_type_count\")) \\\n                              .withColumn(\"rank\", row_number().over(Window.partitionBy(\"country\", \"event_date\").orderBy(desc(\"event_type_count\")))) \\\n                              .filter(col(\"rank\") == 1) \\\n                              .select(\"country\", \"event_date\", \"event_type\")\n\n# Merge aggregations with top event types\nfinal_data = aggregated_data.join(top_event_types, on=[\"country\", \"event_date\"], how=\"inner\") \\\n                             .select(\"country\", \"event_date\", \"daily_active_users\", \"total_revenue\", \"num_sessions\", \"event_type\")\n\n# Save result as Parquet partitioned by event_date\nfinal_data.write.partitionBy(\"event_date\").parquet(\"/data/event_processing_results\", mode=\"overwrite\")\n\n# Alternatively, you can use Delta Lake for more features like ACID transactions and data quality checks\n# from delta.tables import *\n# delta_table = DeltaTable.forPath(spark, \"/data/event_processing_results_delta\")\n# final_data.write.format(\"delta\").mode(\"overwrite\").saveAsTable(\"/data/event_processing_results_delta\")\n```\n\n### Explanation\n\n*   We start by reading both input datasets from Parquet files.\n*   We then deduplicate the events by `event_id`, keeping the row with the latest `ingestion_time`.\n*   The `event_time` is converted to a timestamp, and an `event_date` column is created.\n*   We join the events with users by `user_id`.\n*   The pipeline computes daily active users, total revenue, number of sessions, and top event type by frequency for each country and event date.\n*   Finally, the result is saved as Parquet partitioned by `event_date`. You can also use Delta Lake for more features.\n\n### Performance Considerations\n\n*   **Deduplication**: We use `row_number()` with a `Window` to efficiently deduplicate events.\n*   **Join**: We use an inner join to reduce the data size and avoid unnecessary computations.\n*   **Aggregations**: We use `groupBy()` and `agg()` to compute aggregations efficiently.\n*   **Partitioning**: We partition the result by `event_date` to improve query performance.\n\n### Advice\n\n*   Make sure to optimize the input data (e.g., use efficient file formats like Parquet, and partition data by relevant columns).\n*   Monitor the pipeline's performance and adjust configurations (e.g., executor memory, cores) as needed.\n*   Consider using Delta Lake for more advanced features and data quality checks.",
     "error": null,
     "status": "success",
     "generation_params": {
@@ -282,18 +682,68 @@
     },
     "usage": {
       "prompt_tokens": 239,
-      "completion_tokens": 806,
-      "total_tokens": 1045
+      "completion_tokens": 920,
+      "total_tokens": 1159,
+      "cost": 0.00033909
+    },
+    "generation_stats": {
+      "id": "gen-1780755719-3lWuXcI1neAETp29Wqlh",
+      "api_type": "completions",
+      "model": "meta-llama/llama-4-scout-17b-16e-instruct",
+      "provider_name": "Groq",
+      "router": null,
+      "service_tier": null,
+      "finish_reason": "stop",
+      "native_finish_reason": "stop",
+      "created_at": "2026-06-06T14:21:59.908Z",
+      "latency_ms": 227,
+      "generation_time_ms": 4605,
+      "moderation_latency_ms": null,
+      "latency_s": 0.227,
+      "generation_time_s": 4.605,
+      "moderation_latency_s": null,
+      "tokens_prompt": 278,
+      "tokens_completion": 1156,
+      "tokens_total": 1434,
+      "native_tokens_prompt": 239,
+      "native_tokens_completion": 920,
+      "native_tokens_reasoning": 0,
+      "native_tokens_cached": 0,
+      "total_cost": 0.00033909,
+      "usage": 0.00033909,
+      "upstream_inference_cost": 0,
+      "is_byok": false,
+      "streamed": true,
+      "num_fetches": null,
+      "request_id": "req-1780755719-LLuRwncHp5gbnIFvnvpN",
+      "upstream_id": "chatcmpl-31e5ebcd-9c37-43a8-91c3-7537eb3df853"
     },
     "metrics": {
-      "latency_s": 11.2,
-      "tokens_per_second": 71.964,
-      "output_char_count": 3868,
-      "output_word_count": 331
+      "latency_s": 5.666,
+      "tokens_per_second": 162.372,
+      "tokens_per_second_client": 162.372,
+      "tokens_per_second_generation": 251.031,
+      "tokens_per_second_openrouter_latency": 5092.511,
+      "native_tokens_per_second_generation": 199.783,
+      "native_tokens_per_second_openrouter_latency": 4052.863,
+      "output_char_count": 4383,
+      "output_word_count": 419
+    },
+    "timing": {
+      "client_total_s": 5.666,
+      "openrouter_latency_s": 0.227,
+      "generation_time_s": 4.605,
+      "moderation_latency_s": null,
+      "generation_stats_lookup_s": 10.257
     },
     "metadata": {
-      "started_at": "2026-05-29T07:20:39.326035+00:00",
-      "ended_at": "2026-05-29T07:20:50.526216+00:00"
+      "started_at": "2026-06-06T14:21:59.949577+00:00",
+      "ended_at": "2026-06-06T14:22:15.872634+00:00",
+      "response_id": "gen-1780755719-3lWuXcI1neAETp29Wqlh",
+      "returned_model": "meta-llama/llama-4-scout-17b-16e-instruct",
+      "finish_reason": "stop",
+      "native_finish_reason": "stop",
+      "generation_stats_error": null
     }
   },
   {
@@ -306,7 +756,7 @@
     "model_id": "meta-llama/llama-4-scout",
     "system_prompt": "You are a senior Big Data engineer and Spark expert. Answer accurately, practically, and follow the user's instructions. For code tasks, provide correct and production-aware code.After reasoning, always provide the final answer.Never leave assistant content empty.",
     "prompt": "You are reviewing a slow Spark job that processes 2 TB of clickstream logs daily.\n\nSymptoms:\n- Runtime increased from 35 minutes to 3 hours.\n- Spark UI shows one stage taking 80% of total runtime.\n- A few tasks run much longer than the rest.\n- Shuffle read is very high and several tasks spill to disk.\n- Output table has about 75,000 small Parquet files per day.\n- The job joins a huge events table with a small country_code dimension table.\n- Most queries filter by event_date and country.\n\nAnalyze the likely root causes and propose a prioritized remediation plan.\nYour answer should be structured as: Observations, Likely Root Causes, Remediation Plan, and Validation Metrics.",
-    "model_output": "### Observations\n\n1. **Increased Runtime**: The job's runtime has increased from 35 minutes to 3 hours, indicating a significant performance degradation.\n2. **Skewed Stage Performance**: One stage is taking 80% of the total runtime, suggesting a bottleneck or skew in data processing.\n3. **Task Runtime Variability**: A few tasks are running much longer than the rest, which could indicate data skew or inefficient processing.\n4. **High Shuffle Read and Spilling**: High shuffle read and spilling to disk suggest that the job is experiencing memory pressure, likely due to large data being shuffled.\n5. **Small Parquet Files**: The output table has about 75,000 small Parquet files per day, which can lead to inefficient storage and query performance.\n6. **Join and Filtering**: The job involves joining a large events table with a small country_code dimension table, and most queries filter by event_date and country.\n\n### Likely Root Causes\n\n1. **Data Skew**: The skewed task runtimes and high shuffle read suggest data skew, particularly in the join operation or filtering.\n2. **Inefficient Join Strategy**: The current join strategy might not be optimal for the data sizes and distribution, leading to excessive shuffling and spilling.\n3. **Inadequate Partitioning**: The large number of small Parquet files suggests inadequate partitioning during data writing, which could be due to the default partitioning strategy or insufficient parallelism.\n4. **Insufficient Resources**: The job might not have sufficient resources (e.g., memory, cores) allocated, leading to spilling and prolonged runtime.\n\n### Remediation Plan\n\n**Priority 1: Optimize Join Strategy and Data Partitioning**\n\n1. **Broadcast Join**: Consider using a broadcast join for the small country_code dimension table to reduce shuffling.\n2. **Repartition Data**: Repartition the data to reduce the number of small Parquet files written. This can be achieved by using `coalesce` or `repartition` methods before writing the data.\n\n**Priority 2: Address Data Skew**\n\n1. **Skew Mitigation Techniques**: Implement skew mitigation techniques such as using `salting` or `pre-partitioning` the large events table to balance data distribution.\n2. **Analyze and Optimize Filtering**: Ensure that filtering by event_date and country is optimized, possibly by using `partitioning` and `bucketing` on these columns.\n\n**Priority 3: Enhance Resource Allocation and Configuration**\n\n1. **Increase Resources**: Ensure that the Spark job has sufficient resources (memory, cores) allocated to handle the data volume without spilling.\n2. **Tune Spark Configurations**: Review and optimize Spark configurations, such as `spark.shuffle.compress`, `spark.shuffle.spill.compress`, and `spark.executor.memory`, to improve performance.\n\n**Priority 4: Monitoring and Validation**\n\n1. **Monitor Spark UI**: Closely monitor the Spark UI to identify any stages or tasks that are skewed or experiencing issues.\n2. **Logging and Metrics**: Enhance logging and collect metrics to validate the effectiveness of the remediation steps.\n\n### Validation Metrics\n\n1. **Runtime**: Monitor the job runtime to ensure it returns to the baseline of 35 minutes.\n2. **Shuffle Read and Spilling**: Verify that shuffle read and spilling to disk are significantly reduced.\n3. **Task Runtime Distribution**: Ensure that task runtimes are more evenly distributed.\n4. **Parquet File Count and Size**: Validate that the number of Parquet files is significantly reduced and their sizes are more optimal.\n5. **Resource Utilization**: Monitor resource utilization (CPU, memory) to ensure that the job is not experiencing bottlenecks.\n\nBy following this prioritized remediation plan, we should be able to address the root causes of the performance degradation and improve the overall efficiency of the Spark job.",
+    "model_output": "### Observations\n\n1. **Increased Runtime**: The job's runtime has increased significantly from 35 minutes to 3 hours.\n2. **Skewed Stage Performance**: One stage takes 80% of the total runtime, indicating a bottleneck.\n3. **Task Skew**: A few tasks run much longer than the rest, suggesting data skew or inefficient processing.\n4. **High Shuffle Read and Spill**: High shuffle read and task spill to disk indicate inefficient data processing and potential data skew.\n5. **Small Parquet Files**: The output table has 75,000 small Parquet files per day, which can lead to performance issues in subsequent jobs.\n6. **Join and Filter Operations**: The job involves joining a huge events table with a small country_code dimension table and filters by event_date and country.\n\n### Likely Root Causes\n\n1. **Data Skew**: Uneven distribution of data, particularly in the join operation, causing some tasks to process much more data than others.\n2. **Inefficient Join Operation**: The join operation might not be optimized, leading to a large shuffle and high spill to disk.\n3. **Suboptimal Partitioning**: The current partitioning strategy might not be effective, resulting in a large number of small files and inefficient data retrieval.\n4. **Lack of Efficient Data Filtering**: The filter operations by event_date and country might not be optimized, leading to unnecessary data processing.\n\n### Remediation Plan\n\n**Short-term (High Priority)**\n\n1. **Optimize Join Operation**:\n   - Use `broadcast` to join the small country_code dimension table with the large events table to reduce shuffle.\n   - Example: \n     ```scala\n     val countryCodeDim = sc.read.parquet(\"country_code_dim\")\n     val events = sc.read.parquet(\"events\")\n     val joined = events.join(broadcast(countryCodeDim), \"country_code\")\n     ```\n\n2. **Implement Efficient Data Filtering**:\n   - Push down filter operations by event_date and country to the data source if possible.\n   - Example:\n     ```scala\n     val filteredEvents = events.filter($\"event_date\" === targetDate && $\"country\" === targetCountry)\n     ```\n\n3. **Repartition Data**:\n   - Repartition the data to ensure even distribution across tasks.\n   - Example:\n     ```scala\n     val repartitionedEvents = events.repartition(100)\n     ```\n\n**Medium-term (Medium Priority)**\n\n1. **Improve Partitioning Strategy**:\n   - Use a more efficient partitioning strategy, such as using a composite key (event_date, country).\n   - Example:\n     ```scala\n     val partitionedEvents = events.write.partitionBy(\"event_date\", \"country\").parquet(\"output\")\n     ```\n\n2. **Consolidate Small Files**:\n   - Use `coalesce` or `repartition` before writing to Parquet files to reduce the number of files.\n   - Example:\n     ```scala\n     val consolidatedEvents = events.coalesce(10)\n     consolidatedEvents.write.parquet(\"output\")\n     ```\n\n**Long-term (Low Priority)**\n\n1. **Consider Using Spark 3.x Features**:\n   - Leverage new features in Spark 3.x, such as adaptive query execution (AQE) and dynamic partition pruning.\n\n### Validation Metrics\n\n1. **Runtime**: Monitor the job runtime to ensure it decreases to an acceptable level (e.g., back to 35 minutes).\n2. **Task Distribution**: Verify that task durations are more evenly distributed.\n3. **Shuffle Read and Spill**: Monitor shuffle read and spill metrics to ensure they decrease significantly.\n4. **Output File Size and Count**: Verify that the number of Parquet files decreases and their size increases.\n5. **Query Performance**: Monitor the performance of subsequent queries on the output data to ensure improvements.\n\nBy following this remediation plan, the Spark job should experience significant performance improvements, and the root causes of the slowdown should be addressed.",
     "error": null,
     "status": "success",
     "generation_params": {
@@ -315,18 +765,68 @@
     },
     "usage": {
       "prompt_tokens": 210,
-      "completion_tokens": 775,
-      "total_tokens": 985
+      "completion_tokens": 796,
+      "total_tokens": 1006,
+      "cost": 0.00029374
+    },
+    "generation_stats": {
+      "id": "gen-1780755737-JBohbkE1YKA4T9hJoDeR",
+      "api_type": "completions",
+      "model": "meta-llama/llama-4-scout-17b-16e-instruct",
+      "provider_name": "Groq",
+      "router": null,
+      "service_tier": null,
+      "finish_reason": "stop",
+      "native_finish_reason": "stop",
+      "created_at": "2026-06-06T14:22:16.896Z",
+      "latency_ms": 635,
+      "generation_time_ms": 1679,
+      "moderation_latency_ms": null,
+      "latency_s": 0.635,
+      "generation_time_s": 1.679,
+      "moderation_latency_s": null,
+      "tokens_prompt": 247,
+      "tokens_completion": 991,
+      "tokens_total": 1238,
+      "native_tokens_prompt": 210,
+      "native_tokens_completion": 796,
+      "native_tokens_reasoning": 0,
+      "native_tokens_cached": 0,
+      "total_cost": 0.00029374,
+      "usage": 0.00029374,
+      "upstream_inference_cost": 0,
+      "is_byok": false,
+      "streamed": true,
+      "num_fetches": null,
+      "request_id": "req-1780755737-mBCULJ4OvDtEWi4Sb5oB",
+      "upstream_id": "chatcmpl-dee3ced8-9fd6-42fe-8e23-78f3649c59ef"
     },
     "metrics": {
-      "latency_s": 10.258,
-      "tokens_per_second": 75.551,
-      "output_char_count": 3823,
-      "output_word_count": 549
+      "latency_s": 3.397,
+      "tokens_per_second": 234.324,
+      "tokens_per_second_client": 234.324,
+      "tokens_per_second_generation": 590.232,
+      "tokens_per_second_openrouter_latency": 1560.63,
+      "native_tokens_per_second_generation": 474.092,
+      "native_tokens_per_second_openrouter_latency": 1253.543,
+      "output_char_count": 3742,
+      "output_word_count": 504
+    },
+    "timing": {
+      "client_total_s": 3.397,
+      "openrouter_latency_s": 0.635,
+      "generation_time_s": 1.679,
+      "moderation_latency_s": null,
+      "generation_stats_lookup_s": 36.424
     },
     "metadata": {
-      "started_at": "2026-05-29T07:20:51.527799+00:00",
-      "ended_at": "2026-05-29T07:21:01.785554+00:00"
+      "started_at": "2026-06-06T14:22:16.874481+00:00",
+      "ended_at": "2026-06-06T14:22:56.694993+00:00",
+      "response_id": "gen-1780755737-JBohbkE1YKA4T9hJoDeR",
+      "returned_model": "meta-llama/llama-4-scout-17b-16e-instruct",
+      "finish_reason": "stop",
+      "native_finish_reason": "stop",
+      "generation_stats_error": null
     }
   }
 ]

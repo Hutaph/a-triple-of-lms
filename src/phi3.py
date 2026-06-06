@@ -978,7 +978,7 @@ def parse_args() -> argparse.Namespace:
     parser.add_argument(
         "--score",
         action="store_true",
-        help="Add automatic lexical scoring against ground_truth. By default Phi-3 matches llama4.py and only saves model outputs.",
+        help="Add automatic lexical scoring against ground_truth. By default Phi-3 matches openrouter_benchmark.py and only saves model outputs.",
     )
     parser.add_argument(
         "--summary",
