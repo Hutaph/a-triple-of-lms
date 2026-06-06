@@ -1,0 +1,334 @@
+{
+  "overall": {
+    "count": 30,
+    "scored": 30,
+    "judge_errors": 0,
+    "avg_weighted_score": 8.028,
+    "avg_judge_overall_score": 7.583,
+    "reliability": {
+      "success_rate": 1.0,
+      "empty_output_rate": 0.0,
+      "finish_reason_length_rate": 0.0,
+      "generation_stats_missing_rate": 0.0,
+      "judge_error_rate": 0.0
+    },
+    "cost": {
+      "total_cost": 0.021966,
+      "avg_cost": 0.001,
+      "avg_total_tokens": 1776.633,
+      "avg_completion_tokens": 1643.733
+    },
+    "latency": {
+      "avg_client_total_s": 27.084,
+      "avg_generation_time_s": 25.992,
+      "avg_tokens_per_second_generation": 85.408,
+      "avg_native_tokens_per_second_generation": 74.818
+    },
+    "efficiency": {
+      "avg_score_per_dollar": 23684.524,
+      "avg_score_per_1k_tokens": 5.379,
+      "avg_score_per_second": 0.379,
+      "avg_cost_per_score_point": 0.0,
+      "avg_tokens_per_score_point": 225.835
+    }
+  },
+  "by_model": {
+    "Qwen3-14B": {
+      "count": 10,
+      "avg_weighted_score": 7.764,
+      "avg_judge_overall_score": 6.7,
+      "reliability": {
+        "success_rate": 1.0,
+        "empty_output_rate": 0.0,
+        "finish_reason_length_rate": 0.0,
+        "generation_stats_missing_rate": 0.0,
+        "judge_error_rate": 0.0
+      },
+      "cost": {
+        "total_cost": 0.005247,
+        "avg_cost": 0.001,
+        "avg_total_tokens": 1537.6,
+        "avg_completion_tokens": 1404.6
+      },
+      "latency": {
+        "avg_client_total_s": 22.38,
+        "avg_generation_time_s": 20.672,
+        "avg_tokens_per_second_generation": 79.931,
+        "avg_native_tokens_per_second_generation": 68.361
+      },
+      "efficiency": {
+        "avg_score_per_dollar": 21471.61,
+        "avg_score_per_1k_tokens": 5.637,
+        "avg_score_per_second": 0.38,
+        "avg_cost_per_score_point": 0.0,
+        "avg_tokens_per_score_point": 205.573
+      }
+    },
+    "Qwen3-235B-A22B-Thinking": {
+      "count": 10,
+      "avg_weighted_score": 8.85,
+      "avg_judge_overall_score": 8.7,
+      "reliability": {
+        "success_rate": 1.0,
+        "empty_output_rate": 0.0,
+        "finish_reason_length_rate": 0.0,
+        "generation_stats_missing_rate": 0.0,
+        "judge_error_rate": 0.0
+      },
+      "cost": {
+        "total_cost": 0.011355,
+        "avg_cost": 0.001,
+        "avg_total_tokens": 2349.6,
+        "avg_completion_tokens": 2216.9
+      },
+      "latency": {
+        "avg_client_total_s": 28.913,
+        "avg_generation_time_s": 28.083,
+        "avg_tokens_per_second_generation": 86.41,
+        "avg_native_tokens_per_second_generation": 78.061
+      },
+      "efficiency": {
+        "avg_score_per_dollar": 33965.482,
+        "avg_score_per_1k_tokens": 4.535,
+        "avg_score_per_second": 0.348,
+        "avg_cost_per_score_point": 0.0,
+        "avg_tokens_per_score_point": 269.198
+      }
+    },
+    "Qwen3-32B": {
+      "count": 10,
+      "avg_weighted_score": 7.469,
+      "avg_judge_overall_score": 7.35,
+      "reliability": {
+        "success_rate": 1.0,
+        "empty_output_rate": 0.0,
+        "finish_reason_length_rate": 0.0,
+        "generation_stats_missing_rate": 0.0,
+        "judge_error_rate": 0.0
+      },
+      "cost": {
+        "total_cost": 0.005364,
+        "avg_cost": 0.001,
+        "avg_total_tokens": 1442.7,
+        "avg_completion_tokens": 1309.7
+      },
+      "latency": {
+        "avg_client_total_s": 29.96,
+        "avg_generation_time_s": 29.222,
+        "avg_tokens_per_second_generation": 89.882,
+        "avg_native_tokens_per_second_generation": 78.033
+      },
+      "efficiency": {
+        "avg_score_per_dollar": 15616.479,
+        "avg_score_per_1k_tokens": 5.964,
+        "avg_score_per_second": 0.408,
+        "avg_cost_per_score_point": 0.0,
+        "avg_tokens_per_score_point": 202.735
+      }
+    }
+  },
+  "by_difficulty": {
+    "easy": {
+      "count": 9,
+      "avg_weighted_score": 8.36,
+      "avg_judge_overall_score": 8.222,
+      "reliability": {
+        "success_rate": 1.0,
+        "empty_output_rate": 0.0,
+        "finish_reason_length_rate": 0.0,
+        "generation_stats_missing_rate": 0.0,
+        "judge_error_rate": 0.0
+      },
+      "cost": {
+        "total_cost": 0.005313,
+        "avg_cost": 0.001,
+        "avg_total_tokens": 1459.0,
+        "avg_completion_tokens": 1338.0
+      },
+      "latency": {
+        "avg_client_total_s": 19.723,
+        "avg_generation_time_s": 18.676,
+        "avg_tokens_per_second_generation": 85.59,
+        "avg_native_tokens_per_second_generation": 73.202
+      },
+      "efficiency": {
+        "avg_score_per_dollar": 32832.716,
+        "avg_score_per_1k_tokens": 6.823,
+        "avg_score_per_second": 0.457,
+        "avg_cost_per_score_point": 0.0,
+        "avg_tokens_per_score_point": 190.386
+      }
+    },
+    "hard": {
+      "count": 12,
+      "avg_weighted_score": 7.413,
+      "avg_judge_overall_score": 7.208,
+      "reliability": {
+        "success_rate": 1.0,
+        "empty_output_rate": 0.0,
+        "finish_reason_length_rate": 0.0,
+        "generation_stats_missing_rate": 0.0,
+        "judge_error_rate": 0.0
+      },
+      "cost": {
+        "total_cost": 0.008915,
+        "avg_cost": 0.001,
+        "avg_total_tokens": 2075.167,
+        "avg_completion_tokens": 1915.75
+      },
+      "latency": {
+        "avg_client_total_s": 33.127,
+        "avg_generation_time_s": 31.655,
+        "avg_tokens_per_second_generation": 71.947,
+        "avg_native_tokens_per_second_generation": 63.277
+      },
+      "efficiency": {
+        "avg_score_per_dollar": 16721.544,
+        "avg_score_per_1k_tokens": 4.029,
+        "avg_score_per_second": 0.252,
+        "avg_cost_per_score_point": 0.0,
+        "avg_tokens_per_score_point": 273.118
+      }
+    },
+    "medium": {
+      "count": 9,
+      "avg_weighted_score": 8.516,
+      "avg_judge_overall_score": 7.444,
+      "reliability": {
+        "success_rate": 1.0,
+        "empty_output_rate": 0.0,
+        "finish_reason_length_rate": 0.0,
+        "generation_stats_missing_rate": 0.0,
+        "judge_error_rate": 0.0
+      },
+      "cost": {
+        "total_cost": 0.007739,
+        "avg_cost": 0.001,
+        "avg_total_tokens": 1696.222,
+        "avg_completion_tokens": 1586.778
+      },
+      "latency": {
+        "avg_client_total_s": 26.388,
+        "avg_generation_time_s": 25.758,
+        "avg_tokens_per_second_generation": 103.173,
+        "avg_native_tokens_per_second_generation": 91.822
+      },
+      "efficiency": {
+        "avg_score_per_dollar": 23820.304,
+        "avg_score_per_1k_tokens": 5.733,
+        "avg_score_per_second": 0.47,
+        "avg_cost_per_score_point": 0.0,
+        "avg_tokens_per_score_point": 198.24
+      }
+    }
+  },
+  "by_category": {
+    "Code Generation": {
+      "count": 9,
+      "avg_weighted_score": 7.241,
+      "avg_judge_overall_score": 7.0,
+      "reliability": {
+        "success_rate": 1.0,
+        "empty_output_rate": 0.0,
+        "finish_reason_length_rate": 0.0,
+        "generation_stats_missing_rate": 0.0,
+        "judge_error_rate": 0.0
+      },
+      "cost": {
+        "total_cost": 0.003942,
+        "avg_cost": 0.0,
+        "avg_total_tokens": 2022.222,
+        "avg_completion_tokens": 1841.333
+      },
+      "latency": {
+        "avg_client_total_s": 28.932,
+        "avg_generation_time_s": 27.133,
+        "avg_tokens_per_second_generation": 78.0,
+        "avg_native_tokens_per_second_generation": 69.318
+      },
+      "efficiency": {
+        "avg_score_per_dollar": 22697.881,
+        "avg_score_per_1k_tokens": 4.727,
+        "avg_score_per_second": 0.309,
+        "avg_cost_per_score_point": 0.0,
+        "avg_tokens_per_score_point": 280.111
+      }
+    },
+    "Incident Analysis": {
+      "count": 3,
+      "avg_weighted_score": 7.64,
+      "avg_judge_overall_score": 7.667,
+      "reliability": {
+        "success_rate": 1.0,
+        "empty_output_rate": 0.0,
+        "finish_reason_length_rate": 0.0,
+        "generation_stats_missing_rate": 0.0,
+        "judge_error_rate": 0.0
+      },
+      "cost": {
+        "total_cost": 0.004865,
+        "avg_cost": 0.002,
+        "avg_total_tokens": 1873.0,
+        "avg_completion_tokens": 1657.333
+      },
+      "latency": {
+        "avg_client_total_s": 32.279,
+        "avg_generation_time_s": 31.628,
+        "avg_tokens_per_second_generation": 65.921,
+        "avg_native_tokens_per_second_generation": 59.021
+      },
+      "efficiency": {
+        "avg_score_per_dollar": 7690.395,
+        "avg_score_per_1k_tokens": 4.145,
+        "avg_score_per_second": 0.271,
+        "avg_cost_per_score_point": 0.0,
+        "avg_tokens_per_score_point": 244.633
+      }
+    },
+    "Theory Q&A": {
+      "count": 18,
+      "avg_weighted_score": 8.486,
+      "avg_judge_overall_score": 7.861,
+      "reliability": {
+        "success_rate": 1.0,
+        "empty_output_rate": 0.0,
+        "finish_reason_length_rate": 0.0,
+        "generation_stats_missing_rate": 0.0,
+        "judge_error_rate": 0.0
+      },
+      "cost": {
+        "total_cost": 0.013159,
+        "avg_cost": 0.001,
+        "avg_total_tokens": 1637.778,
+        "avg_completion_tokens": 1542.667
+      },
+      "latency": {
+        "avg_client_total_s": 25.294,
+        "avg_generation_time_s": 24.483,
+        "avg_tokens_per_second_generation": 92.359,
+        "avg_native_tokens_per_second_generation": 80.2
+      },
+      "efficiency": {
+        "avg_score_per_dollar": 26843.533,
+        "avg_score_per_1k_tokens": 5.91,
+        "avg_score_per_second": 0.432,
+        "avg_cost_per_score_point": 0.0,
+        "avg_tokens_per_score_point": 195.564
+      }
+    }
+  },
+  "metric_averages": {
+    "correctness": 8.1,
+    "completeness": 7.8,
+    "key_point_coverage": 8.1,
+    "instruction_following": 8.4,
+    "reasoning_depth": 7.7,
+    "production_readiness": 7.467,
+    "clarity_structure": 8.967,
+    "factual_grounding": 7.967,
+    "code_sql_quality": 7.6,
+    "conciseness": 7.633,
+    "hallucination_risk": 8.367,
+    "code_executability": 7.667
+  }
+}
