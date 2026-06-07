@@ -1100,7 +1100,8 @@ def main() -> None:
         return
 
     client = judge_client(args.provider, args.api_key)
-    existing_rows = load_existing_result_rows(results_path) if args.resume else []
+    # Always load existing rows so results are merged, never overwritten.
+    existing_rows = load_existing_result_rows(results_path)
     existing = {result_key(row): row for row in existing_rows}
     replacement_results = []
 
@@ -1113,7 +1114,7 @@ def main() -> None:
             metadata={},
         )
         key = result_key(empty_result)
-        if key in existing and has_existing_result(existing[key]):
+        if key in existing and has_existing_result(existing[key]) and args.resume:
             replacement_results.append(existing[key])
             continue
 

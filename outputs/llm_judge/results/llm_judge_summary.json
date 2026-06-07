@@ -1,10 +1,10 @@
 {
   "overall": {
-    "count": 30,
-    "scored": 30,
+    "count": 50,
+    "scored": 50,
     "judge_errors": 0,
-    "avg_weighted_score": 8.028,
-    "avg_judge_overall_score": 7.583,
+    "avg_weighted_score": 7.525,
+    "avg_judge_overall_score": 7.21,
     "reliability": {
       "success_rate": 1.0,
       "empty_output_rate": 0.0,
@@ -13,26 +13,88 @@
       "judge_error_rate": 0.0
     },
     "cost": {
-      "total_cost": 0.021966,
+      "total_cost": 0.032707,
       "avg_cost": 0.001,
-      "avg_total_tokens": 1776.633,
-      "avg_completion_tokens": 1643.733
+      "avg_total_tokens": 1404.44,
+      "avg_completion_tokens": 1271.64
     },
     "latency": {
-      "avg_client_total_s": 27.084,
-      "avg_generation_time_s": 25.992,
-      "avg_tokens_per_second_generation": 85.408,
-      "avg_native_tokens_per_second_generation": 74.818
+      "avg_client_total_s": 21.084,
+      "avg_generation_time_s": 20.056,
+      "avg_tokens_per_second_generation": 125.623,
+      "avg_native_tokens_per_second_generation": 105.798
     },
     "efficiency": {
-      "avg_score_per_dollar": 23684.524,
-      "avg_score_per_1k_tokens": 5.379,
-      "avg_score_per_second": 0.379,
+      "avg_score_per_dollar": 22398.363,
+      "avg_score_per_1k_tokens": 6.886,
+      "avg_score_per_second": 0.583,
       "avg_cost_per_score_point": 0.0,
-      "avg_tokens_per_score_point": 225.835
+      "avg_tokens_per_score_point": 190.14
     }
   },
   "by_model": {
+    "Llama 4 Maverick": {
+      "count": 10,
+      "avg_weighted_score": 7.288,
+      "avg_judge_overall_score": 7.1,
+      "reliability": {
+        "success_rate": 1.0,
+        "empty_output_rate": 0.0,
+        "finish_reason_length_rate": 0.0,
+        "generation_stats_missing_rate": 0.0,
+        "judge_error_rate": 0.0
+      },
+      "cost": {
+        "total_cost": 0.008122,
+        "avg_cost": 0.001,
+        "avg_total_tokens": 854.5,
+        "avg_completion_tokens": 721.6
+      },
+      "latency": {
+        "avg_client_total_s": 10.742,
+        "avg_generation_time_s": 9.921,
+        "avg_tokens_per_second_generation": 113.482,
+        "avg_native_tokens_per_second_generation": 91.964
+      },
+      "efficiency": {
+        "avg_score_per_dollar": 12476.929,
+        "avg_score_per_1k_tokens": 10.124,
+        "avg_score_per_second": 0.813,
+        "avg_cost_per_score_point": 0.0,
+        "avg_tokens_per_score_point": 125.174
+      }
+    },
+    "Llama 4 Scout": {
+      "count": 10,
+      "avg_weighted_score": 6.255,
+      "avg_judge_overall_score": 6.2,
+      "reliability": {
+        "success_rate": 1.0,
+        "empty_output_rate": 0.0,
+        "finish_reason_length_rate": 0.0,
+        "generation_stats_missing_rate": 0.0,
+        "judge_error_rate": 0.0
+      },
+      "cost": {
+        "total_cost": 0.002618,
+        "avg_cost": 0.0,
+        "avg_total_tokens": 837.8,
+        "avg_completion_tokens": 705.4
+      },
+      "latency": {
+        "avg_client_total_s": 13.425,
+        "avg_generation_time_s": 12.384,
+        "avg_tokens_per_second_generation": 258.41,
+        "avg_native_tokens_per_second_generation": 212.57
+      },
+      "efficiency": {
+        "avg_score_per_dollar": 28461.316,
+        "avg_score_per_1k_tokens": 8.171,
+        "avg_score_per_second": 0.967,
+        "avg_cost_per_score_point": 0.0,
+        "avg_tokens_per_score_point": 148.02
+      }
+    },
     "Qwen3-14B": {
       "count": 10,
       "avg_weighted_score": 7.764,
@@ -129,9 +191,9 @@
   },
   "by_difficulty": {
     "easy": {
-      "count": 9,
-      "avg_weighted_score": 8.36,
-      "avg_judge_overall_score": 8.222,
+      "count": 15,
+      "avg_weighted_score": 7.959,
+      "avg_judge_overall_score": 7.8,
       "reliability": {
         "success_rate": 1.0,
         "empty_output_rate": 0.0,
@@ -140,29 +202,29 @@
         "judge_error_rate": 0.0
       },
       "cost": {
-        "total_cost": 0.005313,
-        "avg_cost": 0.001,
-        "avg_total_tokens": 1459.0,
-        "avg_completion_tokens": 1338.0
+        "total_cost": 0.007029,
+        "avg_cost": 0.0,
+        "avg_total_tokens": 1108.333,
+        "avg_completion_tokens": 987.2
       },
       "latency": {
-        "avg_client_total_s": 19.723,
-        "avg_generation_time_s": 18.676,
-        "avg_tokens_per_second_generation": 85.59,
-        "avg_native_tokens_per_second_generation": 73.202
+        "avg_client_total_s": 17.289,
+        "avg_generation_time_s": 16.134,
+        "avg_tokens_per_second_generation": 123.147,
+        "avg_native_tokens_per_second_generation": 101.548
       },
       "efficiency": {
-        "avg_score_per_dollar": 32832.716,
-        "avg_score_per_1k_tokens": 6.823,
-        "avg_score_per_second": 0.457,
+        "avg_score_per_dollar": 32670.974,
+        "avg_score_per_1k_tokens": 9.803,
+        "avg_score_per_second": 0.646,
         "avg_cost_per_score_point": 0.0,
-        "avg_tokens_per_score_point": 190.386
+        "avg_tokens_per_score_point": 149.355
       }
     },
     "hard": {
-      "count": 12,
-      "avg_weighted_score": 7.413,
-      "avg_judge_overall_score": 7.208,
+      "count": 20,
+      "avg_weighted_score": 6.793,
+      "avg_judge_overall_score": 6.625,
       "reliability": {
         "success_rate": 1.0,
         "empty_output_rate": 0.0,
@@ -171,29 +233,29 @@
         "judge_error_rate": 0.0
       },
       "cost": {
-        "total_cost": 0.008915,
+        "total_cost": 0.014632,
         "avg_cost": 0.001,
-        "avg_total_tokens": 2075.167,
-        "avg_completion_tokens": 1915.75
+        "avg_total_tokens": 1653.55,
+        "avg_completion_tokens": 1494.3
       },
       "latency": {
-        "avg_client_total_s": 33.127,
-        "avg_generation_time_s": 31.655,
-        "avg_tokens_per_second_generation": 71.947,
-        "avg_native_tokens_per_second_generation": 63.277
+        "avg_client_total_s": 23.974,
+        "avg_generation_time_s": 22.736,
+        "avg_tokens_per_second_generation": 123.447,
+        "avg_native_tokens_per_second_generation": 102.072
       },
       "efficiency": {
-        "avg_score_per_dollar": 16721.544,
-        "avg_score_per_1k_tokens": 4.029,
-        "avg_score_per_second": 0.252,
+        "avg_score_per_dollar": 14497.444,
+        "avg_score_per_1k_tokens": 4.697,
+        "avg_score_per_second": 0.505,
         "avg_cost_per_score_point": 0.0,
-        "avg_tokens_per_score_point": 273.118
+        "avg_tokens_per_score_point": 237.476
       }
     },
     "medium": {
-      "count": 9,
-      "avg_weighted_score": 8.516,
-      "avg_judge_overall_score": 7.444,
+      "count": 15,
+      "avg_weighted_score": 8.069,
+      "avg_judge_overall_score": 7.4,
       "reliability": {
         "success_rate": 1.0,
         "empty_output_rate": 0.0,
@@ -202,31 +264,31 @@
         "judge_error_rate": 0.0
       },
       "cost": {
-        "total_cost": 0.007739,
+        "total_cost": 0.011046,
         "avg_cost": 0.001,
-        "avg_total_tokens": 1696.222,
-        "avg_completion_tokens": 1586.778
+        "avg_total_tokens": 1368.4,
+        "avg_completion_tokens": 1259.2
       },
       "latency": {
-        "avg_client_total_s": 26.388,
-        "avg_generation_time_s": 25.758,
-        "avg_tokens_per_second_generation": 103.173,
-        "avg_native_tokens_per_second_generation": 91.822
+        "avg_client_total_s": 21.026,
+        "avg_generation_time_s": 20.407,
+        "avg_tokens_per_second_generation": 131.0,
+        "avg_native_tokens_per_second_generation": 115.014
       },
       "efficiency": {
-        "avg_score_per_dollar": 23820.304,
-        "avg_score_per_1k_tokens": 5.733,
-        "avg_score_per_second": 0.47,
+        "avg_score_per_dollar": 22660.312,
+        "avg_score_per_1k_tokens": 6.888,
+        "avg_score_per_second": 0.625,
         "avg_cost_per_score_point": 0.0,
-        "avg_tokens_per_score_point": 198.24
+        "avg_tokens_per_score_point": 167.809
       }
     }
   },
   "by_category": {
     "Code Generation": {
-      "count": 9,
-      "avg_weighted_score": 7.241,
-      "avg_judge_overall_score": 7.0,
+      "count": 15,
+      "avg_weighted_score": 6.963,
+      "avg_judge_overall_score": 6.733,
       "reliability": {
         "success_rate": 1.0,
         "empty_output_rate": 0.0,
@@ -235,29 +297,29 @@
         "judge_error_rate": 0.0
       },
       "cost": {
-        "total_cost": 0.003942,
+        "total_cost": 0.007195,
         "avg_cost": 0.0,
-        "avg_total_tokens": 2022.222,
-        "avg_completion_tokens": 1841.333
+        "avg_total_tokens": 1569.6,
+        "avg_completion_tokens": 1388.533
       },
       "latency": {
-        "avg_client_total_s": 28.932,
-        "avg_generation_time_s": 27.133,
-        "avg_tokens_per_second_generation": 78.0,
-        "avg_native_tokens_per_second_generation": 69.318
+        "avg_client_total_s": 21.439,
+        "avg_generation_time_s": 20.171,
+        "avg_tokens_per_second_generation": 92.673,
+        "avg_native_tokens_per_second_generation": 79.721
       },
       "efficiency": {
-        "avg_score_per_dollar": 22697.881,
-        "avg_score_per_1k_tokens": 4.727,
-        "avg_score_per_second": 0.309,
+        "avg_score_per_dollar": 21296.42,
+        "avg_score_per_1k_tokens": 6.069,
+        "avg_score_per_second": 0.493,
         "avg_cost_per_score_point": 0.0,
-        "avg_tokens_per_score_point": 280.111
+        "avg_tokens_per_score_point": 224.299
       }
     },
     "Incident Analysis": {
-      "count": 3,
-      "avg_weighted_score": 7.64,
-      "avg_judge_overall_score": 7.667,
+      "count": 5,
+      "avg_weighted_score": 7.376,
+      "avg_judge_overall_score": 7.2,
       "reliability": {
         "success_rate": 1.0,
         "empty_output_rate": 0.0,
@@ -266,29 +328,29 @@
         "judge_error_rate": 0.0
       },
       "cost": {
-        "total_cost": 0.004865,
-        "avg_cost": 0.002,
-        "avg_total_tokens": 1873.0,
-        "avg_completion_tokens": 1657.333
+        "total_cost": 0.006449,
+        "avg_cost": 0.001,
+        "avg_total_tokens": 1578.8,
+        "avg_completion_tokens": 1365.2
       },
       "latency": {
-        "avg_client_total_s": 32.279,
-        "avg_generation_time_s": 31.628,
-        "avg_tokens_per_second_generation": 65.921,
-        "avg_native_tokens_per_second_generation": 59.021
+        "avg_client_total_s": 22.275,
+        "avg_generation_time_s": 21.044,
+        "avg_tokens_per_second_generation": 187.666,
+        "avg_native_tokens_per_second_generation": 154.682
       },
       "efficiency": {
-        "avg_score_per_dollar": 7690.395,
-        "avg_score_per_1k_tokens": 4.145,
-        "avg_score_per_second": 0.271,
+        "avg_score_per_dollar": 10385.34,
+        "avg_score_per_1k_tokens": 4.97,
+        "avg_score_per_second": 0.694,
         "avg_cost_per_score_point": 0.0,
-        "avg_tokens_per_score_point": 244.633
+        "avg_tokens_per_score_point": 211.856
       }
     },
     "Theory Q&A": {
-      "count": 18,
-      "avg_weighted_score": 8.486,
-      "avg_judge_overall_score": 7.861,
+      "count": 30,
+      "avg_weighted_score": 7.831,
+      "avg_judge_overall_score": 7.45,
       "reliability": {
         "success_rate": 1.0,
         "empty_output_rate": 0.0,
@@ -297,38 +359,38 @@
         "judge_error_rate": 0.0
       },
       "cost": {
-        "total_cost": 0.013159,
+        "total_cost": 0.019062,
         "avg_cost": 0.001,
-        "avg_total_tokens": 1637.778,
-        "avg_completion_tokens": 1542.667
+        "avg_total_tokens": 1292.8,
+        "avg_completion_tokens": 1197.6
       },
       "latency": {
-        "avg_client_total_s": 25.294,
-        "avg_generation_time_s": 24.483,
-        "avg_tokens_per_second_generation": 92.359,
-        "avg_native_tokens_per_second_generation": 80.2
+        "avg_client_total_s": 20.708,
+        "avg_generation_time_s": 19.834,
+        "avg_tokens_per_second_generation": 131.757,
+        "avg_native_tokens_per_second_generation": 110.688
       },
       "efficiency": {
-        "avg_score_per_dollar": 26843.533,
-        "avg_score_per_1k_tokens": 5.91,
-        "avg_score_per_second": 0.432,
+        "avg_score_per_dollar": 24951.505,
+        "avg_score_per_1k_tokens": 7.614,
+        "avg_score_per_second": 0.61,
         "avg_cost_per_score_point": 0.0,
-        "avg_tokens_per_score_point": 195.564
+        "avg_tokens_per_score_point": 169.441
       }
     }
   },
   "metric_averages": {
-    "correctness": 8.1,
-    "completeness": 7.8,
-    "key_point_coverage": 8.1,
-    "instruction_following": 8.4,
-    "reasoning_depth": 7.7,
-    "production_readiness": 7.467,
-    "clarity_structure": 8.967,
-    "factual_grounding": 7.967,
-    "code_sql_quality": 7.6,
-    "conciseness": 7.633,
-    "hallucination_risk": 8.367,
-    "code_executability": 7.667
+    "correctness": 7.6,
+    "completeness": 7.36,
+    "key_point_coverage": 7.52,
+    "instruction_following": 7.86,
+    "reasoning_depth": 7.14,
+    "production_readiness": 6.92,
+    "clarity_structure": 8.18,
+    "factual_grounding": 7.64,
+    "code_sql_quality": 7.375,
+    "conciseness": 7.22,
+    "hallucination_risk": 8.06,
+    "code_executability": 7.417
   }
 }
